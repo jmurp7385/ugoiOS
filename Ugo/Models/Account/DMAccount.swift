@@ -104,11 +104,11 @@ class DMAccount: BaseJsonModel {
         if status {
             if let dict = infoDict!["account"] as? NSDictionary {
                 
-                if let arr1 = dict.objectForKey("custom_fields") as? NSArray{
+                if let arr1 = dict.object(forKey: "custom_fields") as? NSArray{
                     for dict1 in arr1 {
                         var cust = CustomFields()
                         cust.custom_field_id = dict1["firstname"] as? Int
-                        if let arr = dict1.objectForKey("custom_field_value") as? NSArray{
+                        if let arr = (dict1 as AnyObject).object(forKey: "custom_field_value") as? NSArray{
                             for dict2 in arr1 {
                                 var value = CustomFieldsValue()
                                 value.custom_field_value_id = dict2["custom_field_value_id"] as? Int

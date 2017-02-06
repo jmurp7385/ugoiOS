@@ -22,23 +22,23 @@ class MenuCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        lblNotificationCount._गोल_करा
-        lblName.highlightedTextColor = UIColor.whiteColor()
+        //lblNotificationCount._गोल_करा
+        lblName.highlightedTextColor = UIColor.white
         
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        var bgView = UIView()
+        let bgView = UIView()
         bgView.backgroundColor = UIColor(r: 66, g: 154, b: 43, a: 1)
         self.selectedBackgroundView = bgView
         
-        lblNotificationCount.layer.backgroundColor = UIColor.redColor().CGColor
+        lblNotificationCount.layer.backgroundColor = UIColor.red.cgColor
         // Configure the view for the selected state
     }
 

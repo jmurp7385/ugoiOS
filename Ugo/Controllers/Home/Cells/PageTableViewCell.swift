@@ -19,17 +19,17 @@ class PageTableViewCell: UITableViewCell , UIScrollViewDelegate {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func imgTapped(sender:UITapGestureRecognizer){
-        var index = sender.view!.tag
-        var product = products[index]
+    func imgTapped(_ sender:UITapGestureRecognizer){
+        let index = sender.view!.tag
+        let product = products[index]
         
-        NSNotificationCenter.defaultCenter().postNotificationName("didSelectCell", object: product)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "didSelectCell"), object: product)
 
         
     }
@@ -40,32 +40,32 @@ class PageTableViewCell: UITableViewCell , UIScrollViewDelegate {
         var xposition:CGFloat = 0
         
         for (index,product) in  enumerate(products) {
-            var imgView = UIImageView(frame: CGRectMake(xposition, 0, ScreenSize.SCREEN_WIDTH, scrollView.frame.height))
-            imgView.setImageWithUrl(NSURL(string: product.thumb_image!.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!, placeHolderImage: nil)
-            imgView.contentMode = UIViewContentMode.ScaleAspectFit
+            var imgView = UIImageView(frame: CGRect(x: xposition, y: 0, width: ScreenSize.SCREEN_WIDTH, height: scrollView.frame.height))
+            imgView.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: nil)
+            imgView.contentMode = UIViewContentMode.scaleAspectFit
             xposition = xposition + ScreenSize.SCREEN_WIDTH
             
             
             var tapGesture = UITapGestureRecognizer(target: self, action: Selector("imgTapped:"))
             imgView.tag = index
             imgView.gestureRecognizers = [tapGesture]
-            imgView.userInteractionEnabled = true
+            imgView.isUserInteractionEnabled = true
 
             scrollView.addSubview(imgView)
-            scrollView.bringSubviewToFront(imgView)
+            scrollView.bringSubview(toFront: imgView)
         }
         
-        scrollView.contentSize = CGSizeMake(xposition, scrollView.frame.height)
+        scrollView.contentSize = CGSize(width: xposition, height: scrollView.frame.height)
         scrollView.delegate = self
 
         var pages =  Int(scrollView.contentSize.width / ScreenSize.SCREEN_WIDTH)
 //        //print("pages \(pages)")
         pageControl.numberOfPages = pages
-        pageControl.addTarget(self, action: Selector("changePage:"), forControlEvents: UIControlEvents.ValueChanged)
+        pageControl.addTarget(self, action: #selector(PageTableViewCell.changePage(_:)), for: UIControlEvents.valueChanged)
     }
 
-    func changePage(sender:UIPageControl){
-        var page : Int = sender.currentPage
+    func changePage(_ sender:UIPageControl){
+        let page : Int = sender.currentPage
         var frame = scrollView.frame
         frame.origin.x = frame.size.width * CGFloat(page)
         frame.origin.y = 0
@@ -73,17 +73,17 @@ class PageTableViewCell: UITableViewCell , UIScrollViewDelegate {
         
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        var newOffset: CGFloat = scrollView.contentOffset.x
-        var pageNumber = Int(newOffset/scrollView.frame.size.width)
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let newOffset: CGFloat = scrollView.contentOffset.x
+        let pageNumber = Int(newOffset/scrollView.frame.size.width)
         pageControl.currentPage = pageNumber
     }
 
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        var pageWidth = self.scrollView.frame.size.width
-        var fractionalPage = self.scrollView.contentOffset.x / pageWidth
-        var page = lround(Double(fractionalPage))
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageWidth = self.scrollView.frame.size.width
+        let fractionalPage = self.scrollView.contentOffset.x / pageWidth
+        let page = lround(Double(fractionalPage))
         self.pageControl.currentPage = page
     }
 }

@@ -9,6 +9,11 @@
 import UIKit
 
 class UserSessionInformation: NSObject {
+    private static var __once: () = {
+            Static.instance = UserSessionInformation()
+            Static.instance.account = Account()
+
+        }()
     var access_token : String?
     var username: String?
 
@@ -32,14 +37,10 @@ class UserSessionInformation: NSObject {
         
         struct Static{
             static var instance : UserSessionInformation!
-            static var token : dispatch_once_t = 0
+            static var token : Int = 0
         }
         
-        dispatch_once(&Static.token){
-            Static.instance = UserSessionInformation()
-            Static.instance.account = Account()
-
-        }
+        _ = UserSessionInformation.__once
         
         
         return Static.instance
@@ -54,36 +55,36 @@ class UserSessionInformation: NSObject {
     }
     
     func storeData(){
-        var shared = UserSessionInformation.sharedInstance
-        NSUserDefaults.standardUserDefaults().setValue(shared.access_token, forKey: "access_token")
+        let shared = UserSessionInformation.sharedInstance
+        UserDefaults.standard.setValue(shared.access_token, forKey: "access_token")
 
         if shared.account!.customer_id != nil {
-            NSUserDefaults.standardUserDefaults().setInteger(shared.account!.customer_id!, forKey: "cust_id")
+            UserDefaults.standard.set(shared.account!.customer_id!, forKey: "cust_id")
         }else{
-            NSUserDefaults.standardUserDefaults().removeObjectForKey("cust_id")
+            UserDefaults.standard.removeObject(forKey: "cust_id")
         }
 
-        NSUserDefaults.standardUserDefaults().setValue(shared.account?.firstname, forKey: "firstname")
-        NSUserDefaults.standardUserDefaults().setValue(shared.account?.lastname, forKey: "lastname")
-        NSUserDefaults.standardUserDefaults().setValue(shared.account?.email, forKey: "email")
-        NSUserDefaults.standardUserDefaults().setValue(shared.image, forKey: "image")
-        NSUserDefaults.standardUserDefaults().setValue(shared.account?.telephone, forKey: "telephone")
-        NSUserDefaults.standardUserDefaults().setValue(shared.token, forKey: "token")
+        UserDefaults.standard.setValue(shared.account?.firstname, forKey: "firstname")
+        UserDefaults.standard.setValue(shared.account?.lastname, forKey: "lastname")
+        UserDefaults.standard.setValue(shared.account?.email, forKey: "email")
+        UserDefaults.standard.setValue(shared.image, forKey: "image")
+        UserDefaults.standard.setValue(shared.account?.telephone, forKey: "telephone")
+        UserDefaults.standard.setValue(shared.token, forKey: "token")
 
         
         
     }
     
     func getData(){
-        var shared = UserSessionInformation.sharedInstance
-        shared.access_token = NSUserDefaults.standardUserDefaults().valueForKey("access_token") as? String
-        shared.account!.customer_id = NSUserDefaults.standardUserDefaults().valueForKey("cust_id") as? Int
-        shared.account!.firstname = NSUserDefaults.standardUserDefaults().valueForKey("firstname") as? String
-        shared.account!.lastname = NSUserDefaults.standardUserDefaults().valueForKey("lastname") as? String
-        shared.account!.email = NSUserDefaults.standardUserDefaults().valueForKey("email") as? String
-        shared.account!.telephone = NSUserDefaults.standardUserDefaults().valueForKey("telephone") as? String
-        shared.image = NSUserDefaults.standardUserDefaults().valueForKey("image") as? String
-        shared.token = NSUserDefaults.standardUserDefaults().valueForKey("token") as? String
+        let shared = UserSessionInformation.sharedInstance
+        shared.access_token = UserDefaults.standard.value(forKey: "access_token") as? String
+        shared.account!.customer_id = UserDefaults.standard.value(forKey: "cust_id") as? Int
+        shared.account!.firstname = UserDefaults.standard.value(forKey: "firstname") as? String
+        shared.account!.lastname = UserDefaults.standard.value(forKey: "lastname") as? String
+        shared.account!.email = UserDefaults.standard.value(forKey: "email") as? String
+        shared.account!.telephone = UserDefaults.standard.value(forKey: "telephone") as? String
+        shared.image = UserDefaults.standard.value(forKey: "image") as? String
+        shared.token = UserDefaults.standard.value(forKey: "token") as? String
 
 
     }

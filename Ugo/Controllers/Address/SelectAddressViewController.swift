@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,UIPickerViewDataSource, UIPickerViewDelegate,UITextFieldDelegate,UITextViewDelegate{
@@ -35,13 +59,13 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         super.viewDidLoad()
         self.title = "Billing/Delivery Details"
         contactNumber = self.getFormattedPhoneNumber(userSession.account!.telephone!)
-        btnNext.enabled = false
+        btnNext.isEnabled = false
         self.btnNext.alpha = 0.5
         setCloseButton()
         // Do any additional setup after loading the view.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
@@ -53,36 +77,36 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
    
     //MARK: Btn Events
     
-    @IBAction func btnNextTapped(sender: UIButton) {
-        if count(self.convertToNumber(contactNumber!)) == 10 {
-            
+    @IBAction func btnNextTapped(_ sender: UIButton) {
+        if self.convertToNumber(contactNumber!).characters.count == 10 {
+           
             self.putAccountAPI()
         }else{
             CommonUtility.showAlertView("Information", message: "Please enter 10 digit Contact number")
         }
     }
     
-    func btnSelectAddTapped(sender: UIButton){
-        performSegueWithIdentifier("toAddressListViewController", sender: sender)
+    func btnSelectAddTapped(_ sender: UIButton){
+        performSegue(withIdentifier: "toAddressListViewController", sender: sender)
     }
     
-    func addAddressTapped(sender:UIButton){
+    func addAddressTapped(_ sender:UIButton){
                 
-        var vw =  UIApplication.sharedApplication().keyWindow?.topMostController()
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var vc = storyboard.instantiateViewControllerWithIdentifier("AddAddressViewController") as! AddAddressViewController
+        let vw =  UIApplication.shared.keyWindow?.topMostController()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AddAddressViewController") as! AddAddressViewController
         vc.delegate = self
         vc.type = AddressType(rawValue:sender.tag)
         vw!.addChildViewController(vc)
-        vc.view.frame = UIScreen.mainScreen().bounds
+        vc.view.frame = UIScreen.main.bounds
         vw!.view.addSubview(vc.view)
-        vc.didMoveToParentViewController(vw!)
+        vc.didMove(toParentViewController: vw!)
     }
     
    
     // MARK: - Table View Delegates
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         var sections = 4
         var isShow = false
         if shippingMethod != nil && shippingMethod?.shipping_methods.count > 0{
@@ -102,7 +126,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         return sections
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return cart.totals.count
         }else{
@@ -110,18 +134,18 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.section {
         case 0 :
-            let cell = tableView.dequeueReusableCellWithIdentifier("TotalTableViewCell") as! TotalTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TotalTableViewCell") as! TotalTableViewCell
             cell.lblLabel.text = cart.totals[indexPath.row].title!
             cell.lblValue.text = cart.totals[indexPath.row].text!
             
             return cell
             
         case 1 :
-            let cell = tableView.dequeueReusableCellWithIdentifier("ContactTableViewCell") as! ContactTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ContactTableViewCell") as! ContactTableViewCell
             cell.txtContactNo.text = contactNumber
             cell.txtContactNo.tag = 123456
             cell.txtContactNo.delegate = self
@@ -129,7 +153,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             
         case 2:
             // Driver Tips
-            let cell = tableView.dequeueReusableCellWithIdentifier("SelectBoxCell") as! SelectBoxCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectBoxCell") as! SelectBoxCell
             cell.txtSelect.delegate = self
             cell.txtSelect.inputAccessoryView = toolBar
             cell.txtSelect.inputView = pickerView
@@ -139,22 +163,22 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             return cell
             
         case 3 :
-            let cell = tableView.dequeueReusableCellWithIdentifier("SelectAddressCell") as! SelectAddressCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectAddressCell") as! SelectAddressCell
             cell.lblTitle.text = "Shipping address"
             cell.lblAddress.text = addresss[0].fulladdress
             
-            cell.btnGetLocation.tag = AddressType.ShippingWithLocation.rawValue
-            cell.btnAddAddress.tag = AddressType.Shipping.rawValue
-            cell.btnRecentAddress.tag = AddressType.Shipping.rawValue
+            cell.btnGetLocation.tag = AddressType.shippingWithLocation.rawValue
+            cell.btnAddAddress.tag = AddressType.shipping.rawValue
+            cell.btnRecentAddress.tag = AddressType.shipping.rawValue
             
-            cell.btnGetLocation.addTarget(self, action: Selector("addAddressTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-            cell.btnAddAddress.addTarget(self, action: Selector("addAddressTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-            cell.btnRecentAddress.addTarget(self, action: Selector("btnSelectAddTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.btnGetLocation.addTarget(self, action: #selector(SelectAddressViewController.addAddressTapped(_:)), for: UIControlEvents.touchUpInside)
+            cell.btnAddAddress.addTarget(self, action: #selector(SelectAddressViewController.addAddressTapped(_:)), for: UIControlEvents.touchUpInside)
+            cell.btnRecentAddress.addTarget(self, action: #selector(SelectAddressViewController.btnSelectAddTapped(_:)), for: UIControlEvents.touchUpInside)
             
             
             return cell
         case 4 ,5:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SelectBoxCell") as! SelectBoxCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectBoxCell") as! SelectBoxCell
             cell.txtSelect.delegate = self
             cell.txtSelect.inputAccessoryView = toolBar
             cell.txtSelect.inputView = pickerView
@@ -168,10 +192,10 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             return cell
             
         case 6 :
-            let cell1 = tableView.dequeueReusableCellWithIdentifier("DeliveryInstructionCell") as! DeliveryInstructionCell
-            cell1.txtView.backgroundColor = UIColor.whiteColor()
+            let cell1 = tableView.dequeueReusableCell(withIdentifier: "DeliveryInstructionCell") as! DeliveryInstructionCell
+            cell1.txtView.backgroundColor = UIColor.white
             cell1.txtView.layer.borderWidth = 0.5
-            cell1.txtView.layer.borderColor = UIColor.lightGrayColor().CGColor
+            cell1.txtView.layer.borderColor = UIColor.lightGray.cgColor
             cell1.txtView.layer.cornerRadius = 5
             cell1.txtView.delegate = self
             cell1.txtView.inputAccessoryView = toolBar
@@ -186,7 +210,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     }
     
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
         switch indexPath.section {
         case 0,1,4,5 :
@@ -211,15 +235,15 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     
     //MARK: toolbar btn events
-    @IBAction func btnCancelTapped(sender: AnyObject) {
+    @IBAction func btnCancelTapped(_ sender: AnyObject) {
         selectedTxt.resignFirstResponder()
     }
     
-    @IBAction func btnDoneTapped(sender: AnyObject) {
+    @IBAction func btnDoneTapped(_ sender: AnyObject) {
         
-        if selectedTxt .isKindOfClass(UITextField) {
+        if selectedTxt.isKind(of: UITextField.self) {
             if dataArray.count > 0{
-                var data: AnyObject = dataArray[pickerView.selectedRowInComponent(0)]
+                let data: AnyObject = dataArray[pickerView.selectedRow(inComponent: 0)]
                 
                 if let obj =  data as? Shipping{
                     selectedShipping = obj
@@ -234,9 +258,9 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                 }
                 
                 if cart.shipping_status! {
-                    selectedShipping != nil && selectedPayment != nil ? (self.btnNext.enabled = true,self.btnNext.alpha = 1) : (self.btnNext.enabled = false,self.btnNext.alpha = 0.5)
+                    selectedShipping != nil && selectedPayment != nil ? (self.btnNext.isEnabled = true,self.btnNext.alpha = 1) : (self.btnNext.isEnabled = false,self.btnNext.alpha = 0.5)
                 }else{
-                    self.btnNext.enabled = true
+                    self.btnNext.isEnabled = true
                     self.btnNext.alpha = 1
                 }
             }
@@ -249,45 +273,47 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     // MARK: - Text View Delegaate
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if textView.tag == 654321 {
             self.deliveryInstructions = textView.text + text
         }
         return true
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         self.selectedTxt = textView
     }
     
     // MARK: - format telephon to number string
     
-    func convertToNumber(var phoneNumber : String)-> String{
-        phoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        phoneNumber = phoneNumber.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        phoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        phoneNumber = phoneNumber.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+    func convertToNumber(_ phoneNumber : String)-> String{
+        var phoneNumber = phoneNumber
+        phoneNumber = phoneNumber.replacingOccurrences(of: "(", with: "", options: NSString.CompareOptions.literal, range: nil)
+        phoneNumber = phoneNumber.replacingOccurrences(of: ")", with: "", options: NSString.CompareOptions.literal, range: nil)
+        phoneNumber = phoneNumber.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
+        phoneNumber = phoneNumber.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
 
         return phoneNumber
     }
     
     // MARK: - Text Field Delegaate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         selectedTxt.resignFirstResponder()
         return true
     }
     
        
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField.tag == 123456 {
             
-            let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            let components = newString.components(separatedBy: CharacterSet.decimalDigits.inverted)
             
-            let decimalString : String =  "".join(components)
-            let length = count(decimalString)
+            //let decimalString : String =  "".join(components)
+            let decimalString : String =  components.joined(separator: "")
+            let length = decimalString.characters.count
             let decimalStr = decimalString as NSString
-            let hasLeadingOne = length > 0 && decimalStr.characterAtIndex(0) == (1 as unichar)
+            let hasLeadingOne = length > 0 && decimalStr.character(at: 0) == (1 as unichar)
             
             if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
             {
@@ -300,72 +326,73 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             
             if hasLeadingOne
             {
-                formattedString.appendString("1 ")
+                formattedString.append("1 ")
                 index += 1
             }
             if (length - index) > 3
             {
-                let areaCode = decimalStr.substringWithRange(NSMakeRange(index, 3))
+                let areaCode = decimalStr.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@)", areaCode)
                 index += 3
             }
             if length - index > 3
             {
-                let prefix = decimalStr.substringWithRange(NSMakeRange(index, 3))
+                let prefix = decimalStr.substring(with: NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
             
-            let remainder = decimalStr.substringFromIndex(index)
-            formattedString.appendString(remainder)
+            let remainder = decimalStr.substring(from: index)
+            formattedString.append(remainder)
             textField.text = formattedString as String
             contactNumber = textField.text
         }
         return false
     }
     
-    func getFormattedPhoneNumber(phoneNumber : String)-> String {
+    func getFormattedPhoneNumber(_ phoneNumber : String)-> String {
         
-        let components = phoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
-        let decimalString : String =  "".join(components)
-        let length = count(decimalString)
+        let components = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted)
+        //let decimalString : String =  "".join(components)
+        let decimalString : String =  components.joined(separator: "")
+        let length = decimalString.characters.count
         let decimalStr = decimalString as NSString
-        let hasLeadingOne = length > 0 && decimalStr.characterAtIndex(0) == (1 as unichar)
+        let hasLeadingOne = length > 0 && decimalStr.character(at: 0) == (1 as unichar)
         var index = 0 as Int
         let formattedString = NSMutableString()
         if hasLeadingOne
         {
-            formattedString.appendString("1 ")
+            formattedString.append("1 ")
             index += 1
         }
         if (length - index) > 3
         {
-            let areaCode = decimalStr.substringWithRange(NSMakeRange(index, 3))
+            let areaCode = decimalStr.substring(with: NSMakeRange(index, 3))
             formattedString.appendFormat("(%@)", areaCode)
             index += 3
         }
         if length - index > 3
         {
-            let prefix = decimalStr.substringWithRange(NSMakeRange(index, 3))
+            let prefix = decimalStr.substring(with: NSMakeRange(index, 3))
             formattedString.appendFormat("%@-", prefix)
             index += 3
         }
         
-        let remainder = decimalStr.substringFromIndex(index)
-        formattedString.appendString(remainder)
+        let remainder = decimalStr.substring(from: index)
+        formattedString.append(remainder)
         return formattedString as String
     }
     
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
-        let pointInTable = textField.convertPoint(textField.bounds.origin, toView: self.tableView)
-        let indexpath = self.tableView.indexPathForRowAtPoint(pointInTable)
+        let pointInTable = textField.convert(textField.bounds.origin, to: self.tableView)
+        let indexpath = self.tableView.indexPathForRow(at: pointInTable)
         
         selectedTxt = textField
         
         if indexpath?.section == 2 {
-            cart.tipOptions.sort{
+            cart.tipOptions = cart.tipOptions.sorted{       //added cart.tipOptons =
                 return $0.group < $1.group
             }
             dataArray = cart.tipOptions
@@ -386,15 +413,15 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     // ^^^^^^^^^^^^^^^^^^^^^^^
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return dataArray.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         var title = ""
 
@@ -419,17 +446,17 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             userSession.account?.telephone = self.convertToNumber(contactNumber!)
             userSession.storeData()
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.PUTAccount(account: userSession.account!)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.putAccount(account: userSession.account!)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
 //                    CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON!)
+                        let resp = DMAccount(JSON: JSON!)
                         
                         if resp.status {
-                            var account = DMAccount(JSON: JSON!)
+                            let account = DMAccount(JSON: JSON!)
                             self.userSession.account = account.account
                             self.userSession.storeData()
                             
@@ -451,7 +478,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                             }
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
             }
@@ -466,8 +493,8 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTSetOption(option: selectedDriverTip!)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postSetOption(option: selectedDriverTip!)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
@@ -485,19 +512,19 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func postPaymentAddressAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTPaymentAdd(addresss[1])).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentAdd(addresss[1])).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                 self.getShippingMethodsAPI()
 
                 if JSON != nil{
-                    var resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON!)
                     if resp.status {
                         
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
                 
@@ -512,20 +539,20 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
 
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTShippingAdd(addresss[1])).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingAdd(addresss[1])).responseString { _, _, string, _ in
                 //println(string)
                 }.responseString { _, _, string, _ in
-                if let str = string {
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                 self.postPaymentAddressAPI()
                 if JSON != nil{
-                    var resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON!)
                     if resp.status {
                         
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }else{
                 }
@@ -541,21 +568,21 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getShippingMethodsAPI(){
         
-        MINetworkManager.sharedInstance.manager?.request(APIRouter.GETShippingMethods).responseString { _, _, string, _ in
+        MINetworkManager.sharedInstance.manager?.request(APIRouter.getShippingMethods).responseString { _, _, string, _ in
             //println(string)
         }.responseString { _, _, string, _ in
-                if let str = string {
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                 self.getPaymentMethodsAPI()
             if JSON != nil{
-                var resp = DMShipping(JSON: JSON!)
+                let resp = DMShipping(JSON: JSON!)
 
                 if resp.status {
                     self.shippingMethod = resp
                 }else{
-                    CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                    CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                 }
             }else{
             }
@@ -565,23 +592,23 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getPaymentMethodsAPI(){
         
-        MINetworkManager.sharedInstance.manager?.request(APIRouter.GETPaymentMethods).responseString { _, _, string, _ in
+        MINetworkManager.sharedInstance.manager?.request(APIRouter.getPaymentMethods).responseString { _, _, string, _ in
             //println(string)
             }.responseString { _, _, string, _ in
-                if let str = string {
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
             CommonUtility().hideLoadingIndicator(self.navigationController!.view)
             
             if JSON != nil{
-                var resp = DMPayment(JSON: JSON!)
+                let resp = DMPayment(JSON: JSON!)
                 if resp.status {
                     self.paymentMethod = resp
                     self.tableView.reloadData()
 
                 }else{
-                    CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                    CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                 }
             }else{
             }
@@ -594,18 +621,18 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
 //            CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTShippingMethods(shipping_method: selectedShipping!.quote[0].code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingMethods(shipping_method: selectedShipping!.quote[0].code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                 self.postPaymentMethodAPI()
                 if JSON != nil{
-                    var resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON!)
                     if resp.status {
                         
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
                 
@@ -619,8 +646,8 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         //println("Payment Method -> \(selectedPayment!.code!)")
         if CommonUtility.isNetworkAvailable() {
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTPaymentMethods(payment_method: selectedPayment!.code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentMethods(payment_method: selectedPayment!.code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
@@ -628,11 +655,11 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
 
                 self.getCheckoutConfirmAPI()
                 if JSON != nil{
-                    var resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON!)
                     if resp.status {
                         
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
                 
@@ -645,8 +672,8 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getCheckoutConfirmAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETConfirm).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getConfirm).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
@@ -654,14 +681,14 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
 
                 if JSON != nil{
-                    var resp = Cart(JSON: JSON!)
+                    let resp = Cart(JSON: JSON!)
                     if resp.status {
                         
-                        var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ConfirmOrderViewController") as! ConfirmOrderViewController
+                        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ConfirmOrderViewController") as! ConfirmOrderViewController
                         vc.order = resp
                         self.navigationController!.pushViewController(vc, animated: true)
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
                 
@@ -672,13 +699,13 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     }
   
     
-    func addressSelected(type: AddressType, address: Address) {
+    func addressSelected(_ type: AddressType, address: Address) {
         switch type {
-        case AddressType.Shipping , AddressType.ShippingWithLocation:
+        case AddressType.shipping , AddressType.shippingWithLocation:
             addresss[0] = address
             addresss[1] = address
 
-        case AddressType.Billing :
+        case AddressType.billing :
             addresss[1] = address
             
         default :
@@ -696,12 +723,12 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "toAddressListViewController" {
-            var vc = segue.destinationViewController as! AddressListViewController
+            let vc = segue.destination as! AddressListViewController
             vc.delegate = self
-            vc.addressType = AddressType(rawValue: sender!.tag)
+            vc.addressType = AddressType(rawValue: (sender! as AnyObject).tag)
         }
     }
 }

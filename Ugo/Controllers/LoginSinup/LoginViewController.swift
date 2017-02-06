@@ -26,33 +26,33 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     
     // MARK: - Btn Actions
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         
         if buttonIndex == 0 {
             if alertView.tag == 333 {
-                var email = alertView.textFieldAtIndex(0)?.text
+                let email = alertView.textField(at: 0)?.text
                 self.forgotAPI(email!)
             }else if alertView.tag == 222 {
-                var email = alertView.textFieldAtIndex(0)?.text
+                let email = alertView.textField(at: 0)?.text
                 self.acc.email = email
                 self.signupFbAPI(self.acc)
             }
         }
     }
     
-    @IBAction func btnSignupTapped(sender: UIButton) {
+    @IBAction func btnSignupTapped(_ sender: UIButton) {
         
     }
     
-    @IBAction func btnLoginTapped(sender: UIButton) {
+    @IBAction func btnLoginTapped(_ sender: UIButton) {
         loginAPI()
     }
     
-    @IBAction func btnForgotPwdTapped(sender: UIButton) {
-        var alert = UIAlertView(title: "Forgot Password", message: "Please enter email id.", delegate: self, cancelButtonTitle: "OK")
+    @IBAction func btnForgotPwdTapped(_ sender: UIButton) {
+        let alert = UIAlertView(title: "Forgot Password", message: "Please enter email id.", delegate: self, cancelButtonTitle: "OK")
         alert.tag = 333
-        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
-        alert.textFieldAtIndex(0)?.keyboardType = UIKeyboardType.EmailAddress
+        alert.alertViewStyle = UIAlertViewStyle.plainTextInput
+        alert.textField(at: 0)?.keyboardType = UIKeyboardType.emailAddress
         alert.show()
     }
     
@@ -63,8 +63,8 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         //   self.txtUsername.text = "sadiq@xtensible.in"
         // self.txtPwd.text = "asdasd"
         //
-        txtUsername.setBorderBottom
-        txtPwd.setBorderBottom
+//        txtUsername.setBorderBottom       //not used
+//        txtPwd.setBorderBottom            //not used
         
         setCloseButton()
         self.title = "Login"
@@ -72,16 +72,16 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     }
     
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if (FBSDKAccessToken.currentAccessToken() != nil)
+        if (FBSDKAccessToken.current() != nil)
         {
             // User is already logged in, do work such as go to next view controller.
         }
         else
         {
-            var loginButton = FBSDKLoginButton()
-            loginButton.center = CGPointMake(self.vwFB.center.x, self.vwFB.frame.height/2)
+            let loginButton = FBSDKLoginButton()
+            loginButton.center = CGPoint(x: self.vwFB.center.x, y: self.vwFB.frame.height/2)
             //println(self.vwFB.center)
             self.vwFB.addSubview(loginButton)
             
@@ -93,7 +93,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     }
     
     
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         //println("User Logged In")
         
         if ((error) != nil)
@@ -112,7 +112,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
                 
                 if let dict = result as? NSDictionary{
                     for d in dict {
-                        //println(d)
+                        println(d)
                     }
                 }
                 // Do work
@@ -121,14 +121,14 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         }
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         //println("User Logged Out")
     }
     
     func returnUserData()
     {
         let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "email,first_name,last_name"])
-        graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             if let dict = result as? NSDictionary{
                 for d in dict {
                     //println(d)
@@ -143,23 +143,23 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             else
             {
                 //println("fetched user: \(result)")
-                if let first_name : String = result.valueForKey("first_name") as? String{
+                if let first_name : String = result.value(forKey: "first_name") as? String{
                     //println("first_name is: \(first_name)")
                     self.acc.firstname = first_name
                     
                 }
-                if let last_name : String = result.valueForKey("last_name") as? String{
+                if let last_name : String = result.value(forKey: "last_name") as? String{
                     //println("last_name is: \(last_name)")
                     self.acc.lastname = last_name
                     
                 }
-                if let email : String = result.valueForKey("email") as? String{
+                if let email : String = result.value(forKey: "email") as? String{
                     //println("email is: \(email)")
                     self.acc.email = email
                 }else{
                     CommonUtility.showAlertView("Information", message: "No email address is found")
                 }
-                if let id : String = result.valueForKey("id") as? String{
+                if let id : String = result.value(forKey: "id") as? String{
                     //println("id is: \(id)")
                     self.acc.fb = id
                 }
@@ -170,8 +170,8 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
                 if self.acc.email == "" {
                     var alert = UIAlertView(title: "Information", message: "Please enter email id.", delegate: self, cancelButtonTitle: "OK")
                     alert.tag = 222
-                    alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
-                    alert.textFieldAtIndex(0)?.keyboardType = UIKeyboardType.EmailAddress
+                    alert.alertViewStyle = UIAlertViewStyle.plainTextInput
+                    alert.textField(at: 0)?.keyboardType = UIKeyboardType.emailAddress
                     alert.show()
                 }else{
                     self.signupFbAPI(self.acc)
@@ -183,7 +183,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     }
     
     func doneTapped(){
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -197,7 +197,8 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     func loginAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTLogin(txtUsername.text, txtPwd.text)).response { (request, response, data, error) in
+            //changed POSTLogin to postLogin
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postLogin(txtUsername.text!, txtPwd.text!)).response { (request, response, data, error) in
                 //                //println(request)
                 //                //println(response)
                 //                //println(error)
@@ -228,21 +229,21 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         }
     }
     
-    func forgotAPI(email:String){
+    func forgotAPI(_ email:String){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Submitting...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTForgotPwd(email: email)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postForgotPwd(email: email)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        var resp = BaseJsonModel(JSON: JSON!)
+                        let resp = BaseJsonModel(JSON: JSON!)
                         if resp.status {
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }else{
                         CommonUtility.showAlertView("Information", message: "Please check your email. Password reset instructions has been sent to your email address.")
@@ -257,30 +258,30 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     }
     
     
-    func signupFbAPI(acc : Account!){
+    func signupFbAPI(_ acc : Account!){
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTRegisterFB(account: acc)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegisterFB(account: acc)).response { (request, response, data, error) in
                 //println(request)
                 //println(response)
                 //println(error)
                 }.responseString { _, _, string, _ in
-                    if let str = string {
+                    if string != nil {
                         //println(str)
                     }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON!)
+                        let resp = DMAccount(JSON: JSON!)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                            self.dismiss(animated: true, completion: nil)
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     

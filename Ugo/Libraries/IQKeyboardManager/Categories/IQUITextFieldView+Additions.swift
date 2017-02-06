@@ -27,7 +27,7 @@ import UIKit
 /**
 Uses default keyboard distance for textField.
 */
-let kIQUseDefaultKeyboardDistance = CGFloat.max
+let kIQUseDefaultKeyboardDistance = CGFloat.greatestFiniteMagnitude
 
 private var kIQKeyboardDistanceFromTextField = "kIQKeyboardDistanceFromTextField"
 

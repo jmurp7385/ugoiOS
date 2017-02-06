@@ -114,16 +114,16 @@ class AppInit: BaseJsonModel {
     override init(JSON : AnyObject) {
         super.init(JSON: JSON)
         let info = JSON as? NSDictionary
-        if let arr = info?.objectForKey("countries") as? NSArray {
+        if let arr = info?.object(forKey: "countries") as? NSArray {
             for dict in arr{
                 countries.append(Country(dict: dict as! NSDictionary))
             }
         }
         
-        var dmcart = DMCart(JSON:  JSON)
+        let dmcart = DMCart(JSON:  JSON)
         self.cart = dmcart.cart
         UserSessionInformation.sharedInstance.cartCount = self.cart.products.count
-        NSNotificationCenter.defaultCenter().postNotificationName("setbadge", object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "setbadge"), object: nil)
         
     }
 }

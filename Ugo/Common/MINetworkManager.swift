@@ -15,49 +15,49 @@ enum APIRouter: URLRequestConvertible
 //    static let BASE_URL = "http://localhost/ugo/api/v1"
     static let API_KEY = "12"//api key, consumer secret for OAuth, etc
     
-    case POSTToken
+    case postToken
     case initApp(String)
-    case GETCategories
-    case GETSpecialProducts
-    case GETProducts(limit : String?,page : String?,cat_id:String)
-    case GETProductDetail(String)
-    case GETSearchProduct(limit : String?,page : String?,order : String?,sort:String?,search:String?,descriptions:String?)
-    case POSTAddtoCart(Product)
-    case GETCart
-    case POSTLogin(String,String)
-    case DELETECart(String)
-    case DELETEAddress(address_id : Int)
-    case POSTPaymentAdd(Address)
-    case POSTShippingAdd(Address)
-    case GETAddress
-    case GETShippingMethods
-    case GETPaymentMethods
-    case POSTShippingMethods(shipping_method:String,comment:String)
-    case POSTPaymentMethods(payment_method:String,comment:String)
-    case GETConfirm
-    case GETPay(access_token: String)
-    case GETSuccess
-    case GETCountryZones(country_id:String)
-    case GETOrder(page:String)
-    case GETOrderWithId(String)
-    case PUTAccount(account :Account) , PUTCart(key:String,quantity : Int)
-    case POSTPWD(String, String)
-    case POSTRegister(account :Account),POSTRegisterFB(account :Account) ,POSTForgotPwd(email:String),POSTSetOption(option : DriverTipOptions)
-    case GETLogout
+    case getCategories
+    case getSpecialProducts
+    case getProducts(limit : String?,page : String?,cat_id:String)
+    case getProductDetail(String)
+    case getSearchProduct(limit : String?,page : String?,order : String?,sort:String?,search:String?,descriptions:String?)
+    case postAddtoCart(Product)
+    case getCart
+    case postLogin(String,String)
+    case deleteCart(String)
+    case deleteAddress(address_id : Int)
+    case postPaymentAdd(Address)
+    case postShippingAdd(Address)
+    case getAddress
+    case getShippingMethods
+    case getPaymentMethods
+    case postShippingMethods(shipping_method:String,comment:String)
+    case postPaymentMethods(payment_method:String,comment:String)
+    case getConfirm
+    case getPay(access_token: String)
+    case getSuccess
+    case getCountryZones(country_id:String)
+    case getOrder(page:String)
+    case getOrderWithId(String)
+    case putAccount(account :Account) , putCart(key:String,quantity : Int)
+    case postpwd(String, String)
+    case postRegister(account :Account),postRegisterFB(account :Account) ,postForgotPwd(email:String),postSetOption(option : DriverTipOptions)
+    case getLogout
     
     var method: Method {
         switch self {
-        case .POSTToken,.POSTAddtoCart,.POSTLogin,.POSTPaymentAdd,.POSTShippingAdd,.POSTShippingMethods,.POSTPaymentMethods,.POSTPWD,POSTRegister,POSTForgotPwd,.POSTRegisterFB,.POSTSetOption:
+        case .postToken,.postAddtoCart,.postLogin,.postPaymentAdd,.postShippingAdd,.postShippingMethods,.postPaymentMethods,.postpwd,.postRegister,.postForgotPwd,.postRegisterFB,.postSetOption:
             return .POST
             
-        case .initApp,.GETCountryZones , .GETOrder ,.GETOrderWithId,GETLogout,.GETCategories,.GETSpecialProducts,.GETSpecialProducts,.GETProducts,.GETProductDetail,.GETSearchProduct,.GETCart,.GETAddress,.GETShippingMethods,.GETPaymentMethods,.GETConfirm,.GETPay,.GETSuccess:
+        case .initApp,.getCountryZones , .getOrder ,.getOrderWithId,.getLogout,.getCategories,.getSpecialProducts,.getSpecialProducts,.getProducts,.getProductDetail,.getSearchProduct,.getCart,.getAddress,.getShippingMethods,.getPaymentMethods,.getConfirm,.getPay,.getSuccess:
             
             return .GET
             
-        case .DELETECart,.DELETEAddress:
+        case .deleteCart,.deleteAddress:
             return .DELETE
             
-        case .PUTAccount , PUTCart:
+        case .putAccount , .putCart:
             return .PUT
             
             
@@ -67,36 +67,36 @@ enum APIRouter: URLRequestConvertible
     
     
     
-    var URLRequest: NSURLRequest
+    var URLRequest: Foundation.URLRequest
         {
             let (path: String, parameters: [String: AnyObject]) =
-            {
+            { () -> (String, [String : AnyObject]) in 
                 switch self
                 {
-                case .POSTToken:
-                    let params :[String: AnyObject] = ["":""]
+                case .postToken:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/oauth2/token", params)
                 case .initApp(let str):
-                    let params :[String: AnyObject] = ["":""]
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/common/init?include=\(str)", params)
-                case .GETCategories(let str):
-                    let params :[String: AnyObject] = ["":""]
+                case .getCategories(let str):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/product/category", params)
-                case .GETSpecialProducts(let str):
-                    let params :[String: AnyObject] = ["":""]
+                case .getSpecialProducts(let str):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/product/special", params)
-                case .GETProducts(let limit,let page,let str):
-                    var params :[String: AnyObject] = ["":""]
+                case .getProducts(let limit,let page,let str):
+                    var params :[String: AnyObject] = ["":"" as AnyObject]
                     params["limit"] = limit != nil ? limit : "20"
                     params["page"] = page != nil ? page : "1"
 
                     return ("/product/category/\(str)", params)
                     
-                case .GETProductDetail(let str):
-                    let params :[String: AnyObject] = ["":""]
+                case .getProductDetail(let str):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/product/product/\(str)", params)
                     
-                case .GETSearchProduct(let limit,let page,let order,let sort,let search,let descriptions):
+                case .getSearchProduct(let limit,let page,let order,let sort,let search,let descriptions):
                     
                     var params = Dictionary<String, String>()
                     
@@ -107,165 +107,165 @@ enum APIRouter: URLRequestConvertible
                     params["sort"] = sort != nil ? sort : "price"
                     params["description"] = descriptions != nil ? descriptions : "true"
                     
-                    return ("/product/search", params)
+                    return ("/product/search", params as [String : AnyObject])
                     //CART APIS
-                case .POSTAddtoCart(let product):
-                    let params :[String: AnyObject] = ["product_id":product.product_id!,"quantity":product.quantity!]
+                case .postAddtoCart(let product):
+                    let params :[String: AnyObject] = ["product_id":product.product_id! as AnyObject,"quantity":product.quantity! as AnyObject]
                     return ("/cart/product", params)
                 
-                case .POSTSetOption(let option):
-                    let params :[String: AnyObject] = ["\(option.title_en!.removeWhitespace().removeDots())[0]":option.title_admin!.removeWhitespace().removeDots()]
+                case .postSetOption(let option):
+                    let params :[String: AnyObject] = ["\(option.title_en!.removeWhitespace().removeDots())[0]":option.title_admin!.removeWhitespace().removeDots() as AnyObject]
                     return ("/cart/cart/setOptions", params)
                     
                     
-                case .GETCart:
-                    let params :[String: AnyObject] = ["":""]
+                case .getCart:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/cart/cart", params)
                     
-                case .DELETECart(let productkey):
-                    let params :[String: AnyObject] = ["":""]
+                case .deleteCart(let productkey):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/cart/product/\(productkey)", params)
                  
-                case .DELETEAddress(let address_id):
-                    let params :[String: AnyObject] = ["":""]
+                case .deleteAddress(let address_id):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/account/address/\(address_id)", params)
                     
                     // Checkout
-                case .POSTPaymentAdd(let address):
+                case .postPaymentAdd(let address):
                     var params :[String: AnyObject]!
                     if address.payment_address == "new" {
-                        params = ["payment_address": address.payment_address!,"firstname":address.firstname!,"lastname":address.lastname!,"address_1":address.address_1!,"city":address.city!,"postcode":address.postcode!,"country_id":address.country_id!,"zone_id":address.zone_id!]
+                        params = ["payment_address": address.payment_address! as AnyObject,"firstname":address.firstname! as AnyObject,"lastname":address.lastname! as AnyObject,"address_1":address.address_1! as AnyObject,"city":address.city! as AnyObject,"postcode":address.postcode! as AnyObject,"country_id":address.country_id! as AnyObject,"zone_id":address.zone_id! as AnyObject]
                     }else{
-                        params = ["payment_address": address.payment_address!,"address_id":Int(address.address_id!)]
+                        params = ["payment_address": address.payment_address! as AnyObject,"address_id":Int(address.address_id!) as AnyObject]
                     }
                     
                     return ("/checkout/payment_address", params)
                     
-                case .POSTShippingAdd(let address):
+                case .postShippingAdd(let address):
                     var params :[String: AnyObject]!
                     if address.shipping_address == "new" {
-                        params = ["shipping_address": address.shipping_address!,"firstname":address.firstname!,"lastname":address.lastname!,"address_1":address.address_1!,"city":address.city!,"postcode":address.postcode!,"country_id":address.country_id!,"zone_id":address.zone_id!]
+                        params = ["shipping_address": address.shipping_address! as AnyObject,"firstname":address.firstname! as AnyObject,"lastname":address.lastname! as AnyObject,"address_1":address.address_1! as AnyObject,"city":address.city! as AnyObject,"postcode":address.postcode! as AnyObject,"country_id":address.country_id! as AnyObject,"zone_id":address.zone_id! as AnyObject]
                     }else{
-                        params = ["shipping_address": address.shipping_address!,"address_id":Int(address.address_id!)]
+                        params = ["shipping_address": address.shipping_address! as AnyObject,"address_id":Int(address.address_id!) as AnyObject]
                     }
                     
                     return ("/checkout/shipping_address", params)
                     
-                case .GETShippingMethods:
-                    let params :[String: AnyObject] = ["":""]
+                case .getShippingMethods:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/checkout/shipping_method", params)
-                case .GETPaymentMethods:
-                    let params :[String: AnyObject] = ["":""]
+                case .getPaymentMethods:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/checkout/payment_method", params)
                     
-                case .POSTShippingMethods(let shipping_method,let comment):
-                    let params :[String: AnyObject] = ["shipping_method":shipping_method,"comment":comment]
+                case .postShippingMethods(let shipping_method,let comment):
+                    let params :[String: AnyObject] = ["shipping_method":shipping_method as AnyObject,"comment":comment as AnyObject]
                     return ("/checkout/shipping_method", params)
-                case .POSTPaymentMethods(let payment_method,let comment):
-                    let params :[String: AnyObject] = ["payment_method":payment_method,"comment":comment]
+                case .postPaymentMethods(let payment_method,let comment):
+                    let params :[String: AnyObject] = ["payment_method":payment_method as AnyObject,"comment":comment as AnyObject]
                     return ("/checkout/payment_method", params)
                     
-                case .GETConfirm:
-                    let params :[String: AnyObject] = ["":""]
+                case .getConfirm:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/checkout/confirm", params)
                     
-                case .GETPay(let access_token):
-                    let params :[String: AnyObject] = ["":""]
+                case .getPay(let access_token):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/checkout/pay?access_token=\(access_token)", params)
-                case .GETSuccess:
-                    let params :[String: AnyObject] = ["":""]
+                case .getSuccess:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/checkout/success", params)
                     
-                case .GETCountryZones(let cid):
-                    let params :[String: AnyObject] = ["":""]
+                case .getCountryZones(let cid):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/common/country/\(cid)", params)
                     
-                case .GETAddress:
-                    let params :[String: AnyObject] = ["":""]
+                case .getAddress:
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/account/address", params)
-                case .POSTLogin(let username,let pwd):
-                    let params :[String: AnyObject] = ["email":username,"password":pwd]
+                case .postLogin(let username,let pwd):
+                    let params :[String: AnyObject] = ["email":username as AnyObject,"password":pwd as AnyObject]
                     return ("/account/login", params)
                     
-                case .GETLogout :
-                    let params :[String: AnyObject] = ["":""]
+                case .getLogout :
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/account/logout", params)
                     
-                case .GETOrder(let page):
-                    let params :[String: AnyObject] = ["page":page]
+                case .getOrder(let page):
+                    let params :[String: AnyObject] = ["page":page as AnyObject]
                     return ("/account/order", params)
-                case .GETOrderWithId(let oid):
-                    let params :[String: AnyObject] = ["":""]
+                case .getOrderWithId(let oid):
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/account/order\(oid)", params)
-                case .PUTAccount(let account):
-                    let params :[String: AnyObject] = ["firstname":account.firstname!,"lastname":account.lastname!,"email":account.email!,"telephone":account.telephone!,"fax":account.fax!]
+                case .putAccount(let account):
+                    let params :[String: AnyObject] = ["firstname":account.firstname! as AnyObject,"lastname":account.lastname! as AnyObject,"email":account.email! as AnyObject,"telephone":account.telephone! as AnyObject,"fax":account.fax! as AnyObject]
                     return ("/account/account", params)
                     
                 case .POSTPWD(let pwd,let confirm):
-                    let params :[String: AnyObject] = ["password":pwd,"confirm":confirm]
+                    let params :[String: AnyObject] = ["password":pwd as AnyObject,"confirm":confirm as AnyObject]
                     return ("/account/password", params)
                     
-                case .POSTRegisterFB(let account):
-                    var params = [String: AnyObject]()
+                case .postRegisterFB(let account):
+                    var params = [
                     
-                    params["firstname"] = account.firstname != nil ? account.firstname! : ""
-                    params["lastname"] = account.lastname != nil ? account.lastname! : "NA"
-                    params["email"] = account.email != nil ? account.email! : "NA"
-                    params["telephone"] = account.telephone != nil ? account.telephone! : "123"
-                    params["fax"] = account.fax != nil ? account.fax! : ""
+                        "firstname" : account.firstname != nil ? account.firstname! : "",
+                        "lastname" : account.lastname != nil ? account.lastname! : "NA",
+                        "email" : account.email != nil ? account.email! : "NA",
+                        "telephone" : account.telephone != nil ? account.telephone! : "123",
+                        "fax" : account.fax != nil ? account.fax! : "",
                     
-                    params["password"] = account.password != nil ? account.password! : ""
-                    params["confirm"] = account.password != nil ? account.password! : ""
+                        "password" : account.password != nil ? account.password! : "",
+                        "confirm" : account.password != nil ? account.password! : "",
                     
-                    params["address_1"] = "NAA"
-                    params["address_2"] = "NA"
-                    params["city"] = "NA"
-                    params["postcode"] = "NA"
-                    params["country_id"] = "223"
-                    params["zone_id"] = "3613"
-                    params["custom_field[account][1]"] = account.fb != nil ? account.fb! : ""
+                        "address_1" : "NAA",
+                        "address_2" : "NA",
+                        "city" : "NA",
+                        "postcode" : "NA",
+                        "country_id" : "223",
+                        "zone_id" : "3613",
+                        "custom_field[account][1]" : account.fb != nil ? account.fb! : ""]
                     
                     
-                    return ("/account/registerfb", params)
+                    return ("/account/registerfb", params as [String : AnyObject])
                     
-                case .POSTRegister(let account):
-                    var params = [String: AnyObject]()
+                case .postRegister(let account):
+                    var params = [
+                        
+                        "firstname" : account.firstname != nil ? account.firstname! : "",
+                        "lastname" : account.lastname != nil ? account.lastname! : "NA",
+                        "email" : account.email != nil ? account.email! : "NA",
+                        "telephone" : account.telephone != nil ? account.telephone! : "123",
+                        "fax" : account.fax != nil ? account.fax! : "",
                     
-                    params["firstname"] = account.firstname != nil ? account.firstname! : ""
-                    params["lastname"] = account.lastname != nil ? account.lastname! : "NA"
-                    params["email"] = account.email != nil ? account.email! : "NA"
-                    params["telephone"] = account.telephone != nil ? account.telephone! : "123"
-                    params["fax"] = account.fax != nil ? account.fax! : ""
+                        "password" : account.password != nil ? account.password! : "",
+                        "confirm" : account.password != nil ? account.password! : "",
                     
-                    params["password"] = account.password != nil ? account.password! : ""
-                    params["confirm"] = account.password != nil ? account.password! : ""
+                        "address_1" : "NAA",
+                        "address_2" : "NA",
+                        "city" : "NA",
+                        "postcode" : "NA",
+                        "country_id" : "223",
+                        "zone_id" : "3613"]
                     
-                    params["address_1"] = "NAA"
-                    params["address_2"] = "NA"
-                    params["city"] = "NA"
-                    params["postcode"] = "NA"
-                    params["country_id"] = "223"
-                    params["zone_id"] = "3613"
+                    return ("/account/register", params as [String : AnyObject])
                     
-                    return ("/account/register", params)
-                    
-                case POSTForgotPwd(let email):
-                    let params :[String: AnyObject] = ["email":email]
+                case .postForgotPwd(let email):
+                    let params :[String: AnyObject] = ["email":email as AnyObject]
                     return ("/account/forgotten", params)
                     
-                case PUTCart(let key, let quantity):
-                    let params :[String: AnyObject] = [key:quantity]
+                case .putCart(let key, let quantity):
+                    let params :[String: AnyObject] = [key:quantity as AnyObject]
                     return ("/cart/product", params)
                     
                 default:
-                    let params :[String: AnyObject] = ["":""]
+                    let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("", params)
                     
                 }
                 }()
             
             
-            let URL = NSURL(string: APIRouter.BASE_URL)
+            let URL = Foundation.URL(string: APIRouter.BASE_URL)
             let URLRequest = NSMutableURLRequest(URL:URL!.URLByAppendingPathComponent(path))
             URLRequest.HTTPMethod = method.rawValue
             if let access_token = UserSessionInformation.sharedInstance.access_token{
@@ -276,7 +276,7 @@ enum APIRouter: URLRequestConvertible
                 
             }
             
-            let encoding = ParameterEncoding.URL
+            let encoding = ParameterEncoding.url
             //println("Headers ==== \(URLRequest.allHTTPHeaderFields!)")
             //println("parameters ==== \(parameters)")
             
@@ -288,20 +288,23 @@ enum APIRouter: URLRequestConvertible
     }
     
     
+    
 }
 
 class MINetworkManager: NSObject {
+    
+    private static var __once: () = {
+            Static.instance = MINetworkManager()
+        }()
     
     class var sharedInstance:MINetworkManager{
         
         struct Static{
             static var instance : MINetworkManager!
-            static var token : dispatch_once_t = 0
+            static var token : Int = 0
         }
         
-        dispatch_once(&Static.token){
-            Static.instance = MINetworkManager()
-        }
+        _ = MINetworkManager.__once
         
         return Static.instance
     }
@@ -313,16 +316,16 @@ class MINetworkManager: NSObject {
         // Create a shared URL cache
         let memoryCapacity = 500 * 1024 * 1024; // 500 MB
         let diskCapacity = 500 * 1024 * 1024; // 500 MB
-        let cache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: "shared_cache")
+        let cache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: "shared_cache")
         
         // Create a custom configuration
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        var defaultHeaders = Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders
+        let configuration = URLSessionConfiguration.default
+        let defaultHeaders = Manager.sharedInstance.session.configuration.httpAdditionalHeaders
         
-        configuration.HTTPAdditionalHeaders = defaultHeaders
-        configuration.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData
+        configuration.httpAdditionalHeaders = defaultHeaders
+        configuration.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
             // this is the default
-        configuration.URLCache = cache
+        configuration.urlCache = cache
         
         // Create your own manager instance that uses your custom configuration
         manager = Manager(configuration: configuration)

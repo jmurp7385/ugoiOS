@@ -19,15 +19,15 @@ class SelectBoxCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         txtSelect.backgroundColor = UIColor(r: 219, g: 219, b: 219, a: 1)
-        txtSelect.layer.shadowColor = UIColor.blackColor().CGColor
+        txtSelect.layer.shadowColor = UIColor.black.cgColor
         txtSelect.layer.shadowOpacity = 0.5
         txtSelect.layer.shadowRadius = 1
         
-        txtSelect.layer.shadowOffset = CGSizeMake(0.5 , 0.5)
+        txtSelect.layer.shadowOffset = CGSize(width: 0.5 ,height: 0.5)
         txtSelect.layer.cornerRadius = 3
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

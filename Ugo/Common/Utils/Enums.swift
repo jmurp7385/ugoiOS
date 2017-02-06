@@ -9,26 +9,26 @@
 import UIKit
 
 enum AddressType  : Int{
-    case Billing = 0
-    case Shipping
-    case BillingWithLocation
-    case ShippingWithLocation
-    case General
+    case billing = 0
+    case shipping
+    case billingWithLocation
+    case shippingWithLocation
+    case general
 }
 
 enum ProductList {
-    case Default
-    case Search
-    case WishList
-    case MyOrders
+    case `default`
+    case search
+    case wishList
+    case myOrders
 }
 
 enum dayType: Int
 {
-    case TODAY = 1
-    case TOMORROW  = 2
-    case YESTERDAY  = 3
-    case OTHER = 0
+    case today = 1
+    case tomorrow  = 2
+    case yesterday  = 3
+    case other = 0
 }
 
 enum barMenu {

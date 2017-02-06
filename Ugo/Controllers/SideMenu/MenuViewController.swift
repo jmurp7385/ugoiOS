@@ -21,7 +21,7 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         
         menus.append(Menu(name: "Profile", image: "profile"))
 
@@ -51,7 +51,7 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
@@ -63,15 +63,15 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     // MARK: - Table view data source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menus.count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 64
         }else{
@@ -80,28 +80,28 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("headerCell") as! HeaderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell") as! HeaderCell
             
             var str = "LOGIN"
             if UserSessionInformation.sharedInstance.isLoggedIn {
                 str = "\(UserSessionInformation.sharedInstance.fullname)"
             }
             
-            var attStr = NSMutableAttributedString(string: str, attributes: [NSForegroundColorAttributeName:UIColor.whiteColor(),NSFontAttributeName:font17r])
+            let attStr = NSMutableAttributedString(string: str, attributes: [NSForegroundColorAttributeName:UIColor.white,NSFontAttributeName:font17r])
             
-            cell.btnLogin.setAttributedTitle(attStr, forState: .Normal)
+            cell.btnLogin.setAttributedTitle(attStr, for: UIControlState())
 
             cell.btnLogin.titleLabel?.adjustsFontSizeToFitWidth = true
             cell.btnLogin.titleLabel?.minimumScaleFactor = 0.5
-            cell.btnLogin.addTarget(self, action: Selector("btnLoginTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.btnLogin.addTarget(self, action: #selector(MenuViewController.btnLoginTapped(_:)), for: UIControlEvents.touchUpInside)
             cell.backgroundColor = UIColor(r: 55, g: 139, b: 32, a: 1)
 
             return cell
         }else{
-            let cell = tableView.dequeueReusableCellWithIdentifier("menuCell") as! MenuCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell") as! MenuCell
      
             cell.lblName.text = menus[indexPath.row].name
 //            indexPath.row == 2 ? (cell.lblNotificationCount.hidden = false) : (cell.lblNotificationCount.hidden = true)
@@ -113,13 +113,13 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
     }
   
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //println("selected row \(indexPath.row)")
         if indexPath.row == 1 {
-            self.performSegueWithIdentifier("toHome", sender: nil)
+            self.performSegue(withIdentifier: "toHome", sender: nil)
         }else{
             if indexPath.row != 0 {
-                self.performSegueWithIdentifier("toWebView", sender: indexPath.row)
+                self.performSegue(withIdentifier: "toWebView", sender: indexPath.row)
             }
         }
         
@@ -129,18 +129,18 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     
-    func btnLoginTapped(sender: UIButton){
-        self.revealViewController().revealToggleAnimated(false)
+    func btnLoginTapped(_ sender: UIButton){
+        self.revealViewController().revealToggle(animated: false)
 
         if !UserSessionInformation.sharedInstance.isLoggedIn {
-            var vc: LoginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            var nav = UINavigationController(rootViewController: vc)
-            UIApplication.sharedApplication().keyWindow?.topMostController()?.presentViewController(nav, animated: true, completion: nil)
+            let vc: LoginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+            let nav = UINavigationController(rootViewController: vc)
+            UIApplication.shared.keyWindow?.topMostController()?.present(nav, animated: true, completion: nil)
 //            self.presentViewController(nav, animated: true, completion: nil)
         }else{
-            var vc: AccountViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AccountViewController") as! AccountViewController
-            var nav = UINavigationController(rootViewController: vc)
-            UIApplication.sharedApplication().keyWindow?.topMostController()?.presentViewController(nav, animated: true, completion: nil)
+            let vc: AccountViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AccountViewController") as! AccountViewController
+            let nav = UINavigationController(rootViewController: vc)
+            UIApplication.shared.keyWindow?.topMostController()?.present(nav, animated: true, completion: nil)
         }
     }
     
@@ -148,11 +148,11 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     // Get the new view controller using segue.destinationViewController.
     // Pass the selected object to the new view controller.
         
-        if let nav = segue.destinationViewController as? UINavigationController {
+        if let nav = segue.destination as? UINavigationController {
             if segue.identifier == "toWebView" {
                 if let webViewViewController = nav.childViewControllers[0] as? WebViewViewController {
                     var url = ""

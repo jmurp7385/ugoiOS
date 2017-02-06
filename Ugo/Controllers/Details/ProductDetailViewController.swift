@@ -37,7 +37,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.setBadge()
     }
     
@@ -50,7 +50,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
         if CommonUtility.isNetworkAvailable() {
             var product_id = "\(product.product_id!)"
             self.showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETProductDetail(product_id)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getProductDetail(product_id)).responseString { _, _, string, _ in
                 if let str = string {
                     //println(str)
                 }
@@ -91,7 +91,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     
     // MARK: - Table View Delegates
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if tableView != searchDisp.searchResultsTableView {
             if self.product.related_products.count > 0 {
                 return 2
@@ -99,11 +99,11 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 return 1
             }
         }else{
-            return super.numberOfSectionsInTableView(tableView)
+            return super.numberOfSections(in: tableView)
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if tableView != searchDisp.searchResultsTableView {
             
             if section == 0 {
@@ -116,7 +116,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
         }
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section != 0 {
             let label = UILabel()
             label.backgroundColor = UIColor(r: 228, g: 228, b: 228, a: 1)
@@ -129,7 +129,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
         return nil
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView != searchDisp.searchResultsTableView {
             return 1
         }else{
@@ -139,10 +139,11 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     
     
     
-    func heightForView(var text:String?, font:UIFont, width:CGFloat) -> CGFloat{
-        let label:UILabel = UILabel(frame: CGRectMake(0, 0, width, CGFloat.max))
+    func heightForView(_ text:String?, font:UIFont, width:CGFloat) -> CGFloat{
+        var text = text
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = font
         if text == nil {
             text = " "
@@ -161,7 +162,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     //        }
     //    }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView != searchDisp.searchResultsTableView {
             
             switch indexPath.section {
@@ -185,16 +186,16 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 return 44
             }
         }else{
-            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
         
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView != searchDisp.searchResultsTableView {
             
             if indexPath.section == 0 && indexPath.row == 0 {
-                var cell = tableView.dequeueReusableCellWithIdentifier("ProductDetailCell") as? ProductDetailCell
+                var cell = tableView.dequeueReusableCell(withIdentifier: "ProductDetailCell") as? ProductDetailCell
                 if cell == nil {
                     cell = ProductDetailCell.cell()
                 }
@@ -208,16 +209,16 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 
                 
                 if let stock = product.stock_status?.toInt() {
-                    cell!.btnAddtoCart.enabled = true
+                    cell!.btnAddtoCart.isEnabled = true
                     cell!.btnAddtoCart.alpha = 1
                     cell!.lblStockStatus.text = "Total \(stock) in Stock"
                 }else{
-                    cell!.btnAddtoCart.enabled = false
+                    cell!.btnAddtoCart.isEnabled = false
                     cell!.btnAddtoCart.alpha = 0.6
                     cell!.lblStockStatus.text = product.stock_status != nil ? product.stock_status! : ""
                 }
                 
-                cell!.imgProduct.setImageWithUrl(NSURL(string: product.image != nil ? product.image!.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)! : "")!, placeHolderImage: UIImage(named: "loading"))
+                cell!.imgProduct.setImageWithUrl(URL(string: product.image != nil ? product.image!.addingPercentEscapes(using: String.Encoding.utf8)! : "")!, placeHolderImage: UIImage(named: "loading"))
                 
                 cell!.lblDescription.setHTMLFromString(str)
                 
@@ -225,14 +226,14 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 return cell!
                 
             }else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("ProductListCell") as! ProductListCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ProductListCell") as! ProductListCell
                 cell.products = product.related_products
                 cell.loadingView.stopAnimating()
                 
                 return cell
             }
         }else{
-            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
         }
     }
     

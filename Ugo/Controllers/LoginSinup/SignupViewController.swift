@@ -21,7 +21,7 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
 
     // MARK: - Btn Actions
     
-    @IBAction func btnNextTapped(sender: UIButton) {
+    @IBAction func btnNextTapped(_ sender: UIButton) {
         
 //        var vw =  UIApplication.sharedApplication().keyWindow?.topMostController()
 //        var storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -36,7 +36,7 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
         signupAPI()
     }
     
-    func addressSelected(type: AddressType, address: Address) {
+    func addressSelected(_ type: AddressType, address: Address) {
         
     }
     
@@ -70,7 +70,7 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
             acc.email = self.txtEmail.text
             acc.password = self.txtPwd.text
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTRegister(account: acc)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegister(account: acc)).response { (request, response, data, error) in
                 //println(request)
                 //println(response)
                 //println(error)
@@ -86,7 +86,7 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()
-                            (UIApplication.sharedApplication().delegate as! AppDelegate).initVC()
+                            (UIApplication.shared.delegate as! AppDelegate).initVC()
 
                         }else{
                             CommonUtility.showAlertView("Information", message: resp.errorMsg)

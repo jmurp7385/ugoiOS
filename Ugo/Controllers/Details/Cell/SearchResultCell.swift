@@ -21,7 +21,7 @@ class SearchResultCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -29,8 +29,8 @@ class SearchResultCell: UITableViewCell {
     
     class func cell() ->  SearchResultCell
     {
-        var nib:NSArray = NSBundle.mainBundle().loadNibNamed("SearchResultCell", owner: self, options: nil)
-        var cell = nib.objectAtIndex(0) as?  SearchResultCell
+        let nib:NSArray = Bundle.mainBundle.loadNibNamed("SearchResultCell", owner: self, options: nil)
+        let cell = nib.object(at: 0) as?  SearchResultCell
         return cell!
     }
 }

@@ -69,8 +69,8 @@ class IQToolbar: UIToolbar , UIInputViewAudioFeedback {
         super.init(frame: frame)
         
         sizeToFit()
-        autoresizingMask = UIViewAutoresizing.FlexibleWidth
-        tintColor = UIColor .blackColor()
+        autoresizingMask = UIViewAutoresizing.flexibleWidth
+        tintColor = UIColor.black
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -78,10 +78,10 @@ class IQToolbar: UIToolbar , UIInputViewAudioFeedback {
 
         sizeToFit()
         autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-        tintColor = UIColor .blackColor()
+        tintColor = UIColor.black
     }
 
-    override func sizeThatFits(size: CGSize) -> CGSize {
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
         var sizeThatFit = super.sizeThatFits(size)
         sizeThatFit.height = 44
         return sizeThatFit
@@ -91,7 +91,7 @@ class IQToolbar: UIToolbar , UIInputViewAudioFeedback {
         
         didSet {
             if let unwrappedItems = items {
-                for item in unwrappedItems as! [UIBarButtonItem] {
+                for item in unwrappedItems {
                     
                     if item is IQTitleBarButtonItem {
                         item.tintColor = tintColor

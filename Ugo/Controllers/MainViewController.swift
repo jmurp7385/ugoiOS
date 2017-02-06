@@ -283,7 +283,7 @@ class MainViewController: BaseViewController ,UITableViewDataSource,UITableViewD
     }
     
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if tableView != searchDisp.searchResultsTableView {
             if section == 0 {
                 return 0

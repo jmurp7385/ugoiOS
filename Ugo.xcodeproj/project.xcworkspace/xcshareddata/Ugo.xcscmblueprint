@@ -1,5 +1,5 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "C3B7F6044788AAB939E3826680A6223F182401E4",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "38FCC9C9EDFDD39055ABC5ED697097D7F2684395",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "eceeca81-8a24-344e-81f9-38d2fb416878++3031" : {
       "DVTSourceControlWorkingCopyRepositoryBranchesLocationKey" : "branches",
@@ -8,12 +8,12 @@
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "C3B7F6044788AAB939E3826680A6223F182401E4" : 9223372036854775807,
+    "38FCC9C9EDFDD39055ABC5ED697097D7F2684395" : 9223372036854775807,
     "eceeca81-8a24-344e-81f9-38d2fb416878++3031" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "07CF8C4A-714D-4E29-A8DC-132AB725C70A",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "C3B7F6044788AAB939E3826680A6223F182401E4" : "ugoiOS\/",
+    "38FCC9C9EDFDD39055ABC5ED697097D7F2684395" : "Ugo\/",
     "eceeca81-8a24-344e-81f9-38d2fb416878++3031" : "iOS"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Ugo",
@@ -23,7 +23,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jmurp7385\/ugoiOS.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C3B7F6044788AAB939E3826680A6223F182401E4"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "38FCC9C9EDFDD39055ABC5ED697097D7F2684395"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/svn.mobinett.com\/Ugo",
