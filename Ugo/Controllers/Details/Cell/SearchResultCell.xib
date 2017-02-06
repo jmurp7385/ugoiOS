@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+            <string>Roboto-Medium</string>
+        </mutableArray>
+        <mutableArray key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="120" id="KGk-i7-Jjw" customClass="SearchResultCell" customModule="Ugo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="YeK-8k-B3q">
+                        <rect key="frame" x="8" y="8" width="103" height="103"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="YeK-8k-B3q" secondAttribute="height" multiplier="1:1" id="UFf-zP-5u2"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coconut Water" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zau-q3-tKc">
+                        <rect key="frame" x="124" y="8" width="155" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="7vo-y6-S9B"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$ 1.98" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ugz-wT-dId">
+                        <rect key="frame" x="124" y="31" width="155" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="2QW-fP-74X"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
+                        <color key="textColor" red="0.32913773148148151" green="0.32913773148148151" blue="0.32913773148148151" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y5D-Jx-6Rg">
+                        <rect key="frame" x="124" y="54" width="155" height="57"/>
+                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
+                        <color key="textColor" red="0.32913773149999997" green="0.32913773149999997" blue="0.32913773149999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="zau-q3-tKc" firstAttribute="leading" secondItem="YeK-8k-B3q" secondAttribute="trailing" constant="13" id="5ck-RK-84L"/>
+                    <constraint firstItem="ugz-wT-dId" firstAttribute="leading" secondItem="YeK-8k-B3q" secondAttribute="trailing" constant="13" id="5vM-n9-OMn"/>
+                    <constraint firstItem="Y5D-Jx-6Rg" firstAttribute="leading" secondItem="YeK-8k-B3q" secondAttribute="trailing" constant="13" id="7en-S1-74I"/>
+                    <constraint firstItem="Y5D-Jx-6Rg" firstAttribute="top" secondItem="ugz-wT-dId" secondAttribute="bottom" constant="8" id="CER-jX-IAZ"/>
+                    <constraint firstItem="ugz-wT-dId" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="JOY-MK-5dZ"/>
+                    <constraint firstItem="zau-q3-tKc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="M5S-Go-1xo"/>
+                    <constraint firstItem="YeK-8k-B3q" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="VCw-53-xcJ"/>
+                    <constraint firstItem="YeK-8k-B3q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="ZlT-Ks-ywI"/>
+                    <constraint firstItem="YeK-8k-B3q" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="a7i-C1-UN5"/>
+                    <constraint firstItem="Y5D-Jx-6Rg" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="dhC-BN-tsz"/>
+                    <constraint firstItem="Y5D-Jx-6Rg" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="mjC-eC-6CP"/>
+                    <constraint firstItem="ugz-wT-dId" firstAttribute="top" secondItem="zau-q3-tKc" secondAttribute="bottom" constant="8" id="vgb-t6-1sC"/>
+                    <constraint firstItem="zau-q3-tKc" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="zaf-Jd-YJq"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="imgProduct" destination="YeK-8k-B3q" id="lWa-fV-UR2"/>
+                <outlet property="lblDescription" destination="Y5D-Jx-6Rg" id="Epk-1c-eKZ"/>
+                <outlet property="lblPrice" destination="ugz-wT-dId" id="zow-7x-AGO"/>
+                <outlet property="lblTitle" destination="zau-q3-tKc" id="c2d-RK-fim"/>
+            </connections>
+            <point key="canvasLocation" x="349" y="271"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="loading" width="142" height="108"/>
+    </resources>
+</document>

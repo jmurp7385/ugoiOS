@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>07CF8C4A-714D-4E29-A8DC-132AB725C70A</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Ugo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>eceeca81-8a24-344e-81f9-38d2fb416878++3031</key>
+		<string>http://svn.mobinett.com/Ugo/trunk/iOS</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Ugo.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>eceeca81-8a24-344e-81f9-38d2fb416878++3031</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>eceeca81-8a24-344e-81f9-38d2fb416878++3031</key>
+		<string>http://svn.mobinett.com/Ugo</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://svn.mobinett.com/Ugo/trunk/iOS/Ugo.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>eceeca81-8a24-344e-81f9-38d2fb416878++3031</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryBranchesRelativeLocationKey</key>
+			<string>branches</string>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlRepositoryTagsRelativeLocationKey</key>
+			<string>tags</string>
+			<key>IDESourceControlRepositoryTrunkRelativeLocationKey</key>
+			<string>trunk</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>eceeca81-8a24-344e-81f9-38d2fb416878++3031</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS</string>
+		</dict>
+	</array>
+</dict>
+</plist>
