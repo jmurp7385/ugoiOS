@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class Category: NSObject {
     var category_id : Int?
@@ -20,7 +44,7 @@ class Category: NSObject {
     
     var page = 1
     var isCallAPI = true
-    var scollToIndexPath : NSIndexPath?
+    var scollToIndexPath : IndexPath?
     var index : Int?
 }
 
@@ -120,7 +144,7 @@ class Totals: NSObject {
     init(dict:[String:AnyObject]) {
         title = dict["title"] as? String
         text = dict["text"] as? String
-        title = title!.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
+        title = title!.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
 
     }
 }
@@ -183,7 +207,7 @@ class DMCart: BaseJsonModel {
         super.init(JSON: JSON)
         if status {
             if let dict = infoDict!["cart"] as? NSDictionary {
-                if let obj = dict.objectForKey("products") as? NSArray{
+                if let obj = dict.object(forKey: "products") as? NSArray{
                     cart.products = CommonParse.parseProducts(obj)                    
                 }
                 
@@ -213,7 +237,7 @@ class DMCart: BaseJsonModel {
                         for obj in dict3.allKeys {
                             var tip = DriverTipOptions()
                             
-                            if let tipObj = dict3.valueForKey(obj as! String) as? NSDictionary {
+                            if let tipObj = dict3.value(forKey: obj as! String) as? NSDictionary {
                                 tip.option_type = tipObj["option_type"] as? String
                                 tip.option_text_en = tipObj["option_text_en"] as? String
                                 tip.title_admin = tipObj["title_admin"] as? String
@@ -280,7 +304,7 @@ class DMCategory: BaseJsonModel {
             if let arr = infoDict!["categories"] as? NSArray {
                 categories = CommonParse.parseCategory(arr)
             }else if let obj = infoDict!["category"] as? NSDictionary {
-                var category = Category()
+                let category = Category()
                 category.category_id = obj["category_id"] as? Int
                 category.name = obj["name"] as? String
                 category.descriptions = obj["description"] as? String
@@ -296,7 +320,7 @@ class DMCategory: BaseJsonModel {
 }
 
 class CommonParse: NSObject {
-    static func parseCategory(arr : NSArray) -> [Category]{
+    static func parseCategory(_ arr : NSArray) -> [Category]{
         var categories : [Category] = []
         for cat in arr {
             var category = Category()
@@ -314,16 +338,16 @@ class CommonParse: NSObject {
         return categories
     }
     
-    static func parseProducts(arr : NSArray) -> [Product]{
+    static func parseProducts(_ arr : NSArray) -> [Product]{
         var products : [Product] = []
         for dict in arr {
-            products.append(CommonParse.parseProduct(dict))
+            products.append(CommonParse.parseProduct(dict as AnyObject))
         }
         return products
     }
     
     
-    static func parseProduct(dict:AnyObject) -> Product{
+    static func parseProduct(_ dict:AnyObject) -> Product{
         var product = Product()
         product.product_id = dict["product_id"] as? Int
         product.name = dict["name"] as? String

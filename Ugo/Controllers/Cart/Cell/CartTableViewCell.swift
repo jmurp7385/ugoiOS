@@ -28,13 +28,13 @@ class CartTableViewCell: SWTableViewCell {
         super.layoutSubviews()
         self.contentView.autoresizingMask = UIViewAutoresizing.FlexibleHeight|UIViewAutoresizing.FlexibleWidth
         self.contentView.frame = self.bounds
-        bgView.layer.shadowColor = UIColor(r: 0, g: 0, b: 0, a: 0.5).CGColor
-        bgView.layer.shadowOffset = CGSizeMake(0, 2)
+        bgView.layer.shadowColor = UIColor(r: 0, g: 0, b: 0, a: 0.5).cgColor
+        bgView.layer.shadowOffset = CGSize(width: 0, height: 2)
         bgView.layer.shadowOpacity = 1
         bgView.layer.shadowRadius = 5.0
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
        
 

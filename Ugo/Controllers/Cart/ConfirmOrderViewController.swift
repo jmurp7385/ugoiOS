@@ -34,8 +34,8 @@ class ConfirmOrderViewController: BaseViewController {
     func getPayAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETPay(access_token: userSession.access_token!)).response { (request, response, data, error) in
-                self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getPay(access_token: userSession.access_token!)).response { (request, response, data, error) in
+                self.dismiss(animated: true, completion: { () -> Void in
                     self.loadSuccessPage()
                 })
                 
@@ -47,9 +47,9 @@ class ConfirmOrderViewController: BaseViewController {
     }
     
     // MARK: - Btn Taps
-    @IBAction func btnConfirmTapped(sender: UIButton) {
+    @IBAction func btnConfirmTapped(_ sender: UIButton) {
         if order.needs_payment_now == true {
-            var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("WebViewViewController") as! WebViewViewController
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewViewController") as! WebViewViewController
             vc.strUrl = APIRouter.BASE_URL + "/checkout/pay?SOLUTIONTYPE=Sole&LANDINGPAGE=Billing&access_token=" + userSession.access_token!
             vc.isPayment = true
             self.navigationController?.pushViewController(vc, animated: true)
@@ -61,17 +61,17 @@ class ConfirmOrderViewController: BaseViewController {
 
     func loadSuccessPage(){
 
-        var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CheckoutSuccessController") as! CheckoutSuccessController
-        var nav = UINavigationController(rootViewController: vc)
-        UIApplication.sharedApplication().keyWindow?.topMostController()?.presentViewController(nav, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutSuccessController") as! CheckoutSuccessController
+        let nav = UINavigationController(rootViewController: vc)
+        UIApplication.shared.keyWindow?.topMostController()?.present(nav, animated: true, completion: nil)
     }
     // MARK: - Table View Delegates
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return order.products.count
         }else{
@@ -80,9 +80,9 @@ class ConfirmOrderViewController: BaseViewController {
 
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            var cell = tableView.dequeueReusableCellWithIdentifier("ConfirmOrderCell") as! ConfirmOrderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ConfirmOrderCell") as! ConfirmOrderCell
             cell.lblTitle.text = order.products[indexPath.row].name!
             cell.lblModel.text = order.products[indexPath.row].model!
             cell.lblQuantity.text = " x \(order.products[indexPath.row].quantity!)"
@@ -90,7 +90,7 @@ class ConfirmOrderViewController: BaseViewController {
             cell.lblTotal.text = order.products[indexPath.row].total!
             return cell
         }else{
-            var cell = tableView.dequeueReusableCellWithIdentifier("TotalTableViewCell") as! TotalTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TotalTableViewCell") as! TotalTableViewCell
             cell.lblLabel.text = order.totals[indexPath.row].title!
             cell.lblValue.text = order.totals[indexPath.row].text!
             return cell
@@ -99,7 +99,7 @@ class ConfirmOrderViewController: BaseViewController {
     }
     
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 72
         }else{
@@ -107,7 +107,7 @@ class ConfirmOrderViewController: BaseViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
     }

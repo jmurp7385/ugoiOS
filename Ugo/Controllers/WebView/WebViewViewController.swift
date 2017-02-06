@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgressDelegate{
     
@@ -27,7 +51,7 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.isTranslucent = false
         self.navigationItem.setHidesBackButton(true, animated:true);
         
         
@@ -35,9 +59,9 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
             self.navigationItem.leftBarButtonItem = customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTapped")
 
         }else{
-            var btnRefreshItem = UIBarButtonItem(image: UIImage(named: "web_refresh"), style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("btnRefreshTapped"))
+            let btnRefreshItem = UIBarButtonItem(image: UIImage(named: "web_refresh"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnRefreshTapped))
             
-            var btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("btnMenuTapped"))
+            let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
          
             
             self.navigationItem.rightBarButtonItem = btnRefreshItem
@@ -56,23 +80,23 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         progressProxy?.webViewProxyDelegate = self
         progressProxy?.progressDelegate = self
         
-        var req  = NSURLRequest(URL: NSURL(string: strUrl)!, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 3000.0)
+        let req  = Foundation.URLRequest(url: URL(string: strUrl)!, cachePolicy: NSURLRequest.CachePolicy.returnCacheDataElseLoad, timeoutInterval: 3000.0)
         webView.loadRequest(req)
         // Do any additional setup after loading the view.
     }
     
     func btnCloseTapped(){
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func setCloseButton() {
         self.navigationItem.leftBarButtonItem = customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTapped")
     }
     
-    func customBarBtn(width:CGFloat, height:CGFloat, imgName:String, actionName:String) -> UIBarButtonItem {
-        var replyBtn = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        replyBtn.setImage(UIImage(named: imgName), forState: UIControlState.Normal)
-        replyBtn.addTarget(self, action: Selector(actionName), forControlEvents:  UIControlEvents.TouchUpInside)
+    func customBarBtn(_ width:CGFloat, height:CGFloat, imgName:String, actionName:String) -> UIBarButtonItem {
+        let replyBtn = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        replyBtn.setImage(UIImage(named: imgName), for: UIControlState())
+        replyBtn.addTarget(self, action: Selector(actionName), for:  UIControlEvents.touchUpInside)
         
         return UIBarButtonItem(customView: replyBtn)
     }
@@ -82,7 +106,7 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
     // ^^^^^^^^^^^^^^
     
     func btnMenuTapped(){
-        self.revealViewController().revealToggleAnimated(true)
+        self.revealViewController().revealToggle(animated: true)
     }
     
     func btnStopTapped() {
@@ -112,10 +136,10 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         
         if webView != nil {
-            if webView.loading == true
+            if webView.isLoading == true
             {
                 webView.stopLoading()
             }
@@ -125,17 +149,17 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         super.viewWillDisappear(animated)
     }
     
-    func setLeftBarButtons(val:Bool) {
+    func setLeftBarButtons(_ val:Bool) {
         if val {
             if self.navigationItem.leftBarButtonItems?.count != 2 {
                 
-                var btnPreItem = UIBarButtonItem(image: UIImage(named: "web_back"), style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("btnPreTapped"))
+                var btnPreItem = UIBarButtonItem(image: UIImage(named: "web_back"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnPreTapped))
                
                 var btnNextItem = UIBarButtonItem(image: UIImage(named: "web_next"), style:
-                    UIBarButtonItemStyle.Bordered, target: self, action: Selector("btnNextTapped"))
+                    UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnNextTapped))
                 
                 
-                var btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("btnMenuTapped"))
+                let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
         
 
                 self.navigationItem.leftBarButtonItem = isPayment ? customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTapped") : btnMenuItem
@@ -156,10 +180,10 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
     // MARK: WebVIew Delegates
     // ^^^^^^^^^^^^^^^^^^^^^^^
     
-    func webViewDidStartLoad(webView: UIWebView) {
+    func webViewDidStartLoad(_ webView: UIWebView) {
         
         
-        var url = webView.request?.mainDocumentURL
+        _ = webView.request?.mainDocumentURL
         //print(url)
         
         
@@ -170,64 +194,64 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         }
         
         if self.navigationItem.leftBarButtonItems?.count > 1 {
-            var btnBack = self.navigationItem.leftBarButtonItems?[1] as? UIBarButtonItem
-            var btnForward = self.navigationItem.leftBarButtonItems?[2] as? UIBarButtonItem
+            let btnBack = self.navigationItem.leftBarButtonItems?[1] as UIBarButtonItem!
+            var btnForward = self.navigationItem.leftBarButtonItems?[2] as UIBarButtonItem!
             
             
             if webView.canGoBack || pageCnt > 0 {
-                btnBack?.enabled = true
+                btnBack?.isEnabled = true
             } else {
-                btnBack?.enabled = false
+                btnBack?.isEnabled = false
             }
             if webView.canGoForward{
-                btnForward?.enabled = true
+                btnForward?.isEnabled = true
             } else {
-                btnForward?.enabled = false
+                btnForward?.isEnabled = false
             }
         }
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
     
     
     
     
-    func webViewDidFinishLoad(webView: UIWebView) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        self.navigationItem.title = webView.stringByEvaluatingJavaScriptFromString("document.title")
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        self.navigationItem.title = webView.stringByEvaluatingJavaScript(from: "document.title")
         //        lblTitle.text = webView.stringByEvaluatingJavaScriptFromString("document.title")
         //        lblUrl.text = webView.stringByEvaluatingJavaScriptFromString("document.domain")
         
         if self.navigationItem.leftBarButtonItems?.count > 1 {
-            var btnBack = self.navigationItem.leftBarButtonItems?[1] as? UIBarButtonItem
-            var btnForward = self.navigationItem.leftBarButtonItems?[2] as? UIBarButtonItem
+            let btnBack = self.navigationItem.leftBarButtonItems?[1] as UIBarButtonItem! //from as? UIBarButtonItem
+            let btnForward = self.navigationItem.leftBarButtonItems?[2] as UIBarButtonItem! //from as? UIBarButtonItem
             
             if webView.canGoBack {
-                btnBack?.enabled = true;
+                btnBack?.isEnabled = true;
             } else {
-                btnBack?.enabled = false;
+                btnBack?.isEnabled = false;
             }
             
             if webView.canGoForward{
                 
-                btnForward?.enabled = true;
+                btnForward?.isEnabled = true;
             } else {
-                btnForward?.enabled = false;
+                btnForward?.isEnabled = false;
             }
         }
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if isPayment {
-            var str = request.mainDocumentURL?.URLString
-            if let contains = str?.rangeOfString("checkout/success"){
-                self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            let str = request.mainDocumentURL?.URLString
+            if (str?.range(of: "checkout/success")) != nil{     //changed from if (let contains = str?.range(of: "checkout/cart"))
+                self.dismiss(animated: true, completion: { () -> Void in
                     self.loadSuccessPage()
                 })
                 
                 return false
-            } else if let contains = str?.rangeOfString("checkout/cart"){
-                self.dismissViewControllerAnimated(true, completion: nil)
+            } else if (str?.range(of: "checkout/cart")) != nil{
+                self.dismiss(animated: true, completion: nil)
                 return false
             }
             
@@ -237,20 +261,20 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
     }
     
     func loadSuccessPage(){
-        var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CheckoutSuccessController") as! CheckoutSuccessController
-        var nav = UINavigationController(rootViewController: vc)
-        UIApplication.sharedApplication().keyWindow?.topMostController()!.presentViewController(nav, animated: true, completion: nil)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutSuccessController") as! CheckoutSuccessController
+        let nav = UINavigationController(rootViewController: vc)
+        UIApplication.shared.keyWindow?.topMostController()!.present(nav, animated: true, completion: nil)
         
         
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
     // MARK: NJ web del
     // ^^^^^^^^^^^^^^^^
-    func webViewProgress(webViewProgress: NJKWebViewProgress!, updateProgress progress: Float) {
+    func webViewProgress(_ webViewProgress: NJKWebViewProgress!, updateProgress progress: Float) {
         progressView.setProgress(progress, animated:true)
     }
     

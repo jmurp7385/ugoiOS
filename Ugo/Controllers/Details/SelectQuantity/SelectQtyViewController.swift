@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SelectQtyViewControllerDelegate {
-    func receivedSelectedQty(sku: String)
+    func receivedSelectedQty(_ sku: String)
 }
 
 class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
@@ -23,30 +23,30 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        var gesture = UITapGestureRecognizer(target: self, action: Selector("Done:"))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(SelectQtyViewController.Done(_:)))
         self.bgView.gestureRecognizers = [gesture]
-        tableView.contentInset = UIEdgeInsetsZero
+        tableView.contentInset = UIEdgeInsets.zero
         for i in 1..<16
         {
             quantityArr.append("\(i)")
         }
         var height = 5
         if quantityArr.count > 5 {
-            tableView.scrollEnabled = true
+            tableView.isScrollEnabled = true
         }else {
             height = quantityArr.count
         }
         
-        tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, tableView.frame.width, CGFloat(44 * height + 44))
-         tableView.center = CGPointMake(UIScreen.mainScreen().bounds.width/2, UIScreen.mainScreen().bounds.height/2)
+        tableView.frame = CGRect(x: tableView.frame.origin.x, y: tableView.frame.origin.y, width: tableView.frame.width, height: CGFloat(44 * height + 44))
+         tableView.center = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         
         
 //        tableView.backgroundColor = self.view.backgroundColor
-        tableView.layer.shadowColor = UIColor.blackColor().CGColor
+        tableView.layer.shadowColor = UIColor.black.cgColor
         tableView.layer.shadowOpacity = 1
         tableView.layer.shadowRadius = 5
         
-        tableView.layer.shadowOffset = CGSizeMake(1 , 1)
+        tableView.layer.shadowOffset = CGSize(width: 1 , height: 1)
         tableView.layer.cornerRadius = 10
         
 
@@ -54,7 +54,7 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
     }
@@ -65,12 +65,12 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     
     //MARK:- gesture function
-    func Done(sender:UITapGestureRecognizer?){
-        var vw =  self.parentViewController
+    func Done(_ sender:UITapGestureRecognizer?){
+        let vw =  self.parent
         
         let vc = vw!.childViewControllers.last as? SelectQtyViewController
         
-        vc?.willMoveToParentViewController(nil)
+        vc?.willMove(toParentViewController: nil)
         vc?.view.removeFromSuperview()
         vc?.removeFromParentViewController()
         
@@ -79,27 +79,27 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     
     //MARK:- Tableview Delegates
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var label = UILabel(frame: CGRectMake(0, 0, tableView.frame.width, tableView.frame.height))
-        label.textColor = UIColor.whiteColor()
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.frame.height))
+        label.textColor = UIColor.white
         label.backgroundColor = UIColor(r: 66, g: 140, b: 54, a: 1)
-        label.textAlignment = NSTextAlignment.Center
+        label.textAlignment = NSTextAlignment.center
         label.text = "Select Quantity"
         
         return label
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
         return quantityArr.count
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        product.setDefaultSku(quantityArr[indexPath.row])
 //
         delegate.receivedSelectedQty(quantityArr[indexPath.row])
@@ -108,12 +108,12 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
     
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("Cell") as? UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? UITableViewCell
         
         if cell == nil {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")

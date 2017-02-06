@@ -16,17 +16,17 @@ class Extensions: NSObject {
 }
 
 extension NSManagedObject {
-    func addObject(value: NSManagedObject, forKey: String) {
-        var items = self.mutableSetValueForKey(forKey);
-        items.addObject(value)
+    func addObject(_ value: NSManagedObject, forKey: String) {
+        let items = self.mutableSetValue(forKey: forKey);
+        items.add(value)
     }
 }
 
 extension Array {
-    func contains<T where T : Equatable>(obj: T) -> Bool {
+    func contains<T>(_ obj: T) -> Bool where T : Equatable {
         return self.filter({$0 as? T == obj}).count > 0
     }
-    func get(index: Int) -> T? {
+    func get(_ index: Int) -> T? {
         if 0 <= index && index < count {
             return self[index]
         } else {
@@ -42,26 +42,26 @@ extension Float{
 extension String {
     
     func trimWhiteSpaces() -> String {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
     func removeWhitespace() -> String {
-        return self.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        return self.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
     }
     
     func removeDots() -> String {
-        return self.stringByReplacingOccurrencesOfString(".", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        return self.replacingOccurrences(of: ".", with: "", options: NSString.CompareOptions.literal, range: nil)
     }
     
     var floatVal : Float {
         return (self as NSString).floatValue
     }
     
-    func getHtmlToAttributed(font:UIFont = font15) -> NSAttributedString {
-        let encodedData = self.dataUsingEncoding(NSUTF8StringEncoding)!
+    func getHtmlToAttributed(_ font:UIFont = font15) -> NSAttributedString {
+        let encodedData = self.data(using: String.Encoding.utf8)!
         let attributedOptions : [String: AnyObject] = [
-            NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
+            NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType as AnyObject,
+            NSCharacterEncodingDocumentAttribute: String.Encoding.utf8 as AnyObject,
             NSFontAttributeName : font
         ]
         let attributedString = NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil, error: nil)!
@@ -81,42 +81,42 @@ extension UIColor {
     }
     
     convenience init(hex:String , alpha: Double = 1.0){
-        var cString:NSString = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercaseString
+        var cString:NSString = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercased()
         
-        var rString = cString.substringToIndex(2)
-        var gString = (cString.substringFromIndex(2) as NSString).substringToIndex(2)
-        var bString = (cString.substringFromIndex(4)as NSString).substringToIndex(2)
+        var rString = cString.substring(to: 2)
+        var gString = (cString.substring(from: 2) as NSString).substring(to: 2)
+        var bString = (cString.substring(from: 4)as NSString).substring(to: 2)
         
         var r:CUnsignedInt = 0, g:CUnsignedInt = 0, b:CUnsignedInt = 0;
-        NSScanner(string: rString).scanHexInt(&r)
-        NSScanner(string: gString).scanHexInt(&g)
-        NSScanner(string: bString).scanHexInt(&b)
+        Scanner(string: rString).scanHexInt32(&r)
+        Scanner(string: gString).scanHexInt32(&g)
+        Scanner(string: bString).scanHexInt32(&b)
         self.init(red:CGFloat(r), green: CGFloat(g), blue: CGFloat(b), alpha: CGFloat(alpha))
     }
 }
 
 extension UIView{
     
-    func _गोल_करा(radius:CGFloat, color:UIColor = UIColor.clearColor()) -> UIView{
-        var rounfView:UIView = self
+    func _गोल_करा(_ radius:CGFloat, color:UIColor = UIColor.clear) -> UIView{
+        let rounfView:UIView = self
         rounfView.layer.cornerRadius = CGFloat(radius)
         rounfView.layer.borderWidth = 1
-        rounfView.layer.borderColor = color.CGColor
+        rounfView.layer.borderColor = color.cgColor
         rounfView.clipsToBounds = true
         return rounfView
     }
     
     var _गोल_करा:UIView! {
-        var rounfView:UIView = self
+        let rounfView:UIView = self
         rounfView._गोल_करा(rounfView.frame.width / 2)
         return rounfView
     }
     
     var shadow :UIView!{
-        self.layer.shadowColor = UIColor.blackColor().CGColor;
+        self.layer.shadowColor = UIColor.black.cgColor;
         self.layer.shadowOpacity = 0.5;
         self.layer.shadowRadius = 5.0;
-        self.layer.shadowOffset = CGSizeMake(0, 0);
+        self.layer.shadowOffset = CGSize(width: 0, height: 0);
         self.clipsToBounds = false;
 
         return self
@@ -125,32 +125,32 @@ extension UIView{
 
 extension UITextField {
     var setRightView : UITextField {
-        var imgView = UIImageView(frame: CGRectMake(0, 0, 30, 30))
+        let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         imgView.image = UIImage(named: "arrowdown")
     
         self.rightView = imgView
-        self.leftView = UIView(frame: CGRectMake(0, 0, 15, 30))
+        self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
         
-        self.rightViewMode = .Always
-        self.leftViewMode = .Always
+        self.rightViewMode = .always
+        self.leftViewMode = .always
         return self
     }
     
     var setBorder : UITextField {
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
-        self.leftView = UIView(frame: CGRectMake(0, 0, 15, 30))
-        self.rightView = UIView(frame: CGRectMake(0, 0, 15, 30))
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
+        self.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
 
-        self.leftViewMode = .Always
+        self.leftViewMode = .always
         return self
     }
     
     var setBorderBottom : UITextField {
         let border = CALayer()
-        var width : CGFloat = 0.4
-        border.borderColor = UIColor(r: 220, g: 220, b: 220, a: 1).CGColor
+        let width : CGFloat = 0.4
+        border.borderColor = UIColor(r: 220, g: 220, b: 220, a: 1).cgColor
         border.frame = CGRect(x: 0, y: self.frame.size.height - width, width:  self.frame.size.width, height: self.frame.size.height)
         border.borderWidth = width
         self.layer.addSublayer(border)
@@ -162,19 +162,19 @@ extension UITextField {
 
 extension UILabel {
     
-    func characterSpacing(val:CGFloat) {
+    func characterSpacing(_ val:CGFloat) {
         let attributedString = NSMutableAttributedString(string: self.text!)
         attributedString.addAttribute(NSKernAttributeName, value: val, range: NSMakeRange(0, attributedString.length))
         self.attributedText = attributedString
     }
     
     
-    func setHTMLFromString(text: String) {
-        var modifiedFont = NSString(format:"<span style=\"font-family: \(self.font.fontName); font-size: \(self.font.pointSize)\">%@</span>", text) as String
+    func setHTMLFromString(_ text: String) {
+        var modifiedFont = NSString(format:"<span style=\"font-family: \(self.font.fontName); font-size: \(self.font.pointSize)\">%@</span>" as NSString, text) as String
         
         var attrStr = NSAttributedString(
-            data: modifiedFont.dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: true)!,
-            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding],
+            data: modifiedFont.data(using: String.Encoding.unicode, allowLossyConversion: true)!,
+            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8],
             documentAttributes: nil,
             error: nil)
         
@@ -185,24 +185,24 @@ extension UILabel {
     func heightAsPerTheText(setTest txt:String) -> UILabel! {
         self.numberOfLines = 0
         self.text = txt
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.width, self.expectedHeight())
+        self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: self.expectedHeight())
         return self
     }
     
     func expectedHeight() -> CGFloat! {
         
-        let constraintSize = CGSizeMake(ScreenSize.SCREEN_WIDTH - 32, CGFloat.max)
-        let labelSize = self.text!.boundingRectWithSize(constraintSize,
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+        let constraintSize = CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: CGFloat.max)
+        let labelSize = self.text!.boundingRect(with: constraintSize,
+            options: NSStringDrawingOptions.usesLineFragmentOrigin,
             attributes: [NSFontAttributeName: self.font],
             context: nil)
         return labelSize.height + 15
     }
     
     func expectedWidth() -> CGFloat! {
-        let constraintSize = CGSizeMake(CGFloat.max, self.frame.height)
-        let labelSize = self.text!.boundingRectWithSize(constraintSize,
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+        let constraintSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: self.frame.height)
+        let labelSize = self.text!.boundingRect(with: constraintSize,
+            options: NSStringDrawingOptions.usesLineFragmentOrigin,
             attributes: [NSFontAttributeName: self.font],
             context: nil)
         return labelSize.width

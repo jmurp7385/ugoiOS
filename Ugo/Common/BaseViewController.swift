@@ -21,44 +21,44 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
     var userSession : UserSessionInformation!
     var loadingView:MBProgressHUD! = MBProgressHUD()
     var searchResults : [Product] = []
-    func showLoadingWithMessage(onView:UIView, message:String) {
+    func showLoadingWithMessage(_ onView:UIView, message:String) {
         loadingView = MBProgressHUD(view: onView)
         onView.addSubview(loadingView)
         loadingView.labelText = message
         loadingView.show(true)
     }
     
-    func hideLoadingIndicator(onView:UIView) {
-        MBProgressHUD.hideHUDForView(onView, animated: true)
+    func hideLoadingIndicator(_ onView:UIView) {
+        MBProgressHUD.hide(for: onView, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchDisp = UISearchDisplayController(searchBar: UISearchBar(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, 20)), contentsController: self)
+        searchDisp = UISearchDisplayController(searchBar: UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20)), contentsController: self)
         self.view.addSubview(searchDisp.searchBar)
-        searchDisp.searchBar.hidden = true
+        searchDisp.searchBar.isHidden = true
         searchDisp.searchResultsDataSource = self
         searchDisp.searchResultsDelegate = self
         searchDisp.searchBar.delegate = self
         searchDisp.delegate = self
         searchDisp.searchResultsTableView.rowHeight = UITableViewAutomaticDimension
         searchDisp.searchResultsTableView.estimatedRowHeight = 60
-        searchDisp.searchBar.tintColor = UIColor.blackColor()
+        searchDisp.searchBar.tintColor = UIColor.black
         
         userSession = UserSessionInformation.sharedInstance
         //        setBadge
         
         searchDisp.searchResultsTableView.separatorColor = UIColor(r: 65, g: 154, b: 43, a: 1)
-        searchDisp.searchBar.barTintColor = UIColor.blackColor()
-        searchDisp.searchBar.tintColor = UIColor.whiteColor()
+        searchDisp.searchBar.barTintColor = UIColor.black
+        searchDisp.searchBar.tintColor = UIColor.white
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleNetworkChange:"), name: kReachabilityChangedNotification, object: nil)
-        reachability = Reachability.reachabilityForInternetConnection()
+        NotificationCenter.default.addObserver(self, selector: #selector(BaseViewController.handleNetworkChange(_:)), name: NSNotification.Name(rawValue: kReachabilityChangedNotification), object: nil)
+        reachability = Reachability.forInternetConnection()
         reachability.startNotifier()
         
         
-        var revealController:SWRevealViewController? = self.revealViewController()
+        let revealController:SWRevealViewController? = self.revealViewController()
         
         if revealController != nil {
             revealController!.panGestureRecognizer()
@@ -66,9 +66,9 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         }
         
         
-        self.edgesForExtendedLayout = .None
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("removeAddWishListChildViewController"), name: "removeAddWishListChildViewController", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("setbadgeNotif"), name: "setbadge", object: nil)
+        self.edgesForExtendedLayout = UIRectEdge()
+        NotificationCenter.default.addObserver(self, selector: Selector("removeAddWishListChildViewController"), name: NSNotification.Name(rawValue: "removeAddWishListChildViewController"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BaseViewController.setbadgeNotif), name: NSNotification.Name(rawValue: "setbadge"), object: nil)
         
     }
     
@@ -76,7 +76,7 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         
     }
     
-    func handleNetworkChange(notification:NSNotification){
+    func handleNetworkChange(_ notification:Notification){
         
     }
     
@@ -90,13 +90,13 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
     
     func setBadge(){
         
-        var count = userSession.cartCount
+        let count = userSession.cartCount
         
         if count != 0 && cartBtn != nil {
             cartBtn.badgeValue = "\(count)"
-            cartBtn.badgeTextColor = UIColor.blackColor()
-            cartBtn.badgeBGColor = UIColor.whiteColor()
-            cartBtn.badgeFont = UIFont.systemFontOfSize(10)
+            cartBtn.badgeTextColor = UIColor.black
+            cartBtn.badgeBGColor = UIColor.white
+            cartBtn.badgeFont = UIFont.systemFont(ofSize: 10)
             cartBtn.badgeOriginX = 18
             cartBtn.badgeOriginY = -2
             cartBtn.badgePadding = 3
@@ -110,36 +110,36 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         
     }
     
-    func createButtonForNav(menu: barMenu) -> UIButton{
-        var btn = UIButton(frame: CGRectMake(0, 0, 30, 30))
+    func createButtonForNav(_ menu: barMenu) -> UIButton{
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         var name = ""
         
         switch menu {
         case barMenu.sidemenu:
             name = "menu"
-            btn.addTarget(self, action: Selector("menuTapped"), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.addTarget(self, action: Selector("menuTapped"), for: UIControlEvents.touchUpInside)
             break;
         case barMenu.logo:
             name = "topbar_logo"
-            btn.frame = CGRectMake(0, 0, 70, 30)
-            btn.addTarget(self, action: Selector("logoTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.frame = CGRect(x: 0, y: 0, width: 70, height: 30)
+            btn.addTarget(self, action: Selector("logoTapped:"), for: UIControlEvents.touchUpInside)
             break;
         case barMenu.tokri:
             name = "tokri"
-            btn.addTarget(self, action: Selector("tokriTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.addTarget(self, action: Selector("tokriTapped:"), for: UIControlEvents.touchUpInside)
             break;
         case barMenu.user:
             name = "user"
-            btn.addTarget(self, action: Selector("userTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.addTarget(self, action: Selector("userTapped:"), for: UIControlEvents.touchUpInside)
             break;
         case barMenu.search:
             name = "search"
-            btn.addTarget(self, action: Selector("searchTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.addTarget(self, action: Selector("searchTapped:"), for: UIControlEvents.touchUpInside)
             break;
         default :
             break;
         }
-        btn.setImage(UIImage(named: name), forState: UIControlState.Normal)
+        btn.setImage(UIImage(named: name), for: UIControlState())
         return btn
     }
     
@@ -154,7 +154,7 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         self.navigationItem.leftBarButtonItem = customBarBtn(25, height: 25, imgName: "icon_back", actionName: "btnBackTappedFromBase")
     }
     
-    func setCloseButton(isleft : Bool = true) {
+    func setCloseButton(_ isleft : Bool = true) {
         if isleft {
             self.navigationItem.leftBarButtonItem = customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTappedFromBase")
         }else{
@@ -162,33 +162,33 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         }
     }
     
-    func createBarButton(imgName:String, actionName:String) -> UIBarButtonItem {
-        var menuBtn = UIBarButtonItem(image: UIImage(named: imgName), style: UIBarButtonItemStyle.Bordered, target: self, action:
+    func createBarButton(_ imgName:String, actionName:String) -> UIBarButtonItem {
+        let menuBtn = UIBarButtonItem(image: UIImage(named: imgName), style: UIBarButtonItemStyle.bordered, target: self, action:
             Selector(actionName))
-        menuBtn.tintColor = UIColor.whiteColor()
+        menuBtn.tintColor = UIColor.white
         
         return menuBtn
     }
     
-    func customBarBtn(width:CGFloat, height:CGFloat, imgName:String, actionName:String) -> UIBarButtonItem {
-        var replyBtn = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        replyBtn.setImage(UIImage(named: imgName), forState: UIControlState.Normal)
-        replyBtn.addTarget(self, action: Selector(actionName), forControlEvents:  UIControlEvents.TouchUpInside)
+    func customBarBtn(_ width:CGFloat, height:CGFloat, imgName:String, actionName:String) -> UIBarButtonItem {
+        let replyBtn = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        replyBtn.setImage(UIImage(named: imgName), for: UIControlState())
+        replyBtn.addTarget(self, action: Selector(actionName), for:  UIControlEvents.touchUpInside)
         
         return UIBarButtonItem(customView: replyBtn)
     }
     
     // MARK: Search API
     
-    func searchProductAPI(searchText : String,page: String){
+    func searchProductAPI(_ searchText : String,page: String){
         if CommonUtility.isNetworkAvailable() {
             self.showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETSearchProduct(limit: "\(searchLimit)", page: page, order: nil, sort: nil, search: searchText, descriptions: nil)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSearchProduct(limit: "\(searchLimit)", page: page, order: nil, sort: nil, search: searchText, descriptions: nil)).responseString { _, _, string, _ in
                 if let str = string {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
-                    MBProgressHUD.hideAllHUDsForView(self.navigationController!.view, animated: true)
+                    MBProgressHUD.hideAllHUDs(for: self.navigationController!.view, animated: true)
                     
                     if JSON != nil {
                         var resp = DMProduct(JSON: JSON!)
@@ -221,7 +221,7 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
     // MARK: Search Display
     
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchResults = []
         
         if searchText == "" {
@@ -233,55 +233,55 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         }
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        searchDisp.searchBar.hidden = true
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchDisp.searchBar.isHidden = true
     }
     
-    func searchDisplayControllerDidBeginSearch(controller: UISearchDisplayController) {
-        searchDisp.searchBar.hidden = false
+    func searchDisplayControllerDidBeginSearch(_ controller: UISearchDisplayController) {
+        searchDisp.searchBar.isHidden = false
     }
     
-    func searchDisplayControllerDidEndSearch(controller: UISearchDisplayController) {
+    func searchDisplayControllerDidEndSearch(_ controller: UISearchDisplayController) {
         
     }
     
-    func searchDisplayControllerWillEndSearch(controller: UISearchDisplayController) {
-        searchDisp.searchBar.hidden = true
+    func searchDisplayControllerWillEndSearch(_ controller: UISearchDisplayController) {
+        searchDisp.searchBar.isHidden = true
     }
     
-    func addSearchButtonWithCart(chk:Bool) {
+    func addSearchButtonWithCart(_ chk:Bool) {
         
-        var searchBtn = createBarButton("search", actionName: "btnSearchTapped:")
-        var btn = UIButton(frame: CGRectMake(0, 0, 30, 30))
-        btn.addTarget(self, action: Selector("btnCartTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-        btn.setImage(UIImage(named: "cart"), forState: UIControlState.Normal)
+        let searchBtn = createBarButton("search", actionName: "btnSearchTapped:")
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        btn.addTarget(self, action: #selector(BaseViewController.btnCartTapped(_:)), for: UIControlEvents.touchUpInside)
+        btn.setImage(UIImage(named: "cart"), for: UIControlState())
         
         cartBtn = BBBadgeBarButtonItem(customUIButton: btn)
         
-        cartBtn.tintColor = UIColor.whiteColor()
+        cartBtn.tintColor = UIColor.white
         self.navigationItem.rightBarButtonItems = chk ? [cartBtn,searchBtn] : [searchBtn]
     }
     
     // MARK: - Btn Taps
     func btnBackTappedFromBase() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func btnCloseTappedFromBase() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func btnCartTapped(sender:AnyObject) {
-        var vc: CartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CartViewController") as! CartViewController
-        var nav = UINavigationController(rootViewController: vc)
-        self.presentViewController(nav, animated: true, completion: nil)
+    func btnCartTapped(_ sender:AnyObject) {
+        let vc: CartViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CartViewController") as! CartViewController
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true, completion: nil)
         
     }
     
     // Search disp
-    func btnSearchTapped(sender:AnyObject) {
+    func btnSearchTapped(_ sender:AnyObject) {
         searchDisp.searchBar.becomeFirstResponder()
-        searchDisp.searchBar.hidden = false
+        searchDisp.searchBar.isHidden = false
         
         page = 1
         isCallAPI = true
@@ -289,21 +289,21 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
     
     // MARK: - Table View Delegates
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if searchResults.count > 0 {
-            tableView.contentInset = UIEdgeInsetsZero
-            tableView.scrollIndicatorInsets = UIEdgeInsetsZero
+            tableView.contentInset = UIEdgeInsets.zero
+            tableView.scrollIndicatorInsets = UIEdgeInsets.zero
             
-            var cell = tableView.dequeueReusableCellWithIdentifier("SearchResultCell") as? SearchResultCell
+            var cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell") as? SearchResultCell
             if cell == nil {
                 cell = SearchResultCell.cell()
             }
@@ -313,7 +313,7 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
             
             cell!.lblTitle.text = product.name!
             cell!.lblPrice.text = product.price!
-            cell!.imgProduct.setImageWithUrl(NSURL(string: product.thumb_image!.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!, placeHolderImage: UIImage(named: "loading"))
+            cell!.imgProduct.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: UIImage(named: "loading"))
             if let description = product.descriptions {
                 cell!.lblDescription.text = description.trimWhiteSpaces()
             }
@@ -326,18 +326,18 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if searchResults.count > 0 {
-            var vc: ProductDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProductDetailViewController") as! ProductDetailViewController
+            let vc: ProductDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProductDetailViewController") as! ProductDetailViewController
             vc.product = searchResults[indexPath.row]
             self.navigationController!.pushViewController(vc, animated: true)
         }
@@ -345,12 +345,12 @@ class BaseViewController: UIViewController , UISearchBarDelegate, UISearchDispla
     }
     
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if CommonUtility.isNetworkAvailable() {
             if searchResults.count-1 == indexPath.row {
                 page += 1
                 if isCallAPI {
-                    self.searchProductAPI(searchDisp.searchBar.text, page: "\(page)")
+                    self.searchProductAPI(searchDisp.searchBar.text!, page: "\(page)")
                 }
             }
         }

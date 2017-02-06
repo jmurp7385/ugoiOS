@@ -31,11 +31,11 @@ class IQBarButtonItem: UIBarButtonItem {
         superclass()?.initialize()
         
         self.appearance().tintColor = nil
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Normal)
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Highlighted)
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Disabled)
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Selected)
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Application)
-        self.appearance().setTitleTextAttributes(nil, forState: UIControlState.Reserved)
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState())
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState.highlighted)
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState.disabled)
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState.selected)
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState.application)
+        self.appearance().setTitleTextAttributes(nil, for: UIControlState.reserved)
     }
 }

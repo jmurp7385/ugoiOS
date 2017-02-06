@@ -20,7 +20,7 @@ class EditAccountViewController: BaseViewController {
     @IBOutlet weak var btnSubmit: UIButton!
     var account : Account!
     
-    @IBAction func btnSubmitTapped(sender: UIButton) {
+    @IBAction func btnSubmitTapped(_ sender: UIButton) {
         account.firstname = txtFirstName.text
         account.lastname = txtLastName.text
         account.email = txtEmail.text
@@ -36,13 +36,13 @@ class EditAccountViewController: BaseViewController {
         
         self.title = "My Account"
         setCloseButton()
-
+/* warning said they were not used, from extensions.swift
         txtFirstName.setBorderBottom
         txtLastName.setBorderBottom
         txtEmail.setBorderBottom
         txtTelephone.setBorderBottom
         txtFax.setBorderBottom
-        
+*/      
         account = userSession.account
 
         txtFirstName.text = account.firstname!
@@ -59,24 +59,24 @@ class EditAccountViewController: BaseViewController {
     func putAccountAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.PUTAccount(account: account)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.putAccount(account: account)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                 if JSON != nil{
-                    var resp = DMAccount(JSON: JSON!)
+                    let resp = DMAccount(JSON: JSON!)
                     
                     if resp.status {
                         var account = DMAccount(JSON: JSON!)
                         self.userSession.account = account.account
                         self.userSession.storeData()
                         CommonUtility.showAlertView("Information", message: "Account Details updated successfully")
-                        self.navigationController?.popViewControllerAnimated(true)
+                        self.navigationController?.popViewController(animated: true)
 
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
             }

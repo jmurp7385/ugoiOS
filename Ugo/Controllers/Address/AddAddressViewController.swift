@@ -43,7 +43,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         address = Address()
         
         
-        var gesture = UITapGestureRecognizer(target: self, action: Selector("Done:"))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(AddAddressViewController.Done(_:)))
         self.bgView.gestureRecognizers = [gesture]
         scrollView.contentSize = CGSize(width: 300, height: 400)
         
@@ -61,7 +61,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             
-            if (locationManager.respondsToSelector(Selector("requestWhenInUseAuthorization"))) {
+            if (locationManager.responds(to: #selector(CLLocationManager.requestWhenInUseAuthorization))) {
                 locationManager.requestWhenInUseAuthorization()
             }
             locationManager.startUpdatingLocation()
@@ -70,11 +70,11 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         
         btnSubmit._गोल_करा(5)
         scrollView.layer.cornerRadius = 10
-        bgContentView.layer.shadowColor = UIColor.blackColor().CGColor
+        bgContentView.layer.shadowColor = UIColor.black.cgColor
         bgContentView.layer.shadowOpacity = 1
         bgContentView.layer.shadowRadius = 5
         
-        bgContentView.layer.shadowOffset = CGSizeMake(1 , 1)
+        bgContentView.layer.shadowOffset = CGSize(width: 1 , height: 1)
         bgContentView.layer.cornerRadius = 10
         // Do any additional setup after loading the view.
     }
@@ -85,7 +85,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     
     //MARK:- Btn Events
     
-    @IBAction func btnSubmitTapped(sender: UIButton) {
+    @IBAction func btnSubmitTapped(_ sender: UIButton) {
         address.firstname = userSession.account?.firstname
         address.lastname = userSession.account?.lastname
         address.address_1 = self.txtAdd1.text
@@ -95,10 +95,10 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         
         if address.validate {
             //println(address.geocode_add)
-            var addressPoint = geoCodeUsingAddress(address.geocode_add!)
-            var currentLoc = CLLocation(latitude: addressPoint.latitude, longitude: addressPoint.longitude)
-            var distanceKM = (currentLoc.distanceFromLocation(storePoint) / 1000)
-            var distMiles = distanceKM * 0.6214
+            let addressPoint = geoCodeUsingAddress(address.geocode_add!)
+            let currentLoc = CLLocation(latitude: addressPoint.latitude, longitude: addressPoint.longitude)
+            let distanceKM = (currentLoc.distance(from: storePoint) / 1000)
+            let distMiles = distanceKM * 0.6214
             
             //println("distanceKM : \(distanceKM)  distMiles : \(distMiles)")
             
@@ -118,14 +118,14 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     }
     
     //MARK: toolbar btn events
-    @IBAction func btnCancelTapped(sender: AnyObject) {
+    @IBAction func btnCancelTapped(_ sender: AnyObject) {
         selectedTxt.resignFirstResponder()
     }
     
-    @IBAction func btnDoneTapped(sender: AnyObject) {
+    @IBAction func btnDoneTapped(_ sender: AnyObject) {
         
         if dataArray.count > 0{
-            var loc: AnyObject = dataArray[pickerView.selectedRowInComponent(0)]
+            let loc: AnyObject = dataArray[pickerView.selectedRow(inComponent: 0)]
             if selectedTxt == txtCountry {
                 self.txtCountry.text = loc.name!
                 self.address.country_id = (loc as! Country).country_id!
@@ -141,10 +141,10 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     }
     
     //MARK:- gesture function
-    func Done(sender:UITapGestureRecognizer?){
-        var vw =  UIApplication.sharedApplication().keyWindow?.topMostController()
+    func Done(_ sender:UITapGestureRecognizer?){
+        let vw =  UIApplication.shared.keyWindow?.topMostController()
         let vc = vw!.childViewControllers.last as? AddAddressViewController
-        vc?.willMoveToParentViewController(nil)
+        vc?.willMove(toParentViewController: nil)
         vc?.view.removeFromSuperview()
         vc?.removeFromParentViewController()
     }
@@ -155,17 +155,17 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     }
     
     //MARK: Location delegates
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    //added @nonobjc
+    @nonobjc func locationManager(_ manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         //println("did update \(locations)")
-        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error) -> Void in
+        CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: { (placemarks, error) -> Void in
             if (error != nil) {
                 //println("Reverse geocoder failed with error" + error.localizedDescription)
                 return
             }
-            if placemarks.count > 0 {
-                let pm = placemarks[0] as! CLPlacemark
-                self.displayLocationInfo(pm)
+            if (placemarks?.count)! > 0 {
+                let pm = placemarks?[0] as CLPlacemark!
+                self.displayLocationInfo(pm!)
             } else {
                 //println("Problem with the data received from geocoder")
             }
@@ -174,7 +174,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         
     }
     
-    func displayLocationInfo(placemark: CLPlacemark) {
+    func displayLocationInfo(_ placemark: CLPlacemark) {
         //stop updating location to save battery life
         locationManager.stopUpdatingLocation()
         
@@ -202,18 +202,18 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         //        delegate.addressAdded(type, address: add)
     }
     
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         //println(error.description)
     }
     
     
-    func geoCodeUsingAddress(add : String) -> CLLocationCoordinate2D {
+    func geoCodeUsingAddress(_ add : String) -> CLLocationCoordinate2D {
         var latitude : Double = 0
         var longitude : Double = 0
-        var esc_addr = add.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+        var esc_addr = add.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) //String.Encoding.utf8 to .urlHostAllowed
         var str = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=\(esc_addr!)"
-        var result = String(contentsOfURL: NSURL(string: str)!, encoding: NSUTF8StringEncoding, error: nil)
-        var scanner = NSScanner(string: result!)
+        var result = String(contentsOf: URL(string: str)!, encoding: String.Encoding.utf8, error: nil)
+        var scanner = Scanner(string: result!)
         if scanner.scanUpToString("\"lat\" :", intoString: nil) && scanner.scanString("\"lat\" :", intoString: nil)
         {
             scanner.scanDouble(&latitude)
@@ -234,12 +234,12 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     
     
     // MARK: - Text Field Delegaate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         selectedTxt.resignFirstResponder()
         return true
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
         selectedTxt = textField
         if textField == txtCountry {
@@ -259,24 +259,24 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     
     
     
-    func getZonesAPI(country_id:String){
+    func getZonesAPI(_ country_id:String){
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETCountryZones(country_id: country_id)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCountryZones(country_id: country_id)).responseString { _, _, string, _ in
+                if string != nil {
                     //println(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        var resp = Country(JSON: JSON!)
+                        let resp = Country(JSON: JSON!)
                         if resp.status {
                             self.dataArray = resp.zones
                             self.pickerView.selectRow(0, inComponent: 0, animated: false)
                             self.pickerView.reloadAllComponents()
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                         
                     }
@@ -294,15 +294,15 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     // ^^^^^^^^^^^^^^^^^^^^^^^
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return dataArray.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         //        if selectedTxt == txtCountry {
         //            return dataArray[row].name

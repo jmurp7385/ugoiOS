@@ -13,26 +13,26 @@ let iOS7 = floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_i
 
 enum UIUserInterfaceIdiom : Int
 {
-    case Unspecified
-    case Phone
-    case Pad
+    case unspecified
+    case phone
+    case pad
 }
 
 struct ScreenSize
 {
-    static let SCREEN_WIDTH         = UIScreen.mainScreen().bounds.size.width
-    static let SCREEN_HEIGHT        = UIScreen.mainScreen().bounds.size.height
+    static let SCREEN_WIDTH         = UIScreen.main.bounds.size.width
+    static let SCREEN_HEIGHT        = UIScreen.main.bounds.size.height
     static let SCREEN_MAX_LENGTH    = max(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
     static let SCREEN_MIN_LENGTH    = min(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
 }
 
 struct DeviceType
 {
-    static let IS_IPHONE_4_OR_LESS  = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH < 568.0
-    static let IS_IPHONE_5          = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 568.0
-    static let IS_IPHONE_6          = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 667.0
-    static let IS_IPHONE_6P         = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 736.0
-    static let IS_IPAD              = UIDevice.currentDevice().userInterfaceIdiom == .Pad && ScreenSize.SCREEN_MAX_LENGTH == 1024.0
+    static let IS_IPHONE_4_OR_LESS  = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH < 568.0
+    static let IS_IPHONE_5          = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH == 568.0
+    static let IS_IPHONE_6          = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH == 667.0
+    static let IS_IPHONE_6P         = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH == 736.0
+    static let IS_IPAD              = UIDevice.current.userInterfaceIdiom == .pad && ScreenSize.SCREEN_MAX_LENGTH == 1024.0
 }
 
 
@@ -44,31 +44,31 @@ class CommonUtility: NSObject {
     var loadingView:MBProgressHUD! = MBProgressHUD()
 
     let navBarColor:UIColor = UIColor(red: 40/255.0, green: 140/255.0, blue: 210/255.0, alpha: 1)
-    let navBarContentColor:UIColor = UIColor.whiteColor()
+    let navBarContentColor:UIColor = UIColor.white
  
-    class func showAlertView(title:NSString, message:NSString){
+    class func showAlertView(_ title:NSString, message:NSString){
         let alert = UIAlertView()
         alert.title = title as String
         alert.message = message as String
-        alert.addButtonWithTitle("Ok")
+        alert.addButton(withTitle: "Ok")
         alert.show()
         
     }
     
     
-    class func showToast(msg : String){
-        var hud = MBProgressHUD(view: UIApplication.sharedApplication().keyWindow)
-        UIApplication.sharedApplication().keyWindow!.addSubview(hud)
-        hud.customView = UIImageView(image: UIImage(named: "menucheck"))
-        hud.mode = MBProgressHUDModeCustomView
-        hud.labelText = msg
-        hud.show(true)
-        hud.hide(true, afterDelay: 3)
+    class func showToast(_ msg : String){
+        let hud = MBProgressHUD(view: UIApplication.shared.keyWindow)
+        UIApplication.shared.keyWindow!.addSubview(hud!)
+        hud?.customView = UIImageView(image: UIImage(named: "menucheck"))
+        hud?.mode = MBProgressHUDModeCustomView
+        hud?.labelText = msg
+        hud?.show(true)
+        hud?.hide(true, afterDelay: 3)
     }
 
     
     
-    func showLoadingWithMessage(onView:UIView, message:String) {
+    func showLoadingWithMessage(_ onView:UIView, message:String) {
         
         loadingView = MBProgressHUD(view: onView)
         onView.addSubview(loadingView)
@@ -76,9 +76,9 @@ class CommonUtility: NSObject {
         loadingView.show(true)
     }
     
-    func hideLoadingIndicator(onView:UIView) {
+    func hideLoadingIndicator(_ onView:UIView) {
         
-        MBProgressHUD.hideHUDForView(onView, animated: true)
+        MBProgressHUD.hide(for: onView, animated: true)
     }
     
     
@@ -86,7 +86,7 @@ class CommonUtility: NSObject {
     
     //MARK:- get Nav controller
     class func getNavigationController() -> UINavigationController? {
-        if let navigationController = UIApplication.sharedApplication().keyWindow?.rootViewController  {
+        if let navigationController = UIApplication.shared.keyWindow?.rootViewController  {
             return navigationController as? UINavigationController
         }
         return nil
@@ -95,45 +95,45 @@ class CommonUtility: NSObject {
     
     func attributedText(WithStr str:String) -> NSAttributedString! {
         
-        var attrStr:NSMutableAttributedString = NSMutableAttributedString(string: "& \(str)")
+        let attrStr:NSMutableAttributedString = NSMutableAttributedString(string: "& \(str)")
         attrStr.addAttribute(NSForegroundColorAttributeName, value: CommonUtility().navBarColor, range: NSMakeRange(0, 2))
         
         return attrStr
     }
     
-    func setSearchIconForTxt(txtSearch:UITextField, withImageName:NSString) {
+    func setSearchIconForTxt(_ txtSearch:UITextField, withImageName:NSString) {
         
-        var searchImg = UIImage(named: withImageName as String)
-        var leftImgView = UIImageView(image: searchImg)
-        leftImgView.frame = CGRectMake(10, 0, searchImg!.size.width, searchImg!.size.height)
-        var leftView = UIView(frame: CGRectMake(0, 0, 20, searchImg!.size.width))
+        let searchImg = UIImage(named: withImageName as String)
+        let leftImgView = UIImageView(image: searchImg)
+        leftImgView.frame = CGRect(x: 10, y: 0, width: searchImg!.size.width, height: searchImg!.size.height)
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: searchImg!.size.width))
         leftView.addSubview(leftImgView)
         
-        txtSearch.leftViewMode = UITextFieldViewMode.Always
+        txtSearch.leftViewMode = UITextFieldViewMode.always
         txtSearch.leftView = leftView
     }
     
     func calculateHeight(WithString str:String) -> CGFloat! {
         
-        var font = UIFont.systemFontOfSize(15)
+        let font = UIFont.systemFont(ofSize: 15)
         
-        var rect:CGRect = str.boundingRectWithSize(CGSize(width: 280, height: 999), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName:font], context: nil)
+        let rect:CGRect = str.boundingRect(with: CGSize(width: 280, height: 999), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:font], context: nil)
         
         return rect.height
     }
     
-   class func heightForView(text:String) -> CGFloat{
-        var calculationView : UITextView = UITextView()
+   class func heightForView(_ text:String) -> CGFloat{
+        let calculationView : UITextView = UITextView()
         calculationView.text = text
         
-        var size : CGSize  = calculationView.sizeThatFits(CGSize(width: ScreenSize.SCREEN_WIDTH, height: CGFloat.max))
+        let size : CGSize  = calculationView.sizeThatFits(CGSize(width: ScreenSize.SCREEN_WIDTH, height: CGFloat.greatestFiniteMagnitude))
         return size.height
     }
     
-   class func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat{
-        let label:UILabel = UILabel(frame: CGRectMake(0, 0, width, CGFloat.max))
+   class func heightForView(_ text:String, font:UIFont, width:CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = font
         label.text = text
         label.sizeToFit()
@@ -141,7 +141,7 @@ class CommonUtility: NSObject {
     }
     
 
-    func transformedValue(value:Double) -> String {
+    func transformedValue(_ value:Double) -> String {
         
         var tokens:Array = ["bytes", "KB", "MB", "GB", "TB"]
         var convertedValue:Double = value
@@ -149,24 +149,24 @@ class CommonUtility: NSObject {
         
         while (convertedValue > 1024) {
             convertedValue /= 1024;
-            multiplyFactor++;
+            multiplyFactor += 1;
         }
         
         return NSString(format: "%4.2f %@",convertedValue, tokens[multiplyFactor]) as String
     }
     
-    func addNoDataLabelOnView(viewToAdd:UIView, text txt:String)
+    func addNoDataLabelOnView(_ viewToAdd:UIView, text txt:String)
     {
-        var tmpView = UIView(frame: CGRectMake(20, 100, 280, 40))
+        let tmpView = UIView(frame: CGRect(x: 20, y: 100, width: 280, height: 40))
         tmpView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         tmpView.layer.cornerRadius = 5
         
-        var lbl = UILabel(frame: CGRectMake(10, 0, tmpView.frame.width - 20, tmpView.frame.height))
-        lbl.backgroundColor = UIColor.clearColor()
-        lbl.textColor = UIColor.whiteColor()
+        let lbl = UILabel(frame: CGRect(x: 10, y: 0, width: tmpView.frame.width - 20, height: tmpView.frame.height))
+        lbl.backgroundColor = UIColor.clear
+        lbl.textColor = UIColor.white
         lbl.numberOfLines = 0
-        lbl.font = UIFont.systemFontOfSize(13)
-        lbl.textAlignment = NSTextAlignment.Center
+        lbl.font = UIFont.systemFont(ofSize: 13)
+        lbl.textAlignment = NSTextAlignment.center
                 lbl.text = txt
         tmpView.addSubview(lbl)
         viewToAdd.addSubview(tmpView)
@@ -174,18 +174,18 @@ class CommonUtility: NSObject {
     
     class func generateRandomString() -> NSString
     {
-        var letters: NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let letters: NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         var randomString: NSString = ""
-        for index in 0...16
+        for _ in 0...16
         {
-            randomString = randomString.stringByAppendingFormat("%C", letters.characterAtIndex(Int(arc4random_uniform(26)) % letters.length))
+            randomString = randomString.appendingFormat("%C", letters.character(at: Int(arc4random_uniform(26)) % letters.length))
         }
         return randomString
     }
 
     class func isNetworkAvailable() -> Bool
     {
-        var reachability:Reachability = Reachability.reachabilityForInternetConnection()
+        var reachability:Reachability = Reachability.forInternetConnection()
         var internetStatus:NetworkStatus = reachability.currentReachabilityStatus()
         
         if(internetStatus.value !=  NotReachable.value){
@@ -196,88 +196,88 @@ class CommonUtility: NSObject {
         }
     }
     
-    class func todayTomorowOrDateBy(strDate:String?) -> dayType
+    class func todayTomorowOrDateBy(_ strDate:String?) -> dayType
     {
         if(strDate != nil)
         {
-            var dateFormatter:NSDateFormatter = NSDateFormatter()
+            let dateFormatter:DateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             
-            var actdate:NSDate? = dateFormatter.dateFromString(strDate!)
-            var currDate:NSDate = NSDate()
+            let actdate:Date? = dateFormatter.date(from: strDate!)
+            var currDate:Date = Date()
             
-            var dtcomponents:NSDateComponents? = getDateComponentsFromDate(actdate)
-            var currcomponents:NSDateComponents? = getDateComponentsFromDate(currDate)
+            var dtcomponents:DateComponents? = getDateComponentsFromDate(actdate)
+            var currcomponents:DateComponents? = getDateComponentsFromDate(currDate)
             
             if (dtcomponents?.day == currcomponents?.day && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
             {
-                return  dayType.TODAY//"Today"
+                return  dayType.today//"Today"
             }
-            else if (dtcomponents?.day == currcomponents!.day + 1 && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
+            else if ((dtcomponents?.day)! == currcomponents!.day! + 1 && dtcomponents?.month == (currcomponents?.month)! && dtcomponents?.year == (currcomponents?.year)!)
             {
-                return dayType.TOMORROW //"Tomorrow"
+                return dayType.tomorrow //"Tomorrow"
             }
-            else if (dtcomponents?.day == currcomponents!.day - 1 && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
+            else if ((dtcomponents?.day)! == currcomponents!.day! - 1 && dtcomponents?.month == (currcomponents?.month)! && dtcomponents?.year == (currcomponents?.year)!)
             {
-                return dayType.YESTERDAY //"Yesterday"
+                return dayType.yesterday //"Yesterday"
             }
             else
             {
-                return dayType.OTHER
+                return dayType.other
             }
         }
         else
         {
-            return dayType.OTHER
+            return dayType.other
         }
     }
     
     
    
-    class func todayTomorowOrDateForChatBy(strDate:String?) -> dayType
+    class func todayTomorowOrDateForChatBy(_ strDate:String?) -> dayType
     {
         if(strDate != nil)
         {
-            var dateFormatter:NSDateFormatter = NSDateFormatter()
+            var dateFormatter:DateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             
-            var actdate:NSDate? = dateFormatter.dateFromString(strDate!)
-            var currDate:NSDate = NSDate()
+            var actdate:Date? = dateFormatter.date(from: strDate!)
+            var currDate:Date = Date()
             
-            var dtcomponents:NSDateComponents? = getDateComponentsFromDate(actdate)
-            var currcomponents:NSDateComponents? = getDateComponentsFromDate(currDate)
+            var dtcomponents:DateComponents? = getDateComponentsFromDate(actdate)
+            var currcomponents:DateComponents? = getDateComponentsFromDate(currDate)
             
             if (dtcomponents?.day == currcomponents?.day && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
             {
-                return  dayType.TODAY//"Today"
+                return  dayType.today//"Today"
             }
-            else if (dtcomponents?.day == currcomponents!.day + 1 && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
+            else if ((dtcomponents?.day)! == currcomponents!.day! + 1 && dtcomponents?.month == (currcomponents?.month)! && dtcomponents?.year == (currcomponents?.year)!)
             {
-                return dayType.TOMORROW //"Tomorrow"
+                return dayType.tomorrow //"Tomorrow"
             }
-            else if (dtcomponents?.day == currcomponents!.day - 1 && dtcomponents?.month == currcomponents?.month && dtcomponents?.year == currcomponents?.year)
+            else if ((dtcomponents?.day)! == currcomponents!.day! - 1 && dtcomponents?.month == (currcomponents?.month)! && dtcomponents?.year == (currcomponents?.year)!)
             {
-                return dayType.YESTERDAY //"Yesterday"
+                return dayType.yesterday //"Yesterday"
             }
             else
             {
-                return dayType.OTHER
+                return dayType.other
             }
         }
         else
         {
-            return dayType.OTHER
+            return dayType.other
         }
     }
     
-    class func getDateComponentsFromDate(date:NSDate?) -> NSDateComponents?
+    class func getDateComponentsFromDate(_ date:Date?) -> DateComponents?
     {
         if(date != nil)
         {
-            var gregorian:NSCalendar? = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+            var gregorian:Calendar? = Calendar(identifier: NSGregorianCalendar)
             if(gregorian != nil)
             {
-                var components:NSDateComponents = gregorian!.components(NSCalendarUnit.DayCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.YearCalendarUnit, fromDate:date!)
+                var components:DateComponents = gregorian!.components(NSCalendar.Unit.DayCalendarUnit | NSCalendar.Unit.MonthCalendarUnit | NSCalendar.Unit.YearCalendarUnit, fromDate:date!)
                 
                 return components
             }
@@ -287,7 +287,7 @@ class CommonUtility: NSObject {
     
     //MARK: - Validations
     
-    class func containsSpecialCharacters(string: String) -> Bool {
+    class func containsSpecialCharacters(_ string: String) -> Bool {
         let regex = NSRegularExpression(pattern: "[^A-Za-z]", options: nil, error: nil)!
         if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, count(string))) != nil {
             return true
@@ -295,7 +295,7 @@ class CommonUtility: NSObject {
         return false
     }
 
-    class func containsNumbers(string: String) -> Bool {
+    class func containsNumbers(_ string: String) -> Bool {
         let regex = NSRegularExpression(pattern: "[0-9]", options: nil, error: nil)!
         if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, count(string))) != nil {
             return true
@@ -303,8 +303,8 @@ class CommonUtility: NSObject {
         return false
     }
     
-    class func isValidEmail(emailString:String) -> Bool {
+    class func isValidEmail(_ emailString:String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluateWithObject(emailString)
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: emailString)
     }
 }

@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewControllerDelegate{
     
@@ -20,7 +44,7 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     var product : Product!
     @IBOutlet weak var btnAddtoCart: UIButton!
     
-    @IBAction func btnAddToCartTapped(sender: UIButton) {
+    @IBAction func btnAddToCartTapped(_ sender: UIButton) {
         
 
         if product.quantity != nil && product.quantity != 0{
@@ -39,7 +63,7 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.window!, message: "Adding product to cart...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.POSTAddtoCart(product)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postAddtoCart(product)).responseString { _, _, string, _ in
                 if let str = string {
                     //println(str)
                 }
@@ -50,7 +74,7 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
                 
                 if response.status {
                     UserSessionInformation.sharedInstance.cartCount = response.cart.products.count
-                    NSNotificationCenter.defaultCenter().postNotificationName("setbadge", object: nil)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "setbadge"), object: nil)
                     
                     
                 }else{
@@ -79,12 +103,12 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     //        self.layoutIfNeeded()
     //    }
     
-    func receivedSelectedQty(sku: String) {
+    func receivedSelectedQty(_ sku: String) {
         //print("receivedSelectedQty \(sku)")
         if let stock = product.stock_status?.toInt() {
             if stock >= sku.toInt() {
                 product.quantity = sku.toInt()
-                btnSelectQty.setTitle("Quantity   \(sku)", forState: UIControlState.Normal)
+                btnSelectQty.setTitle("Quantity   \(sku)", for: UIControlState())
             }else{
                 CommonUtility.showAlertView("Information", message: "No stock for product or the minimum quantity requirement of a product is not met.")
             }
@@ -92,13 +116,13 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
         
     }
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 0 {
-            var count = alertView.textFieldAtIndex(0)?.text
+            var count = alertView.textField(at: 0)?.text
             
             if let ct = count?.toInt() {
                 product.quantity = ct
-                btnSelectQty.setTitle("Quantity   \(ct)", forState: UIControlState.Normal)
+                btnSelectQty.setTitle("Quantity   \(ct)", for: UIControlState())
 
             }
             
@@ -106,7 +130,7 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
         }
     }
     
-    @IBAction func btnSelectQtyTapped(sender: UIButton) {
+    @IBAction func btnSelectQtyTapped(_ sender: UIButton) {
         
 //        var alert = UIAlertView(title: "Select Quantity", message: "", delegate: self, cancelButtonTitle: "OK")
 //        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
@@ -114,17 +138,17 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
 //        alert.show()
         
         
-        var vw =  UIApplication.sharedApplication().keyWindow?.rootViewController
+        let vw =  UIApplication.shared.keyWindow?.rootViewController
         
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var quantity = storyboard.instantiateViewControllerWithIdentifier("SelectQtyViewController") as! SelectQtyViewController
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let quantity = storyboard.instantiateViewController(withIdentifier: "SelectQtyViewController") as! SelectQtyViewController
         
         quantity.delegate = self
         quantity.product = product
         vw!.addChildViewController(quantity)
-        quantity.view.frame = UIScreen.mainScreen().bounds
+        quantity.view.frame = UIScreen.main.bounds
         vw!.view.addSubview(quantity.view)
-        quantity.didMoveToParentViewController(vw!)
+        quantity.didMove(toParentViewController: vw!)
         
     }
     
@@ -135,11 +159,11 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
         
         
         btnSelectQty.backgroundColor = self.backgroundColor
-        btnSelectQty.layer.shadowColor = UIColor.blackColor().CGColor
+        btnSelectQty.layer.shadowColor = UIColor.black.cgColor
         btnSelectQty.layer.shadowOpacity = 0.5
         btnSelectQty.layer.shadowRadius = 0.8
         
-        btnSelectQty.layer.shadowOffset = CGSizeMake(0.5 , 0.5)
+        btnSelectQty.layer.shadowOffset = CGSize(width: 0.5 , height: 0.5)
         btnSelectQty.layer.cornerRadius = 3
         
         
@@ -148,26 +172,27 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     
     class func cell() -> ProductDetailCell
     {
-        var nib:NSArray = NSBundle.mainBundle().loadNibNamed("ProductDetailCell", owner: self, options: nil)
-        var cell = nib.objectAtIndex(0) as? ProductDetailCell
+        let nib:NSArray = Bundle.mainBundle.loadNibNamed("ProductDetailCell", owner: self, options: nil)
+        let cell = nib.object(at: 0) as? ProductDetailCell
         return cell!
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
     }
     
-    class func heightForCell(var str:String?) -> CGFloat
+    class func heightForCell(_ str:String?) -> CGFloat
     {
+        var str = str
         var cell = ProductDetailCell.cell()
         if str == nil {
             str = " "
         }
         cell.lblDescription.setHTMLFromString(str!)
         
-        var rect = cell.lblDescription.attributedText.boundingRectWithSize(CGSizeMake(ScreenSize.SCREEN_WIDTH - 32, 10000), options: NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, context: nil)
+        var rect = cell.lblDescription.attributedText?.boundingRectWithSize(CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: 10000), options: NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, context: nil)
         
         cell.lblDescription.sizeToFit()
         var lblHt = cell.lblDescription.frame.height

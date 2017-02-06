@@ -135,7 +135,7 @@
 
 /* Begin PBXFileReference section */
 		04009F3B1E3A99DC00201BFC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		04009F3D1E3A99DC00201BFC /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		C910177E1B720EF200930472 /* BBBadgeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBadgeBarButtonItem.h; sourceTree = "<group>"; };
 		C910177F1B720EF200930472 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
@@ -442,8 +442,8 @@
 				C96537991B6F49AC0073A160 /* Alamofire.swift */,
 				C965379A1B6F49AC0073A160 /* Download.swift */,
 				C965379B1B6F49AC0073A160 /* Manager.swift */,
-				C965379C1B6F49AC0073A160 /* MultipartFormData.swift */,
 				C965379D1B6F49AC0073A160 /* ParameterEncoding.swift */,
+				C965379C1B6F49AC0073A160 /* MultipartFormData.swift */,
 				C965379E1B6F49AC0073A160 /* Request.swift */,
 				C965379F1B6F49AC0073A160 /* ResponseSerialization.swift */,
 				C96537A01B6F49AC0073A160 /* ServerTrustPolicy.swift */,
@@ -460,7 +460,6 @@
 				C9B286441C69BE5400434716 /* GpsLocation1.gpx */,
 				C95B66741BD11B9E003AC194 /* Mobinett HQ.gpx */,
 				04009F3B1E3A99DC00201BFC /* FBSDKCoreKit.framework */,
-				04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */,
 				04009F3D1E3A99DC00201BFC /* FBSDKShareKit.framework */,
 				C9AA94EC1B84ADE10013867C /* CoreLocation.framework */,
 				C9682A0F1B674BD5007CC3C5 /* Ugo */,
@@ -497,6 +496,7 @@
 		C9682A101B674BD5007CC3C5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */,
 				C9C4B02A1B6A093200B918F7 /* Font */,
 				C9682A111B674BD5007CC3C5 /* Info.plist */,
 			);
@@ -833,9 +833,11 @@
 					C9682A0C1B674BD5007CC3C5 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 2BZX6J5L3M;
+						LastSwiftMigration = 0820;
 					};
 					C9682A211B674BD5007CC3C5 = {
 						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 0820;
 						TestTargetID = C9682A0C1B674BD5007CC3C5;
 					};
 				};
@@ -1068,6 +1070,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1108,6 +1111,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1127,7 +1131,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Ugo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ugollc.shopper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1153,7 +1157,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Ugo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ugollc.shopper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1180,6 +1184,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobinett.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ugo.app/Ugo";
 			};
 			name = Debug;
@@ -1196,6 +1201,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mobinett.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ugo.app/Ugo";
 			};
 			name = Release;

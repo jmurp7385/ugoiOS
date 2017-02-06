@@ -34,20 +34,20 @@ class OrderHistoryViewController: BaseViewController {
 
     // MARK: - Table View Delegates
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray.count
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 66
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("OrderCell") as! OrderCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OrderCell") as! OrderCell
 
         let obj = dataArray[indexPath.row]
         cell.lblAmount.text = obj.total!
@@ -58,29 +58,29 @@ class OrderHistoryViewController: BaseViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
          if CommonUtility.isNetworkAvailable() {
             if dataArray.count-1 == indexPath.row {
                 page += 1
                 if isCallAPI {
-                    getOrderHistoryAPI(page: "\(page)")
+                    getOrderHistoryAPI("\(page)")
                 }
             }
         }
     }
     // MARK: - API calls
     
-    func getOrderHistoryAPI(page : String = ""){
+    func getOrderHistoryAPI(_ page : String = ""){
         
         
         //print("page \(page)")
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.GETOrder(page: page)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getOrder(page: page)).responseString { _, _, string, _ in
                 if let str = string {
                     //println(str)
                 }
@@ -97,13 +97,13 @@ class OrderHistoryViewController: BaseViewController {
                         
                         self.tableView.reloadData()
                     }else{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                     }
                 }
             }
             
         }else{
-            CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
+            CommonUtility.showAlertView(ß,"Network Unavailable", message: "Please check your internet connectivity and try again.")
         }
     }
     /*
