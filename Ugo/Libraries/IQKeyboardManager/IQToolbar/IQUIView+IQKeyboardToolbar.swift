@@ -440,7 +440,7 @@ extension UIView {
             items.append(cancelButton)
             
             if let unwrappedTitleText = titleText {
-                if count(unwrappedTitleText) != 0 && shouldHideTitle == false {
+                if unwrappedTitleText.characters.count != 0 && shouldHideTitle == false {
                     /*
                     66 Cancel button maximum x.
                     50 done button frame.
@@ -553,7 +553,7 @@ extension UIView {
             items.append(cancelButton)
             
             if let unwrappedTitleText = titleText {
-                if count(unwrappedTitleText) != 0 && shouldHideTitle == false {
+                if unwrappedTitleText.characters.count != 0 && shouldHideTitle == false {
                     /*
                     66 Cancel button maximum x.
                     50 done button frame.

@@ -195,7 +195,7 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         
         if self.navigationItem.leftBarButtonItems?.count > 1 {
             let btnBack = self.navigationItem.leftBarButtonItems?[1] as UIBarButtonItem!
-            var btnForward = self.navigationItem.leftBarButtonItems?[2] as UIBarButtonItem!
+            let btnForward = self.navigationItem.leftBarButtonItems?[2] as UIBarButtonItem!
             
             
             if webView.canGoBack || pageCnt > 0 {
