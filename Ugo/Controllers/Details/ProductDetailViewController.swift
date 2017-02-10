@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var lblTitle: UILabel!

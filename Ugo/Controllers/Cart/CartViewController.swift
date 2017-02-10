@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQtyViewControllerDelegate{
     
@@ -41,7 +42,7 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         //        btnSelectQty.setTitle(sku, forState: UIControlState.Normal)
         
         var product = products[selectedIndex]
-        product.quantity = sku.toInt()
+        product.quantity = Int(sku)
         putCartAPI(product.key!, quantity: product.quantity!)
         
     }

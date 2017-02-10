@@ -7,9 +7,19 @@
 //
 
 import UIKit
+import Alamofire
 
 enum APIRouter: URLRequestConvertible
 {
+    /// Returns a URL request or throws if an `Error` was encountered.
+    ///
+    /// - throws: An `Error` if the underlying `URLRequest` is `nil`.
+    ///
+    /// - returns: A URL request.
+    public func asURLRequest() throws -> URLRequest {
+        print("nil")
+    }
+
     static let BASE_URL = "https://www.ugollc.com/api/v1"
 //    static let BASE_URL = "http://sadiq-mac.local/openupload/api/v1"
 //    static let BASE_URL = "http://localhost/ugo/api/v1"
@@ -45,20 +55,20 @@ enum APIRouter: URLRequestConvertible
     case postRegister(account :Account),postRegisterFB(account :Account) ,postForgotPwd(email:String),postSetOption(option : DriverTipOptions)
     case getLogout
     
-    var method: Method {
+    var method: Alamofire.HTTPMethod {
         switch self {
         case .postToken,.postAddtoCart,.postLogin,.postPaymentAdd,.postShippingAdd,.postShippingMethods,.postPaymentMethods,.postpwd,.postRegister,.postForgotPwd,.postRegisterFB,.postSetOption:
-            return .POST
+            return .post
             
-        case .initApp,.getCountryZones , .getOrder ,.getOrderWithId,.getLogout,.getCategories,.getSpecialProducts,.getSpecialProducts,.getProducts,.getProductDetail,.getSearchProduct,.getCart,.getAddress,.getShippingMethods,.getPaymentMethods,.getConfirm,.getPay,.getSuccess:
+        case .initApp, .getCountryZones , .getOrder ,.getOrderWithId,.getLogout,.getCategories,.getSpecialProducts,.getSpecialProducts,.getProducts,.getProductDetail,.getSearchProduct,.getCart,.getAddress,.getShippingMethods,.getPaymentMethods,.getConfirm,.getPay,.getSuccess:
             
-            return .GET
+            return .get
             
         case .deleteCart,.deleteAddress:
-            return .DELETE
+            return .delete
             
         case .putAccount , .putCart:
-            return .PUT
+            return .put
             
             
             
@@ -69,8 +79,10 @@ enum APIRouter: URLRequestConvertible
     
     var URLRequest: Foundation.URLRequest
         {
+        
+        let (path: String, parameters: [Stri])
             let (path: String, parameters: [String: AnyObject]) =
-            { () -> (String, [String : AnyObject]) in 
+            { () -> (String, [String : AnyObject]) in
                 switch self
                 {
                 case .postToken:
@@ -201,7 +213,7 @@ enum APIRouter: URLRequestConvertible
                     let params :[String: AnyObject] = ["firstname":account.firstname! as AnyObject,"lastname":account.lastname! as AnyObject,"email":account.email! as AnyObject,"telephone":account.telephone! as AnyObject,"fax":account.fax! as AnyObject]
                     return ("/account/account", params)
                     
-                case .POSTPWD(let pwd,let confirm):
+                case .postpwd(let pwd,let confirm):
                     let params :[String: AnyObject] = ["password":pwd as AnyObject,"confirm":confirm as AnyObject]
                     return ("/account/password", params)
                     
@@ -283,7 +295,7 @@ enum APIRouter: URLRequestConvertible
             //println("Method ==== \(URLRequest.HTTPMethod)")
             //println("URL ==== \(URLRequest.URLString)")
             
-            return encoding.encode(URLRequest, parameters: parameters).0
+            return encoding.encode(URLRequest, parameters: paramaters).0
             
     }
     
@@ -294,8 +306,8 @@ enum APIRouter: URLRequestConvertible
 class MINetworkManager: NSObject {
     
     private static var __once: () = {
-            Static.instance = MINetworkManager()
-        }()
+        Static.instance = MINetworkManager()
+    }()
     
     class var sharedInstance:MINetworkManager{
         
@@ -309,8 +321,9 @@ class MINetworkManager: NSObject {
         return Static.instance
     }
     
+   
     
-    var manager: Manager?
+    var manager: SessionManager?
     
     override init() {
         // Create a shared URL cache
@@ -320,7 +333,7 @@ class MINetworkManager: NSObject {
         
         // Create a custom configuration
         let configuration = URLSessionConfiguration.default
-        let defaultHeaders = Manager.sharedInstance.session.configuration.httpAdditionalHeaders
+        let defaultHeaders = manager.sharedInstance.session.configuration.httpAdditionalHeaders
         
         configuration.httpAdditionalHeaders = defaultHeaders
         configuration.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
@@ -328,7 +341,7 @@ class MINetworkManager: NSObject {
         configuration.urlCache = cache
         
         // Create your own manager instance that uses your custom configuration
-        manager = Manager(configuration: configuration)
+        manager = manager(configuration: configuration)
         
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Alamofire
 
 class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginButtonDelegate{
     
@@ -82,7 +83,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         {
             let loginButton = FBSDKLoginButton()
             loginButton.center = CGPoint(x: self.vwFB.center.x, y: self.vwFB.frame.height/2)
-            //println(self.vwFB.center)
+            //print(self.vwFB.center)
             self.vwFB.addSubview(loginButton)
             
             
@@ -94,7 +95,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        //println("User Logged In")
+        //print("User Logged In")
         
         if ((error) != nil)
         {
@@ -108,11 +109,11 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             // should check if specific permissions missing
             if result.grantedPermissions.contains("email")
             {
-                //println("Granted email permission")
+                //print("Granted email permission")
                 
                 if let dict = result as? NSDictionary{
                     for d in dict {
-                        println(d)
+                        print(d)
                     }
                 }
                 // Do work
@@ -122,7 +123,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        //println("User Logged Out")
+        //print("User Logged Out")
     }
     
     func returnUserData()
@@ -131,36 +132,36 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             if let dict = result as? NSDictionary{
                 for d in dict {
-                    //println(d)
+                    //print(d)
                 }
             }
             
             if ((error) != nil)
             {
                 // Process error
-                //println("Error: \(error)")
+                //print("Error: \(error)")
             }
             else
             {
-                //println("fetched user: \(result)")
+                //print("fetched user: \(result)")
                 if let first_name : String = result.value(forKey: "first_name") as? String{
-                    //println("first_name is: \(first_name)")
+                    //print("first_name is: \(first_name)")
                     self.acc.firstname = first_name
                     
                 }
                 if let last_name : String = result.value(forKey: "last_name") as? String{
-                    //println("last_name is: \(last_name)")
+                    //print("last_name is: \(last_name)")
                     self.acc.lastname = last_name
                     
                 }
                 if let email : String = result.value(forKey: "email") as? String{
-                    //println("email is: \(email)")
+                    //print("email is: \(email)")
                     self.acc.email = email
                 }else{
                     CommonUtility.showAlertView("Information", message: "No email address is found")
                 }
                 if let id : String = result.value(forKey: "id") as? String{
-                    //println("id is: \(id)")
+                    //print("id is: \(id)")
                     self.acc.fb = id
                 }
                 
@@ -199,12 +200,12 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             //changed POSTLogin to postLogin
             MINetworkManager.sharedInstance.manager?.request(APIRouter.postLogin(txtUsername.text!, txtPwd.text!)).response { (request, response, data, error) in
-                //                //println(request)
-                //                //println(response)
-                //                //println(error)
+                //                //print(request)
+                //                //print(response)
+                //                //print(error)
                 }.responseString { _, _, string, _ in
                     if let str = string {
-                        //println(str)
+                        //print(str)
                     }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
@@ -234,7 +235,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Submitting...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.postForgotPwd(email: email)).responseString { _, _, string, _ in
                 if string != nil {
-                    //println(str)
+                    //print(str)
                 }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
@@ -263,12 +264,12 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegisterFB(account: acc)).response { (request, response, data, error) in
-                //println(request)
-                //println(response)
-                //println(error)
+                //print(request)
+                //print(response)
+                //print(error)
                 }.responseString { _, _, string, _ in
                     if string != nil {
-                        //println(str)
+                        //print(str)
                     }
                 }.responseJSON { _, _, JSON, _ in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)

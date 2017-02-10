@@ -81,7 +81,7 @@ extension UIView {
             }
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &kIQShouldHideTitle, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &kIQShouldHideTitle, newValue, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
         }
     }
     
@@ -134,12 +134,12 @@ extension UIView {
             return (target: target, selector: selector)
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &kIQPreviousInvocationTarget, newValue.target, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &kIQPreviousInvocationTarget, newValue.target, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             
             if let unwrappedSelector = newValue.selector {
-                objc_setAssociatedObject(self, &kIQPreviousInvocationSelector, NSStringFromSelector(unwrappedSelector), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQPreviousInvocationSelector, NSStringFromSelector(unwrappedSelector), objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             } else {
-                objc_setAssociatedObject(self, &kIQPreviousInvocationSelector, nil, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQPreviousInvocationSelector, nil, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             }
         }
     }
@@ -159,12 +159,12 @@ extension UIView {
             return (target: target, selector: selector)
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &kIQNextInvocationTarget, newValue.target, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &kIQNextInvocationTarget, newValue.target, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             
             if let unwrappedSelector = newValue.selector {
-                objc_setAssociatedObject(self, &kIQNextInvocationSelector, NSStringFromSelector(unwrappedSelector), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQNextInvocationSelector, NSStringFromSelector(unwrappedSelector), objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             } else {
-                objc_setAssociatedObject(self, &kIQNextInvocationSelector, nil, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQNextInvocationSelector, nil, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             }
         }
     }
@@ -184,12 +184,12 @@ extension UIView {
             return (target: target, selector: selector)
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &kIQDoneInvocationTarget, newValue.target, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &kIQDoneInvocationTarget, newValue.target, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             
             if let unwrappedSelector = newValue.selector {
-                objc_setAssociatedObject(self, &kIQDoneInvocationSelector, NSStringFromSelector(unwrappedSelector), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQDoneInvocationSelector, NSStringFromSelector(unwrappedSelector), objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             } else {
-                objc_setAssociatedObject(self, &kIQDoneInvocationSelector, nil, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+                objc_setAssociatedObject(self, &kIQDoneInvocationSelector, nil, objc_AssociationPolicy(rawValue: UInt(objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC.rawValue))!)
             }
         }
     }
@@ -226,7 +226,7 @@ extension UIView {
             var items : [UIBarButtonItem] = []
             
             if let unwrappedTitleText = titleText {
-                if count(unwrappedTitleText) != 0 && shouldHideTitle == false {
+                if unwrappedTitleText.characters.count != 0 && shouldHideTitle == false {
                     /*
                     50 done button frame.
                     24 distance maintenance
@@ -331,7 +331,7 @@ extension UIView {
             var items : [UIBarButtonItem] = []
             
             if let unwrappedTitleText = titleText {
-                if count(unwrappedTitleText) != 0 && shouldHideTitle == false {
+                if unwrappedTitleText.characters.count != 0 && shouldHideTitle == false {
                     
                     /*
                     50 done button frame.

@@ -10,6 +10,7 @@
 		04009F3E1E3A99DC00201BFC /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04009F3B1E3A99DC00201BFC /* FBSDKCoreKit.framework */; };
 		04009F3F1E3A99DC00201BFC /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */; };
 		04009F401E3A99DC00201BFC /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04009F3D1E3A99DC00201BFC /* FBSDKShareKit.framework */; };
+		75B2CA33BD5E4D9FBC8837BB /* Pods_Ugo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5506608B877795B3AACA1A /* Pods_Ugo.framework */; };
 		C91017801B720EF200930472 /* BBBadgeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C910177F1B720EF200930472 /* BBBadgeBarButtonItem.m */; };
 		C932C7621B8C4C780065D3A4 /* CheckoutSuccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C932C7611B8C4C780065D3A4 /* CheckoutSuccessController.swift */; };
 		C935E2D01B8B115A009D49B3 /* DMShipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935E2CF1B8B115A009D49B3 /* DMShipping.swift */; };
@@ -45,17 +46,6 @@
 		C9578E791B788807002CB2EB /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9578E781B788807002CB2EB /* ProductDetailViewController.swift */; };
 		C9578E7C1B78B8B0002CB2EB /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9578E7B1B78B8B0002CB2EB /* WebViewViewController.swift */; };
 		C95B66751BD11B9E003AC194 /* Mobinett HQ.gpx in Resources */ = {isa = PBXBuildFile; fileRef = C95B66741BD11B9E003AC194 /* Mobinett HQ.gpx */; };
-		C96537A51B6F49AC0073A160 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537991B6F49AC0073A160 /* Alamofire.swift */; };
-		C96537A61B6F49AC0073A160 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379A1B6F49AC0073A160 /* Download.swift */; };
-		C96537A71B6F49AC0073A160 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379B1B6F49AC0073A160 /* Manager.swift */; };
-		C96537A81B6F49AC0073A160 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379C1B6F49AC0073A160 /* MultipartFormData.swift */; };
-		C96537A91B6F49AC0073A160 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379D1B6F49AC0073A160 /* ParameterEncoding.swift */; };
-		C96537AA1B6F49AC0073A160 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379E1B6F49AC0073A160 /* Request.swift */; };
-		C96537AB1B6F49AC0073A160 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965379F1B6F49AC0073A160 /* ResponseSerialization.swift */; };
-		C96537AC1B6F49AC0073A160 /* ServerTrustPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537A01B6F49AC0073A160 /* ServerTrustPolicy.swift */; };
-		C96537AD1B6F49AC0073A160 /* UIImageView+AFNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537A11B6F49AC0073A160 /* UIImageView+AFNetworking.swift */; };
-		C96537AF1B6F49AC0073A160 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537A31B6F49AC0073A160 /* Upload.swift */; };
-		C96537B01B6F49AC0073A160 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537A41B6F49AC0073A160 /* Validation.swift */; };
 		C96537B21B6F49DB0073A160 /* MINetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96537B11B6F49DB0073A160 /* MINetworkManager.swift */; };
 		C9682A131B674BD5007CC3C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9682A121B674BD5007CC3C5 /* AppDelegate.swift */; };
 		C9682A181B674BD5007CC3C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9682A161B674BD5007CC3C5 /* Main.storyboard */; };
@@ -137,6 +127,9 @@
 		04009F3B1E3A99DC00201BFC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		04009F3C1E3A99DC00201BFC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		04009F3D1E3A99DC00201BFC /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		5B5506608B877795B3AACA1A /* Pods_Ugo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ugo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		82BCB7E5C902738933093C03 /* Pods-Ugo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ugo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ugo/Pods-Ugo.release.xcconfig"; sourceTree = "<group>"; };
+		89E033B2B6824BF818E02138 /* Pods-Ugo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ugo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ugo/Pods-Ugo.debug.xcconfig"; sourceTree = "<group>"; };
 		C910177E1B720EF200930472 /* BBBadgeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBadgeBarButtonItem.h; sourceTree = "<group>"; };
 		C910177F1B720EF200930472 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
 		C932C7611B8C4C780065D3A4 /* CheckoutSuccessController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckoutSuccessController.swift; sourceTree = "<group>"; };
@@ -184,18 +177,6 @@
 		C9578E781B788807002CB2EB /* ProductDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		C9578E7B1B78B8B0002CB2EB /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		C95B66741BD11B9E003AC194 /* Mobinett HQ.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Mobinett HQ.gpx"; sourceTree = "<group>"; };
-		C96537981B6F49AC0073A160 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
-		C96537991B6F49AC0073A160 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
-		C965379A1B6F49AC0073A160 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
-		C965379B1B6F49AC0073A160 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
-		C965379C1B6F49AC0073A160 /* MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFormData.swift; sourceTree = "<group>"; };
-		C965379D1B6F49AC0073A160 /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
-		C965379E1B6F49AC0073A160 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		C965379F1B6F49AC0073A160 /* ResponseSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseSerialization.swift; sourceTree = "<group>"; };
-		C96537A01B6F49AC0073A160 /* ServerTrustPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTrustPolicy.swift; sourceTree = "<group>"; };
-		C96537A11B6F49AC0073A160 /* UIImageView+AFNetworking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+AFNetworking.swift"; sourceTree = "<group>"; };
-		C96537A31B6F49AC0073A160 /* Upload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Upload.swift; sourceTree = "<group>"; };
-		C96537A41B6F49AC0073A160 /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		C96537B11B6F49DB0073A160 /* MINetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MINetworkManager.swift; sourceTree = "<group>"; };
 		C9682A0D1B674BD5007CC3C5 /* Ugo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ugo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9682A111B674BD5007CC3C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -278,6 +259,7 @@
 				C9AA94ED1B84ADE10013867C /* CoreLocation.framework in Frameworks */,
 				04009F3E1E3A99DC00201BFC /* FBSDKCoreKit.framework in Frameworks */,
 				04009F3F1E3A99DC00201BFC /* FBSDKLoginKit.framework in Frameworks */,
+				75B2CA33BD5E4D9FBC8837BB /* Pods_Ugo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +273,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		866B88C3F3B5C5F4631FD943 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				89E033B2B6824BF818E02138 /* Pods-Ugo.debug.xcconfig */,
+				82BCB7E5C902738933093C03 /* Pods-Ugo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8FEDD180105200FD8182B5E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B5506608B877795B3AACA1A /* Pods_Ugo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C910177D1B720EEA00930472 /* Badge */ = {
 			isa = PBXGroup;
 			children = (
@@ -435,25 +434,6 @@
 			path = WebView;
 			sourceTree = "<group>";
 		};
-		C96537971B6F49A30073A160 /* Alamofire */ = {
-			isa = PBXGroup;
-			children = (
-				C96537981B6F49AC0073A160 /* Alamofire.h */,
-				C96537991B6F49AC0073A160 /* Alamofire.swift */,
-				C965379A1B6F49AC0073A160 /* Download.swift */,
-				C965379B1B6F49AC0073A160 /* Manager.swift */,
-				C965379D1B6F49AC0073A160 /* ParameterEncoding.swift */,
-				C965379C1B6F49AC0073A160 /* MultipartFormData.swift */,
-				C965379E1B6F49AC0073A160 /* Request.swift */,
-				C965379F1B6F49AC0073A160 /* ResponseSerialization.swift */,
-				C96537A01B6F49AC0073A160 /* ServerTrustPolicy.swift */,
-				C96537A11B6F49AC0073A160 /* UIImageView+AFNetworking.swift */,
-				C96537A31B6F49AC0073A160 /* Upload.swift */,
-				C96537A41B6F49AC0073A160 /* Validation.swift */,
-			);
-			path = Alamofire;
-			sourceTree = "<group>";
-		};
 		C9682A041B674BD5007CC3C5 = {
 			isa = PBXGroup;
 			children = (
@@ -465,6 +445,8 @@
 				C9682A0F1B674BD5007CC3C5 /* Ugo */,
 				C9682A251B674BD5007CC3C5 /* UgoTests */,
 				C9682A0E1B674BD5007CC3C5 /* Products */,
+				866B88C3F3B5C5F4631FD943 /* Pods */,
+				8FEDD180105200FD8182B5E8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -546,7 +528,6 @@
 				C9AE56AB1B830E0600062DBF /* IQKeyboardManager */,
 				C953F90D1B822B970001B400 /* SWTableviewCell */,
 				C910177D1B720EEA00930472 /* Badge */,
-				C96537971B6F49A30073A160 /* Alamofire */,
 				C9D52DB71B6B94EE001D485E /* Reachability */,
 				C9D52DB31B6B947B001D485E /* MBProgress */,
 				C942A8761B6774D0002AF40D /* SWRevealViewController */,
@@ -789,9 +770,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9682A2C1B674BD5007CC3C5 /* Build configuration list for PBXNativeTarget "Ugo" */;
 			buildPhases = (
+				3E1EA45D6A13F12D68C28096 /* [CP] Check Pods Manifest.lock */,
 				C9682A091B674BD5007CC3C5 /* Sources */,
 				C9682A0A1B674BD5007CC3C5 /* Frameworks */,
 				C9682A0B1B674BD5007CC3C5 /* Resources */,
+				92033E3CF4CDC6D1BFFB7748 /* [CP] Embed Pods Frameworks */,
+				DCE7EC24B4D730D1F1FEDC7F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -902,6 +886,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3E1EA45D6A13F12D68C28096 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		92033E3CF4CDC6D1BFFB7748 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ugo/Pods-Ugo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DCE7EC24B4D730D1F1FEDC7F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ugo/Pods-Ugo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C9682A091B674BD5007CC3C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -911,9 +943,7 @@
 				C9578E7C1B78B8B0002CB2EB /* WebViewViewController.swift in Sources */,
 				C94656271B8DE47700BDC32F /* AccountViewController.swift in Sources */,
 				C9C4B12A1B6A484300B918F7 /* MenuCell.swift in Sources */,
-				C96537A91B6F49AC0073A160 /* ParameterEncoding.swift in Sources */,
 				C946562B1B8DEED500BDC32F /* ChangePassViewController.swift in Sources */,
-				C96537B01B6F49AC0073A160 /* Validation.swift in Sources */,
 				C9AE56C91B830E0E00062DBF /* IQTextView.swift in Sources */,
 				C9AE56C81B830E0E00062DBF /* IQKeyboardReturnKeyHandler.swift in Sources */,
 				C948B54D1B8B6ADA0064C14A /* ConfirmOrderCell.swift in Sources */,
@@ -925,8 +955,6 @@
 				C94C004F1B70D98800CDCBB1 /* ProductCollectionViewCell.swift in Sources */,
 				C950FF5B1C169D0D0086210D /* ContactTableViewCell.swift in Sources */,
 				C932C7621B8C4C780065D3A4 /* CheckoutSuccessController.swift in Sources */,
-				C96537AA1B6F49AC0073A160 /* Request.swift in Sources */,
-				C96537AF1B6F49AC0073A160 /* Upload.swift in Sources */,
 				C9D52DB11B6B9265001D485E /* CommonUtility.swift in Sources */,
 				C979C7AC1B8EC098008FC202 /* OrderCell.swift in Sources */,
 				C91017801B720EF200930472 /* BBBadgeBarButtonItem.m in Sources */,
@@ -935,16 +963,12 @@
 				C942A8831B6775FA002AF40D /* GeneralHeader.m in Sources */,
 				C953F9221B8236D40001B400 /* LoginViewController.swift in Sources */,
 				C942A88A1B677781002AF40D /* MenuViewController.swift in Sources */,
-				C96537A71B6F49AC0073A160 /* Manager.swift in Sources */,
 				C953F90C1B82202D0001B400 /* CartViewController.swift in Sources */,
-				C96537A81B6F49AC0073A160 /* MultipartFormData.swift in Sources */,
 				C96841F11BDE589F00C8D4D6 /* DeliveryInstructionCell.swift in Sources */,
 				C9F1E1AD1B6B3F4800C3E235 /* HeaderCell.swift in Sources */,
 				C9AE56C21B830E0E00062DBF /* IQUIView+Hierarchy.swift in Sources */,
 				C9AE56C41B830E0E00062DBF /* IQUIWindow+Hierarchy.swift in Sources */,
-				C96537AC1B6F49AC0073A160 /* ServerTrustPolicy.swift in Sources */,
 				C9AE56C51B830E0E00062DBF /* IQKeyboardManagerConstants.swift in Sources */,
-				C96537A61B6F49AC0073A160 /* Download.swift in Sources */,
 				C9AE56C31B830E0E00062DBF /* IQUIViewController+Additions.swift in Sources */,
 				C9D52DB21B6B9265001D485E /* Enums.swift in Sources */,
 				C96B077A1B9026FC0058594A /* SignupViewController.swift in Sources */,
@@ -957,7 +981,6 @@
 				C9AE56C01B830E0E00062DBF /* IQNSArray+Sort.swift in Sources */,
 				C953F90A1B821F280001B400 /* CartTableViewCell.swift in Sources */,
 				C9AA94E61B8491CE0013867C /* SelectAddressViewController.swift in Sources */,
-				C96537A51B6F49AC0073A160 /* Alamofire.swift in Sources */,
 				C96A60621B86EF1400B21FBA /* AddAddressViewController.swift in Sources */,
 				C9D52DA91B6B9200001D485E /* BaseViewController.swift in Sources */,
 				C942A8881B67774F002AF40D /* MainViewController.swift in Sources */,
@@ -977,7 +1000,6 @@
 				C9AE56C61B830E0E00062DBF /* IQKeyboardManagerConstantsInternal.swift in Sources */,
 				C953F91A1B822B9D0001B400 /* NSMutableArray+SWUtilityButtons.m in Sources */,
 				C953F91F1B822B9D0001B400 /* SWUtilityButtonView.m in Sources */,
-				C96537AB1B6F49AC0073A160 /* ResponseSerialization.swift in Sources */,
 				C953F91E1B822B9D0001B400 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				C9578E791B788807002CB2EB /* ProductDetailViewController.swift in Sources */,
 				C94FBB1D1B8D951100E1B453 /* NJKWebViewProgress.m in Sources */,
@@ -988,7 +1010,6 @@
 				C942A87A1B6774FD002AF40D /* SWRevealViewController.m in Sources */,
 				C9D52DB61B6B9481001D485E /* MBProgressHUD.m in Sources */,
 				C9AA94E41B848C980013867C /* AddressListViewController.swift in Sources */,
-				C96537AD1B6F49AC0073A160 /* UIImageView+AFNetworking.swift in Sources */,
 				C9AA94E91B84950C0013867C /* TotalTableViewCell.swift in Sources */,
 				C99E19E61B7A27FC00358677 /* ProductDetailCell.swift in Sources */,
 				C94C004D1B70D8D800CDCBB1 /* ProductListCell.swift in Sources */,
@@ -1119,7 +1140,9 @@
 		};
 		C9682A2D1B674BD5007CC3C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89E033B2B6824BF818E02138 /* Pods-Ugo.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
@@ -1145,7 +1168,9 @@
 		};
 		C9682A2E1B674BD5007CC3C5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82BCB7E5C902738933093C03 /* Pods-Ugo.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;

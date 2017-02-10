@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class CheckoutSuccessController: BaseViewController {
     @IBOutlet weak var btnContinue: UIButton!

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import Alamofire
 
 class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UIPickerViewDataSource, UIPickerViewDelegate,UITextFieldDelegate{
     @IBOutlet var pickerView: UIPickerView!
@@ -68,7 +69,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         }
         
         
-        btnSubmit._गोल_करा(5)
+        //btnSubmit._गोल_करा(5) unused
         scrollView.layer.cornerRadius = 10
         bgContentView.layer.shadowColor = UIColor.black.cgColor
         bgContentView.layer.shadowOpacity = 1

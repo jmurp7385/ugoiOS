@@ -9,8 +9,9 @@
 //
 
 import UIKit
+import Alamofire
 
-class MainViewController: BaseViewController ,UITableViewDataSource,UITableViewDelegate{
+class MainViewController: BaseViewController {//,UITableViewDataSource,UITableViewDelegate{
     
     var products : [Product] = []
     var categories : [Category] = []
@@ -112,7 +113,7 @@ class MainViewController: BaseViewController ,UITableViewDataSource,UITableViewD
                     //println(str)
                 }
                 }.responseJSON { a, res, JSON, c in
-                    println(res?.statusCode)
+                    print(res?.statusCode) //from println
                     
                     if res?.statusCode == 401 {
                         var userSession = UserSessionInformation.sharedInstance
@@ -301,7 +302,7 @@ class MainViewController: BaseViewController ,UITableViewDataSource,UITableViewD
             if section == 0 {
                 return nil
             } else {
-                var view = UIView()
+                let view = UIView()
                 view.backgroundColor = UIColor(r: 228, g: 228, b: 228, a: 1)
                 
                 let label = UILabel(frame: CGRect(x: 8, y: 4, width: ScreenSize.SCREEN_WIDTH-20, height: 21))

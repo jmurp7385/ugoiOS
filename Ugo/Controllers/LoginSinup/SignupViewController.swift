@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class SignupViewController: BaseViewController,AddressListViewDelegate {
 
@@ -46,11 +47,12 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
         account = Account()
         setBackButton()
         self.title = "Sign Up"
-        
+        /* warning: unused
         txtFirstname.setBorderBottom
         txtLastname.setBorderBottom
         txtEmail.setBorderBottom
         txtPwd.setBorderBottom
+         */
         // Do any additional setup after loading the view.
     }
 

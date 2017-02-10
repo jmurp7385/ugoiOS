@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class EditAccountViewController: BaseViewController {
 
@@ -69,7 +70,7 @@ class EditAccountViewController: BaseViewController {
                     let resp = DMAccount(JSON: JSON!)
                     
                     if resp.status {
-                        var account = DMAccount(JSON: JSON!)
+                        let account = DMAccount(JSON: JSON!)
                         self.userSession.account = account.account
                         self.userSession.storeData()
                         CommonUtility.showAlertView("Information", message: "Account Details updated successfully")

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -59,9 +60,9 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
             self.navigationItem.leftBarButtonItem = customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTapped")
 
         }else{
-            let btnRefreshItem = UIBarButtonItem(image: UIImage(named: "web_refresh"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnRefreshTapped))
+            let btnRefreshItem = UIBarButtonItem(image: UIImage(named: "web_refresh"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(WebViewViewController.btnRefreshTapped))
             
-            let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
+            let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
          
             
             self.navigationItem.rightBarButtonItem = btnRefreshItem
@@ -153,13 +154,13 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
         if val {
             if self.navigationItem.leftBarButtonItems?.count != 2 {
                 
-                var btnPreItem = UIBarButtonItem(image: UIImage(named: "web_back"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnPreTapped))
+                _ = UIBarButtonItem(image: UIImage(named: "web_back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(WebViewViewController.btnPreTapped)) //let btnPreItem
                
-                var btnNextItem = UIBarButtonItem(image: UIImage(named: "web_next"), style:
-                    UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnNextTapped))
+                _ = UIBarButtonItem(image: UIImage(named: "web_next"), style:
+                    UIBarButtonItemStyle.plain, target: self, action: #selector(WebViewViewController.btnNextTapped)) //let btnNextItem
                 
                 
-                let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStylePlain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
+                let btnMenuItem = UIBarButtonItem(image: UIImage(named: "menu"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(WebViewViewController.btnMenuTapped))
         
 
                 self.navigationItem.leftBarButtonItem = isPayment ? customBarBtn(25, height: 25, imgName: "web_close", actionName: "btnCloseTapped") : btnMenuItem
@@ -243,7 +244,7 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if isPayment {
-            let str = request.mainDocumentURL?.URLString
+            let str = request.mainDocumentURL?.absoluteString
             if (str?.range(of: "checkout/success")) != nil{     //changed from if (let contains = str?.range(of: "checkout/cart"))
                 self.dismiss(animated: true, completion: { () -> Void in
                     self.loadSuccessPage()
@@ -255,7 +256,7 @@ class WebViewViewController: UIViewController ,UIWebViewDelegate,NJKWebViewProgr
                 return false
             }
             
-            //println(request.mainDocumentURL?.URLString)
+            //println(request.mainDocumentURL?.absoluteString)
         }
         return true
     }

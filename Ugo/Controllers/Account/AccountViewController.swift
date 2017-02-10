@@ -8,22 +8,23 @@
 
 import UIKit
 import FBSDKLoginKit
+import Alamofire
 
 class AccountViewController: BaseViewController, UIAlertViewDelegate {
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableview: UITableView!
     var dataArray : [String] = []
     
     @IBAction func btnLogOutTapped(_ sender: UIButton) {
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getLogout).responseString { _, _, string, _ in
-                if string != nil {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getLogout).responseString { string in
+              //  if string != nil {
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+              // }
+                }.responseJSON { JSON in
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
-                if JSON == nil{
+                    if (JSON.result.value == nil) { //if JSON == nil{
                     let appdel = UIApplication.shared.delegate as! AppDelegate
                     self.userSession.account = Account()
                     self.userSession.access_token = nil
@@ -59,14 +60,14 @@ class AccountViewController: BaseViewController, UIAlertViewDelegate {
     func postPWDAPI(_ pwd : String , confirm:String){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postpwd(pwd, confirm)).responseString { _, _, string, _ in
-                if string != nil {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postpwd(pwd, confirm)).responseString { string in
+              //  if string != nil {
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+              //  }
+                }.responseJSON { JSON in
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
-                if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON!)
+                    if JSON.result.value == nil {// response.result.value {//if JSON != nil{
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
                     if resp.status {
 
                     }else{
@@ -95,7 +96,7 @@ class AccountViewController: BaseViewController, UIAlertViewDelegate {
     
     // MARK: - Table View Delegates
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableview: UITableView) -> Int {
         return 1
     }
     
@@ -108,7 +109,7 @@ class AccountViewController: BaseViewController, UIAlertViewDelegate {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "settingsCell") as UITableViewCell! //changed from 'as? UITableViewCell' to 'as UITableViewCell!'
+        var cell = tableview.dequeueReusableCell(withIdentifier: "settingsCell") as UITableViewCell! //changed from 'as? UITableViewCell' to 'as UITableViewCell!'
         if cell == nil {
             cell  = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "settingsCell")
             cell?.accessoryType = UITableViewCellAccessoryType.disclosureIndicator

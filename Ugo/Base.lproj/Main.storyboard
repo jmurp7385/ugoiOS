@@ -419,7 +419,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Status pending" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qfb-uR-wUS">
-                                                    <rect key="frame" x="8" y="24" width="232.5" height="17"/>
+                                                    <rect key="frame" x="8" y="24" width="232" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="17" id="RIF-P4-lmC"/>
                                                     </constraints>
@@ -447,7 +447,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14 / 06 / 2015" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7Z-bn-m93">
-                                                    <rect key="frame" x="248.5" y="27" width="63.5" height="12"/>
+                                                    <rect key="frame" x="248" y="27" width="64" height="12"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="12" id="rqz-LG-E8c"/>
                                                     </constraints>
@@ -2520,7 +2520,7 @@ If you have any questions or concerns, please call us.</string>
         <image name="logologin" width="104" height="86"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qQg-Vs-B2r"/>
         <segue reference="AOR-wr-CVG"/>
+        <segue reference="qQg-Vs-B2r"/>
     </inferredMetricsTieBreakers>
 </document>

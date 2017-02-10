@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 protocol AddressListViewDelegate{
     func addressSelected(_ type:AddressType,address:Address)
