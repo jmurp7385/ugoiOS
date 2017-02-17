@@ -264,14 +264,14 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCountryZones(country_id: country_id)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCountryZones(country_id: country_id)).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        let resp = Country(JSON: JSON!)
+                        let resp = Country(JSON: JSON as AnyObject)
                         if resp.status {
                             self.dataArray = resp.zones
                             self.pickerView.selectRow(0, inComponent: 0, animated: false)

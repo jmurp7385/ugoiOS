@@ -17,7 +17,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     @IBOutlet weak var lblDescription: UILabel!
     @IBOutlet weak var imgProduct: UIImageView!
     
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     var product : Product!
     
     
@@ -51,12 +52,12 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
         if CommonUtility.isNetworkAvailable() {
             var product_id = "\(product.product_id!)"
             self.showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getProductDetail(product_id)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getProductDetail(product_id)).responseString { string in
                 if let str = string {
                     //println(str)
                 }
                 }
-                .responseJSON { _, _, JSON, _ in
+                .responseJSON { JSON in
                     self.hideLoadingIndicator(self.navigationController!.view)
                     
                     
@@ -117,7 +118,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section != 0 {
             let label = UILabel()
             label.backgroundColor = UIColor(r: 228, g: 228, b: 228, a: 1)

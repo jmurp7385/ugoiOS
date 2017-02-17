@@ -29,8 +29,10 @@ class SearchResultCell: UITableViewCell {
     
     class func cell() ->  SearchResultCell
     {
-        let nib:NSArray = Bundle.main.loadNibNamed("SearchResultCell", owner: self, options: nil)
-        let cell = nib.object(at: 0) as?  SearchResultCell
+//        let nib : NSArray = Bundle.main.loadNibNamed("SearchResultCell", owner: self, options: nil)
+        let nib = Bundle.main.loadNibNamed("SearchResultCell", owner: self, options: nil)
+        let cell = nib?.first as? SearchResultCell
+        //let cell = nib.object(at: 0) as?  SearchResultCell
         return cell!
     }
 }

@@ -185,10 +185,10 @@ class CommonUtility: NSObject {
 
     class func isNetworkAvailable() -> Bool
     {
-        var reachability:Reachability = Reachability.forInternetConnection()
-        var internetStatus:NetworkStatus = reachability.currentReachabilityStatus()
+        let reachability:Reachability = Reachability.forInternetConnection()
+        let internetStatus:NetworkStatus = reachability.currentReachabilityStatus()
 
-        if(internetStatus.value !=  NotReachable.value){
+        if(internetStatus.rawValue !=  NotReachable.rawValue){
             return true
         }
         else {

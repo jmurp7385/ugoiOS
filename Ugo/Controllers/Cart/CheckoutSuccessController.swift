@@ -46,7 +46,7 @@ class CheckoutSuccessController: BaseViewController {
     func getSuccessAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSuccess).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSuccess).response { response in
                 self.userSession.cartCount = 0
                 CommonUtility().hideLoadingIndicator(self.view)
             }

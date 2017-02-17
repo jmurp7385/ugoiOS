@@ -36,7 +36,7 @@ class ConfirmOrderViewController: BaseViewController {
     func getPayAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getPay(access_token: userSession.access_token!)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getPay(access_token: userSession.access_token!)).response { response in
                 self.dismiss(animated: true, completion: { () -> Void in
                     self.loadSuccessPage()
                 })

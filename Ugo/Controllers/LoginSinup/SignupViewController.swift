@@ -72,26 +72,26 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
             acc.email = self.txtEmail.text
             acc.password = self.txtPwd.text
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegister(account: acc)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegister(account: acc)).response { response in
                 //println(request)
                 //println(response)
                 //println(error)
-                }.responseString { _, _, string, _ in
-                if let str = string {
+                }.responseString { string in
+                let str = string 
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+                
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
 
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON!)
+                        var resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()
                             (UIApplication.shared.delegate as! AppDelegate).initVC()
 
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     

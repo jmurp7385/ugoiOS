@@ -188,6 +188,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="table" destination="4OA-XQ-bQm" id="Oy0-ew-yYn"/>
                         <outlet property="tableView" destination="4OA-XQ-bQm" id="yuB-EL-Ht1"/>
                         <segue destination="cKe-LL-aLS" kind="custom" identifier="toWebView" customClass="SWRevealViewControllerSeguePushController" id="7pi-OM-2U4"/>
                         <segue destination="bMX-Gn-Hh3" kind="custom" identifier="toHome" customClass="SWRevealViewControllerSeguePushController" id="AOR-wr-CVG"/>
@@ -419,7 +420,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Status pending" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qfb-uR-wUS">
-                                                    <rect key="frame" x="8" y="24" width="232" height="17"/>
+                                                    <rect key="frame" x="8" y="24" width="232.5" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="17" id="RIF-P4-lmC"/>
                                                     </constraints>
@@ -447,7 +448,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14 / 06 / 2015" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7Z-bn-m93">
-                                                    <rect key="frame" x="248" y="27" width="64" height="12"/>
+                                                    <rect key="frame" x="248.5" y="27" width="63.5" height="12"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="12" id="rqz-LG-E8c"/>
                                                     </constraints>
@@ -1116,7 +1117,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="VRO-J4-iCi"/>
                     <connections>
-                        <outlet property="tableView" destination="54y-F0-qiK" id="7el-Gp-ZFw"/>
+                        <outlet property="table" destination="54y-F0-qiK" id="EuT-XH-LGl"/>
                         <segue destination="9kS-Yh-C4D" kind="show" identifier="productDetail" id="TlA-lE-BWx"/>
                     </connections>
                 </viewController>
@@ -2151,8 +2152,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FxD-bb-Ly4">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FxD-bb-Ly4">
+                                <rect key="frame" x="0.0" y="-1" width="320" height="568"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductListCell" rowHeight="150" id="TbE-wF-6Es" customClass="ProductListCell" customModule="Ugo" customModuleProvider="target">
@@ -2277,7 +2278,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="tableView" destination="FxD-bb-Ly4" id="QQ2-QQ-uIx"/>
+                        <outlet property="table" destination="FxD-bb-Ly4" id="LJl-2M-MWf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f5k-v1-H1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2520,7 +2521,7 @@ If you have any questions or concerns, please call us.</string>
         <image name="logologin" width="104" height="86"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="YNA-KU-6hp"/>
-        <segue reference="AOR-wr-CVG"/>
+        <segue reference="AAp-yi-DaD"/>
+        <segue reference="qQg-Vs-B2r"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -16,7 +16,7 @@ struct Menu{
 class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     var menus : [Menu] = []
     
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var table: UITableView!
 
     

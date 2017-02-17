@@ -201,26 +201,26 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             //changed POSTLogin to postLogin
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postLogin(txtUsername.text!, txtPwd.text!)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postLogin(txtUsername.text!, txtPwd.text!)).response { response in
                 //                //print(request)
                 //                //print(response)
                 //                //print(error)
-                }.responseString { _, _, string, _ in
-                    if let str = string {
+                }.responseString { string in
+                    let str = string 
                         //print(str)
-                    }
-                }.responseJSON { _, _, JSON, _ in
+                    
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON!)
+                        var resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()
                             self.doneTapped()
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     
@@ -242,7 +242,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        let resp = BaseJsonModel(JSON: JSON)
+                        let resp = BaseJsonModel(JSON: JSON as AnyObject)
                         if resp.status {
                             
                         }else{
@@ -265,19 +265,19 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegisterFB(account: acc)).response { (request, response, data, error) in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegisterFB(account: acc)).response { response in
                 //print(request)
                 //print(response)
                 //print(error)
-                }.responseString { _, _, string, _ in
+                }.responseString { string in
                     if string != nil {
                         //print(str)
                     }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil{
-                        let resp = DMAccount(JSON: JSON!)
+                        let resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()

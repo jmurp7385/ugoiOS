@@ -18,7 +18,8 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     
     var scrollTimer : Timer!
     
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     // MARK: button Events
     func btnMenuTapped(_ sender: UIBarButtonItem) {
         self.revealViewController().revealToggle(animated: true)
@@ -108,13 +109,12 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     func specialProductAPI(){
         if CommonUtility.isNetworkAvailable() {
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSpecialProducts).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSpecialProducts).responseString { string in
+                let str = string
                     //println(str)
-                }
+                
                 }.responseJSON { a, res, JSON, c in
                     print(res?.statusCode) //from println
-                    
                     if res?.statusCode == 401 {
                         var userSession = UserSessionInformation.sharedInstance
                         userSession.access_token = nil
@@ -196,13 +196,13 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                     if JSON != nil {
                         
                         self.categories[section-1].isLoaded = true
-                        var resp = DMCategory(JSON: JSON)
+                        var resp = DMCategory(JSON: JSON as AnyObject)
                         
                         if resp.status {
                             var c = resp.category
                             //println("Section \(section) \(c.name) API Reaponse Products Count : \(c.products.count) ")
                             
-                            if c.products.count == 0 {
+                            if c?.products.count == 0 {
                                 self.categories[section-1].isCallAPI = false
                             }
                             self.categories[section-1].products =   self.categories[section-1].products.count == 0 ? c.products :   self.categories[section-1].products + c.products
@@ -211,7 +211,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                             self.tableView.reloadSections(IndexSet(integer: section), with: UITableViewRowAnimation.automatic)
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     
@@ -261,7 +261,8 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView != searchDisp.searchResultsTableView {
+        //if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
             if indexPath.section == 0 && indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "pageCell") as! PageTableViewCell
                 cell.products = products
@@ -299,7 +300,9 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView != searchDisp.searchResultsTableView {
+       // if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+
             if section == 0 {
                 return 0
             }else{
@@ -311,8 +314,9 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if tableView != searchDisp.searchResultsTableView {
-            
+        //if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+    
             if section == 0 {
                 return nil
             } else {
@@ -332,8 +336,9 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView != searchDisp.searchResultsTableView {
-            
+        //if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+    
             switch indexPath.section {
             case 0 :
                 return 161

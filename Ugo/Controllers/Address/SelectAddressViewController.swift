@@ -455,10 +455,10 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                 }.responseJSON { JSON in
 //                    CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        let resp = DMAccount(JSON: JSON!)
+                        let resp = DMAccount(JSON: JSON as AnyObject)
                         
                         if resp.status {
-                            let account = DMAccount(JSON: JSON!)
+                            let account = DMAccount(JSON: JSON as AnyObject)
                             self.userSession.account = account.account
                             self.userSession.storeData()
                             
@@ -550,7 +550,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                 }.responseJSON { JSON in
                 self.postPaymentAddressAPI()
                 if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON)
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
                     if resp.status {
                         
                     }else{
@@ -630,7 +630,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
                 }.responseJSON { JSON in
                 self.postPaymentMethodAPI()
                 if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
                     if resp.status {
                         
                     }else{
@@ -657,7 +657,7 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
 
                 self.getCheckoutConfirmAPI()
                 if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
                     if resp.status {
                         
                     }else{
@@ -674,16 +674,18 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getCheckoutConfirmAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getConfirm).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getConfirm).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON
+                    
+                    in
                 
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
 
                 if JSON != nil{
-                    let resp = Cart(JSON: JSON!)
+                    let resp = Cart(JSON: JSON as AnyObject)
                     if resp.status {
                         
                         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ConfirmOrderViewController") as! ConfirmOrderViewController

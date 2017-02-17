@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 
 class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQtyViewControllerDelegate{
     
@@ -88,16 +89,16 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getCart).responseString { string in
-                if let str = string {
+                let str = string  //if let str = string {
                     //println(str)
-                }
+                
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil {
-                        self.cart = DMCart(JSON: JSON!)
-                        var resp = self.cart
-                        if resp?.status {
+                        self.cart = DMCart(JSON: JSON as AnyObject)
+                        let resp = self.cart
+                        if (resp?.status)! {
                             self.products  = self.cart.cart.products
                             self.userSession.cartCount = self.cart.cart.products.count
                             self.tableView.reloadData()
@@ -123,9 +124,9 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.putCart(key: productKey, quantity: quantity)).responseString { string in
-                if let str = string {
+                let str = string
                     //println(str)
-                }
+                
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
@@ -159,17 +160,17 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
     func deleteCartAPI(_ productKey : String){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.deleteCart(productKey)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.deleteCart(productKey)).responseString { string in
+                let str = string
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+            
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     
                     if JSON != nil {
                         self.setBadge()
-                        self.cart = DMCart(JSON: JSON!)
+                        self.cart = DMCart(JSON: JSON as AnyObject)
                         
                         if self.cart.status {
                             self.products  = self.cart.cart.products
@@ -178,11 +179,11 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
                             self.tableView.reloadData()
                             
                             if let warning = self.cart.cart.error_warning {
-                                CommonUtility.showAlertView("Information", message: warning)
+                                CommonUtility.showAlertView("Information", message: warning as NSString)
                             }
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: self.cart.errorMsg)
+                            CommonUtility.showAlertView("Information", message: self.cart.errorMsg as NSString)
                         }
                     }
             }
