@@ -9,6 +9,8 @@
 import UIKit
 import FBSDKCoreKit
 import CoreLocation
+import IQKeyboardManagerSwift
+import Alamofire
 
 
 @UIApplicationMain
@@ -20,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let userSession = UserSessionInformation.sharedInstance
         userSession.getData()
-
+        
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
         UINavigationBar.appearance().tintColor = UIColor.white
@@ -31,8 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //enable IQKeyboardManager
         IQKeyboardManager.sharedManager().enable = true
-        IQKeyboardManager.sharedManager().shouldRestoreScrollViewContentOffset = true
-
+        //IQKeyboardManager.sharedManager().shouldRestoreScrollViewContentOffset = true
+        
         getInitAPI()
         if userSession.access_token == nil {
             getTokenAPI()
@@ -41,19 +43,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         
-//        geocoder.geocodeAddressString("Palolem Beach, Goa, India", completionHandler: { (placemarks:[AnyObject]!, error:NSError!) -> Void in
-//            for pla in placemarks {
-//                //println(pla)
-//            }
-//        })
-
+        //        geocoder.geocodeAddressString("Palolem Beach, Goa, India", completionHandler: { (placemarks:[AnyObject]!, error:NSError!) -> Void in
+        //            for pla in placemarks {
+        //                //println(pla)
+        //            }
+        //        })
+        
         
         
         //        testAPI()
         //        test()
         
         return FBSDKApplicationDelegate.sharedInstance().application(application,
-            didFinishLaunchingWithOptions:launchOptions)
+                                                                     didFinishLaunchingWithOptions:launchOptions)
         
     }
     
@@ -63,46 +65,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var longitude : Double = 0
         let esc_addr = add.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) //(using: String.Encoding.utf8)
         let str = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=\(esc_addr!)"
-        let result = String(contentsOfURL: URL(string: str)!, encoding: String.Encoding.utf8)
-        let scanner = Scanner(string: result)
-        if scanner.scanUpTo("\"lat\" :", into: nil) && scanner.scanString("\"lat\" :", into: nil)
-        {
-            scanner.scanDouble(&latitude)
+        //added do try catch 
+        do {
+            let result = try String(contentsOf: URL(string: str)!, encoding: String.Encoding.utf8)
+            
+            //let result = String(contentsOfURL: URL(string: str)!, encoding: String.Encoding.utf8)
+            let scanner = Scanner(string: result)
+            if scanner.scanUpTo("\"lat\" :", into: nil) && scanner.scanString("\"lat\" :", into: nil)
+            {
+                scanner.scanDouble(&latitude)
+            }
+            if scanner.scanUpTo("\"lng\" :", into: nil) && scanner.scanString("\"lng\" :", into: nil)
+            {
+                scanner.scanDouble(&longitude)
+            }
+            
+            
+            let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            
+            //println(center.latitude)
+            //println(center.longitude)
+            return center
+        } catch {
+            print("error")
         }
-        if scanner.scanUpTo("\"lng\" :", into: nil) && scanner.scanString("\"lng\" :", into: nil)
-        {
-            scanner.scanDouble(&longitude)
-        }
-        
-        
-        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
-        //println(center.latitude)
-        //println(center.longitude)
-        return center
-        
     }
     
-   
+    
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         return FBSDKApplicationDelegate.sharedInstance().application(application,
-            open:url,
-            sourceApplication:sourceApplication,
-            annotation:annotation)
+                                                                     open:url,
+                                                                     sourceApplication:sourceApplication,
+                                                                     annotation:annotation)
         
     }
     func test(){
         
-//        
-//        request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
-//        .responseJSON { _, _, JSON, _ in
-//            
-//            if JSON != nil {
-//               //println(JSON)
-//            }
-//        }
-
+        //
+        //        request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
+        //        .responseJSON { _, _, JSON, _ in
+        //
+        //            if JSON != nil {
+        //               //println(JSON)
+        //            }
+        //        }
+        
         let vc: AnyObject! =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditAccountViewController")
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = vc as? UIViewController
@@ -128,9 +136,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //println(response)
                 //println(error)
                 }.responseString { _, _, string, _ in
-                if string != nil {
-                    //println(str)
-                }
+                    if string != nil {
+                        //println(str)
+                    }
                 }.responseJSON { _, _,JSON, _ in
                     
                     if JSON != nil {
@@ -166,7 +174,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }.responseJSON { _, _,JSON, _ in
                     
                     if JSON != nil {
-
+                        
                         let resp = BaseJsonModel(JSON: JSON!)
                         if !resp.status{
                             CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
@@ -188,21 +196,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getInitAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.initApp("languages,currencies,countries,settings,customer_groups,cart,wishlist")).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.initApp("languages,currencies,countries,settings,customer_groups,cart,wishlist")).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
-                
-                if JSON != nil {
-                    let resp = AppInit(JSON: JSON!)
-                    if !resp.status{
-                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
-                    }else{
-                        UserSessionInformation.sharedInstance.appInit = resp
+                }.responseJSON { JSON in
+                    
+                    if JSON != nil {
+                        let resp = AppInit(JSON: JSON as AnyObject)
+                        if !resp.status{
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                        }else{
+                            UserSessionInformation.sharedInstance.appInit = resp
+                        }
                     }
-                }
-                
+                    
             }
         }else{
             CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
@@ -220,9 +228,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //println(response)
                 //println(error)
                 }.responseString { _, _, string, _ in
-                if string != nil {
-                    //println(str)
-                }
+                    if string != nil {
+                        //println(str)
+                    }
                 }.responseJSON { _, _, JSON, _ in
                     
                     if JSON != nil {

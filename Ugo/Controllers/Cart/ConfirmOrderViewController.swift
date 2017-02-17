@@ -11,7 +11,8 @@ import Alamofire
 
 class ConfirmOrderViewController: BaseViewController {
 
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
 
     var order : Cart!
     

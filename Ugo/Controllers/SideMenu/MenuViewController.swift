@@ -17,6 +17,7 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var menus : [Menu] = []
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
 
     
     override func viewDidLoad() {

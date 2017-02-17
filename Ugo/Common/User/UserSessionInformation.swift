@@ -9,11 +9,25 @@
 import UIKit
 
 class UserSessionInformation: NSObject {
-    private static var __once: () = {
+    /*private static var __once: () = {
             Static.instance = UserSessionInformation()
             Static.instance.account = Account()
 
         }()
+    */
+    private static var __once: ()
+    
+    class var UserInstance: UserSessionInformation! {
+        struct Static {
+            static var instance : UserSessionInformation!
+            static var account : Account!
+        }
+        __once = {
+            Static.instance = UserSessionInformation()
+            Static.instance.account = Account()
+        }()
+        return Static.instance
+    }
     var access_token : String?
     var username: String?
 

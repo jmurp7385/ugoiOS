@@ -12,7 +12,8 @@ import Alamofire
 class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQtyViewControllerDelegate{
     
     @IBOutlet weak var btnCheckout: UIButton!
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     
     var cart : DMCart!
     var products : [Product] = []
@@ -25,12 +26,12 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if userSession.isLoggedIn {
             
             if let warning = self.cart.cart.error_warning {
-                CommonUtility.showAlertView("Information", message: warning)
+                CommonUtility.showAlertView("Information", message: warning as NSString)
             }else{
                 performSegue(withIdentifier: "toSelectAddressViewController", sender: nil)
             }
         }else{
-            var nav: UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginNav") as! UINavigationController
+            let nav: UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginNav") as! UINavigationController
             
             self.present(nav, animated: true, completion: nil)
         }
@@ -41,7 +42,7 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         //print("receivedSelectedQty \(sku)")
         //        btnSelectQty.setTitle(sku, forState: UIControlState.Normal)
         
-        var product = products[selectedIndex]
+        let product = products[selectedIndex]
         product.quantity = Int(sku)
         putCartAPI(product.key!, quantity: product.quantity!)
         
@@ -86,28 +87,28 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
     func getCartAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCart).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCart).responseString { string in
                 if let str = string {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil {
                         self.cart = DMCart(JSON: JSON!)
                         var resp = self.cart
-                        if resp.status {
+                        if resp?.status {
                             self.products  = self.cart.cart.products
                             self.userSession.cartCount = self.cart.cart.products.count
                             self.tableView.reloadData()
                             
                             if let warning = self.cart.cart.error_warning {
-                                CommonUtility.showAlertView("Information", message: warning)
+                                CommonUtility.showAlertView("Information", message: warning as NSString)
                             }
                             
                         }else{
                             self.setCheckoutBtnStatus()
-                            CommonUtility.showAlertView("We're sorry...", message: resp.errorMsg)
+                            CommonUtility.showAlertView("We're sorry...", message: resp!.errorMsg as NSString)
                         }
                     }
                     
@@ -121,29 +122,29 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
     func putCartAPI(_ productKey : String,quantity : Int){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.putCart(key: productKey, quantity: quantity)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.putCart(key: productKey, quantity: quantity)).responseString { string in
                 if let str = string {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     self.setBadge()
-                    self.cart = DMCart(JSON: JSON!)
+                    self.cart = DMCart(JSON: JSON as AnyObject)
                     var resp = self.cart
                     if JSON != nil {
-                        if resp.status {
+                        if (resp?.status)! {
                             self.products  = self.cart.cart.products
                             self.userSession.cartCount = self.cart.cart.products.count
                             self.setCheckoutBtnStatus()
                             self.tableView.reloadData()
                             
                             if let warning = self.cart.cart.error_warning {
-                                CommonUtility.showAlertView("Information", message: warning)
+                                CommonUtility.showAlertView("Information", message: warning as NSString)
                             }
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp!.errorMsg as NSString)
                         }
                     }
                     
@@ -234,14 +235,14 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         return 30
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        var view = UIView()
+        let view = UIView()
         view.backgroundColor = UIColor(r: 228, g: 228, b: 228, a: 1)
         
         let label = UILabel(frame: CGRect(x: 20, y: 4, width: ScreenSize.SCREEN_WIDTH-20, height: 21))
         
-        var attStr = NSMutableAttributedString(string: "Cart Subtotal: ", attributes: [NSForegroundColorAttributeName:colorGray,NSFontAttributeName:font15r])
+        let attStr = NSMutableAttributedString(string: "Cart Subtotal: ", attributes: [NSForegroundColorAttributeName:colorGray,NSFontAttributeName:font15r])
         
         attStr.append(NSAttributedString(string: "(\(products.count) items) ", attributes:  [NSForegroundColorAttributeName:colorGray,NSFontAttributeName:font14r]))
         
@@ -324,11 +325,11 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
     
     func alertView(_ alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         
-        var count = alertView.textField(at: 0)?.text
-        var product = products[alertView.tag]
+        let count = alertView.textField(at: 0)?.text
+        let product = products[alertView.tag]
         
-        if let ct = count?.toInt() {
-            product.quantity = count?.toInt()
+        if Int(count!) != nil {
+            product.quantity = Int(count!)
             putCartAPI(product.key!, quantity: product.quantity!)
         }
         //        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: alertView.tag, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)

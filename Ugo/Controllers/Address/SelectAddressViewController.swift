@@ -37,7 +37,8 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,UIPickerViewDataSource, UIPickerViewDelegate,UITextFieldDelegate,UITextViewDelegate{
 
     @IBOutlet weak var btnNext: UIButton!
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     
     @IBOutlet var pickerView: UIPickerView!
     @IBOutlet var toolBar: UIToolbar!
@@ -447,11 +448,11 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
             userSession.account?.telephone = self.convertToNumber(contactNumber!)
             userSession.storeData()
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.putAccount(account: userSession.account!)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.putAccount(account: userSession.account!)).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
 //                    CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
                         let resp = DMAccount(JSON: JSON!)
@@ -494,11 +495,11 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postSetOption(option: selectedDriverTip!)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postSetOption(option: selectedDriverTip!)).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
 
@@ -513,15 +514,15 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func postPaymentAddressAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentAdd(addresss[1])).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentAdd(addresss[1])).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                 self.getShippingMethodsAPI()
 
                 if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
                     if resp.status {
                         
                     }else{
@@ -540,16 +541,16 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
 
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingAdd(addresss[1])).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingAdd(addresss[1])).responseString { string in
                 //println(string)
-                }.responseString { _, _, string, _ in
+                }.responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                 self.postPaymentAddressAPI()
                 if JSON != nil{
-                    let resp = BaseJsonModel(JSON: JSON!)
+                    let resp = BaseJsonModel(JSON: JSON)
                     if resp.status {
                         
                     }else{
@@ -569,16 +570,16 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getShippingMethodsAPI(){
         
-        MINetworkManager.sharedInstance.manager?.request(APIRouter.getShippingMethods).responseString { _, _, string, _ in
+        MINetworkManager.sharedInstance.manager?.request(APIRouter.getShippingMethods).responseString { string in
             //println(string)
-        }.responseString { _, _, string, _ in
+        }.responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                 self.getPaymentMethodsAPI()
             if JSON != nil{
-                let resp = DMShipping(JSON: JSON!)
+                let resp = DMShipping(JSON: JSON as AnyObject)
 
                 if resp.status {
                     self.shippingMethod = resp
@@ -593,17 +594,17 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
     
     func getPaymentMethodsAPI(){
         
-        MINetworkManager.sharedInstance.manager?.request(APIRouter.getPaymentMethods).responseString { _, _, string, _ in
+        MINetworkManager.sharedInstance.manager?.request(APIRouter.getPaymentMethods).responseString { string in
             //println(string)
-            }.responseString { _, _, string, _ in
+            }.responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
             CommonUtility().hideLoadingIndicator(self.navigationController!.view)
             
             if JSON != nil{
-                let resp = DMPayment(JSON: JSON!)
+                let resp = DMPayment(JSON: JSON as AnyObject)
                 if resp.status {
                     self.paymentMethod = resp
                     self.tableView.reloadData()
@@ -622,11 +623,11 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
 //            CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingMethods(shipping_method: selectedShipping!.quote[0].code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postShippingMethods(shipping_method: selectedShipping!.quote[0].code!,comment: deliveryInstructions)).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                 self.postPaymentMethodAPI()
                 if JSON != nil{
                     let resp = BaseJsonModel(JSON: JSON!)
@@ -647,11 +648,11 @@ class SelectAddressViewController: BaseViewController,AddressListViewDelegate ,U
         //println("Payment Method -> \(selectedPayment!.code!)")
         if CommonUtility.isNetworkAvailable() {
             
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentMethods(payment_method: selectedPayment!.code!,comment: deliveryInstructions)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postPaymentMethods(payment_method: selectedPayment!.code!,comment: deliveryInstructions)).responseString { string in
                 if string != nil {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                 
 
                 self.getCheckoutConfirmAPI()

@@ -186,15 +186,15 @@ class BaseViewController: UITableViewController, /*UIViewController,*/ UISearchB
     func searchProductAPI(_ searchText : String,page: String){
         if CommonUtility.isNetworkAvailable() {
             self.showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSearchProduct(limit: "\(searchLimit)", page: page, order: nil, sort: nil, search: searchText, descriptions: nil)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getSearchProduct(limit: "\(searchLimit)", page: page, order: nil, sort: nil, search: searchText, descriptions: nil)).responseString { string in
+//                if let str = string {
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+//                }
+                }.responseJSON { JSON in
                     MBProgressHUD.hideAllHUDs(for: self.navigationController!.view, animated: true)
                     
                     if JSON != nil {
-                        var resp = DMProduct(JSON: JSON!)
+                        let resp = DMProduct(JSON: JSON as AnyObject)
                         
                         if resp.status {
                             
@@ -207,10 +207,10 @@ class BaseViewController: UITableViewController, /*UIViewController,*/ UISearchB
                             self.searchResults = self.searchResults.count == 0 ? resp.products : self.searchResults + resp.products
                             
                             
-                            self.searchDisp.searchResultsTableView.reloadData()
+//                            self.searchDisp.searchResultsTableView.reloadData()
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     
@@ -316,14 +316,15 @@ class BaseViewController: UITableViewController, /*UIViewController,*/ UISearchB
             
             cell!.lblTitle.text = product.name!
             cell!.lblPrice.text = product.price!
-            cell!.imgProduct.af_setImage(withUrl: URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: UIImage(named: "loading"))//setImageWithUrl
-            if let description = product.descriptions {
-                cell!.lblDescription.text = description.trimWhiteSpaces()
-            }
+            //cell!.imgProduct.af_setImage(withUrl: URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!)//, placeHolderImage: UIImage(named: "loading"))//setImageWithUrl
+            //cell!.imgProduct.af_setImage(withURL: URL(string: product.thumb_image!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!,placeHolderImage: UIImage(named: "loading"))
+            cell!.imgProduct.af_setImage(withURL: URL(string: product.thumb_image!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, placeholderImage: UIImage(named: "loading"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: UIImageView.ImageTransition.noTransition, runImageTransitionIfCached: false, completion: nil)
+            
+            cell!.lblDescription.text = description.trimWhiteSpaces()
+            
             
             return cell!
-            
-        }else{
+        } else {
             return UITableViewCell()
         }
         

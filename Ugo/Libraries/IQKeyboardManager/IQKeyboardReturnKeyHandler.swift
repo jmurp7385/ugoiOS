@@ -80,7 +80,7 @@ class IQKeyboardReturnKeyHandler: NSObject , UITextFieldDelegate, UITextViewDele
     deinit {
         
         for infoDict in textFieldInfoCache {
-            
+            infoDict as! [[String : Any]]
             let view : AnyObject = infoDict[kIQTextField]!!
             
             if let textField = view as? UITextField {
@@ -130,9 +130,9 @@ class IQKeyboardReturnKeyHandler: NSObject , UITextFieldDelegate, UITextViewDele
 
     fileprivate func updateReturnKeyTypeOnTextField(_ view : UIView)
     {
-        var tableView : UIView? = view.superviewOfClassType(UITableView)
+        var tableView : UIView? = view.superviewOfClassType(UITableView.self)
         if tableView == nil {
-            tableView = tableView?.superviewOfClassType(UICollectionView)
+            tableView = tableView?.superviewOfClassType(UICollectionView.self)
         }
         
         var textFields : [UIView]?
@@ -266,9 +266,9 @@ class IQKeyboardReturnKeyHandler: NSObject , UITextFieldDelegate, UITextViewDele
     
     func goToNextResponderOrResign(_ view : UIView) {
         
-        var tableView : UIView? = view.superviewOfClassType(UITableView)
+        var tableView : UIView? = view.superviewOfClassType(UITableView.self)
         if tableView == nil {
-            tableView = tableView?.superviewOfClassType(UICollectionView)
+            tableView = tableView?.superviewOfClassType(UICollectionView.self)
         }
 
         var textFields : [UIView]?
@@ -292,8 +292,8 @@ class IQKeyboardReturnKeyHandler: NSObject , UITextFieldDelegate, UITextViewDele
         }
 
         if let unwrappedTextFields = textFields {
-            
-            if contains(unwrappedTextFields, view) == true {
+            if unwrappedTextFields.contains(view) == true {
+            //if contains(unwrappedTextFields, view) == true {
                 //Getting index of current textField.
                 if let index = find(unwrappedTextFields, view) {
                     //If it is not last textField. then it's next object becomeFirstResponder.
@@ -412,7 +412,7 @@ class IQKeyboardReturnKeyHandler: NSObject , UITextFieldDelegate, UITextViewDele
         
         var shouldReturn = true
         
-        if delegate?.responds(to: "textView:shouldChangeCharactersInRange:replacementString:") != nil {
+        if delegate?.responds(to: Selector(("textView:shouldChangeCharactersInRange:replacementString:"))) != nil {
             shouldReturn = ((delegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text)) == true)
         }
         

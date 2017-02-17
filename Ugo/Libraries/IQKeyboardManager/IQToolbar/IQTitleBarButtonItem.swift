@@ -64,7 +64,7 @@ class IQTitleBarButtonItem: UIBarButtonItem {
         isEnabled = false
     }
 
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder aDecoder: NSCoder) { //added '?'
+        super.init(coder: aDecoder) //added '?'
     }
 }

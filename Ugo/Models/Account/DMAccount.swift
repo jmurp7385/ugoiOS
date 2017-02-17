@@ -104,13 +104,13 @@ class DMAccount: BaseJsonModel {
         if status {
             if let dict = infoDict!["account"] as? NSDictionary {
                 
-                if let arr1 = dict.object(forKey: "custom_fields") as? NSArray{
+                if let arr1 = dict.object(forKey: "custom_fields") as? [[String : Any]] { //NSArray{
                     for dict1 in arr1 {
-                        var cust = CustomFields()
+                        let cust = CustomFields()
                         cust.custom_field_id = dict1["firstname"] as? Int
-                        if let arr = (dict1 as AnyObject).object(forKey: "custom_field_value") as? NSArray{
+                        if ((arr1 as AnyObject).object(forKey: "custom_field_value") as? [[String : Any]]) != nil { //NSArray{
                             for dict2 in arr1 {
-                                var value = CustomFieldsValue()
+                                let value = CustomFieldsValue()
                                 value.custom_field_value_id = dict2["custom_field_value_id"] as? Int
                                 value.name = dict2["name"] as? String
                                 cust.custom_field_value.append(value)
@@ -119,7 +119,7 @@ class DMAccount: BaseJsonModel {
                             cust.type = dict1["type"] as? String
                             cust.value = dict1["value"] as? String
                             cust.required = dict1["required"] as? Bool
-                            account.custom_fields.append(cust)
+                            self.account.custom_fields.append(cust)
                         }
                     }
                 }
@@ -136,20 +136,20 @@ class DMAccount: BaseJsonModel {
                 if let cid = dict["customer_id"] as? Int {
                     account.customer_id = cid
                 }else if let cid = dict["customer_id"] as? String {
-                    account.customer_id = cid.toInt()
+                    account.customer_id = Int(cid)
                 }
                 
-                if let obj: AnyObject = dict["customer_id"] {
-                    var customer_group = CustomerGroup()
+                if let obj: AnyObject = dict["customer_id"] as AnyObject?{
+                    let customer_group = CustomerGroup()
                     customer_group.customer_group_id = obj["customer_group_id"] as? Int
                     customer_group.name = obj["name"] as? String
                     customer_group.descriptions = obj["descriptions"] as? String
                     account.customer_group = customer_group
                 }
                 
-            }else if let arr = infoDict!["addresses"] as? NSArray {
+            }else if let arr = infoDict!["addresses"] as? [[String : Any]] { //NSArray {
                 for obj in arr {
-                    var address = Address()
+                    let address = Address()
                     address.address_id = obj["address_id"] as? Int
                     address.firstname = obj["firstname"] as? String
                     address.lastname = obj["lastname"] as? String

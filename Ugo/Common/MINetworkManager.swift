@@ -19,10 +19,10 @@ enum APIRouter: URLRequestConvertible
     public func asURLRequest() throws -> URLRequest {
         print("nil")
     }
-
+    
     static let BASE_URL = "https://www.ugollc.com/api/v1"
-//    static let BASE_URL = "http://sadiq-mac.local/openupload/api/v1"
-//    static let BASE_URL = "http://localhost/ugo/api/v1"
+    //    static let BASE_URL = "http://sadiq-mac.local/openupload/api/v1"
+    //    static let BASE_URL = "http://localhost/ugo/api/v1"
     static let API_KEY = "12"//api key, consumer secret for OAuth, etc
     
     case postToken
@@ -77,14 +77,11 @@ enum APIRouter: URLRequestConvertible
     
     
     
-    var URLRequest: Foundation.URLRequest
-        {
-        
-        let (path: String, parameters: [Stri])
-            let (path: String, parameters: [String: AnyObject]) =
+    var URLRequest: Foundation.URLRequest {
+        let (path, parameters) = 
+        //let (path: String, parameters: [String: AnyObject]) =
             { () -> (String, [String : AnyObject]) in
-                switch self
-                {
+                switch self {
                 case .postToken:
                     let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/oauth2/token", params)
@@ -99,9 +96,9 @@ enum APIRouter: URLRequestConvertible
                     return ("/product/special", params)
                 case .getProducts(let limit,let page,let str):
                     var params :[String: AnyObject] = ["":"" as AnyObject]
-                    params["limit"] = limit != nil ? limit : "20"
-                    params["page"] = page != nil ? page : "1"
-
+                    params["limit"] = limit != nil ? limit as AnyObject? : "20" as AnyObject?
+                    params["page"] = page != nil ? page as AnyObject? : "1" as AnyObject?
+                    
                     return ("/product/category/\(str)", params)
                     
                 case .getProductDetail(let str):
@@ -120,11 +117,11 @@ enum APIRouter: URLRequestConvertible
                     params["description"] = descriptions != nil ? descriptions : "true"
                     
                     return ("/product/search", params as [String : AnyObject])
-                    //CART APIS
+                //CART APIS
                 case .postAddtoCart(let product):
                     let params :[String: AnyObject] = ["product_id":product.product_id! as AnyObject,"quantity":product.quantity! as AnyObject]
                     return ("/cart/product", params)
-                
+                    
                 case .postSetOption(let option):
                     let params :[String: AnyObject] = ["\(option.title_en!.removeWhitespace().removeDots())[0]":option.title_admin!.removeWhitespace().removeDots() as AnyObject]
                     return ("/cart/cart/setOptions", params)
@@ -137,12 +134,12 @@ enum APIRouter: URLRequestConvertible
                 case .deleteCart(let productkey):
                     let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/cart/product/\(productkey)", params)
-                 
+                    
                 case .deleteAddress(let address_id):
                     let params :[String: AnyObject] = ["":"" as AnyObject]
                     return ("/account/address/\(address_id)", params)
                     
-                    // Checkout
+                // Checkout
                 case .postPaymentAdd(let address):
                     var params :[String: AnyObject]!
                     if address.payment_address == "new" {
@@ -219,16 +216,16 @@ enum APIRouter: URLRequestConvertible
                     
                 case .postRegisterFB(let account):
                     var params = [
-                    
+                        
                         "firstname" : account.firstname != nil ? account.firstname! : "",
                         "lastname" : account.lastname != nil ? account.lastname! : "NA",
                         "email" : account.email != nil ? account.email! : "NA",
                         "telephone" : account.telephone != nil ? account.telephone! : "123",
                         "fax" : account.fax != nil ? account.fax! : "",
-                    
+                        
                         "password" : account.password != nil ? account.password! : "",
                         "confirm" : account.password != nil ? account.password! : "",
-                    
+                        
                         "address_1" : "NAA",
                         "address_2" : "NA",
                         "city" : "NA",
@@ -248,10 +245,10 @@ enum APIRouter: URLRequestConvertible
                         "email" : account.email != nil ? account.email! : "NA",
                         "telephone" : account.telephone != nil ? account.telephone! : "123",
                         "fax" : account.fax != nil ? account.fax! : "",
-                    
+                        
                         "password" : account.password != nil ? account.password! : "",
                         "confirm" : account.password != nil ? account.password! : "",
-                    
+                        
                         "address_1" : "NAA",
                         "address_2" : "NA",
                         "city" : "NA",
@@ -274,29 +271,29 @@ enum APIRouter: URLRequestConvertible
                     return ("", params)
                     
                 }
-                }()
+        }()
+        
+        
+        let URL = Foundation.URL(string: APIRouter.BASE_URL)
+        let URLRequest = NSMutableURLRequest(URL:URL!.URLByAppendingPathComponent(path))
+        URLRequest.HTTPMethod = method.rawValue
+        if let access_token = UserSessionInformation.sharedInstance.access_token{
+            URLRequest.setValue("Bearer \(access_token)", forHTTPHeaderField: "Authorization")
+        }else{
+            URLRequest.setValue("Basic VWdvQXV0aDMyMTY1NDpSVGdPQnN0QUJ4MjN4OTgxd3BvQQ==", forHTTPHeaderField: "Authorization")
+            URLRequest.setValue("private", forHTTPHeaderField: "Cache-Control")
             
-            
-            let URL = Foundation.URL(string: APIRouter.BASE_URL)
-            let URLRequest = NSMutableURLRequest(URL:URL!.URLByAppendingPathComponent(path))
-            URLRequest.HTTPMethod = method.rawValue
-            if let access_token = UserSessionInformation.sharedInstance.access_token{
-                URLRequest.setValue("Bearer \(access_token)", forHTTPHeaderField: "Authorization")
-            }else{
-                URLRequest.setValue("Basic VWdvQXV0aDMyMTY1NDpSVGdPQnN0QUJ4MjN4OTgxd3BvQQ==", forHTTPHeaderField: "Authorization")
-                URLRequest.setValue("private", forHTTPHeaderField: "Cache-Control")
-                
-            }
-            
-            let encoding = ParameterEncoding.url
-            //println("Headers ==== \(URLRequest.allHTTPHeaderFields!)")
-            //println("parameters ==== \(parameters)")
-            
-            //println("Method ==== \(URLRequest.HTTPMethod)")
-            //println("URL ==== \(URLRequest.URLString)")
-            
-            return encoding.encode(URLRequest, parameters: paramaters).0
-            
+        }
+        
+        let encoding = ParameterEncoding.self    //.url
+        //println("Headers ==== \(URLRequest.allHTTPHeaderFields!)")
+        //println("parameters ==== \(parameters)")
+        
+        //println("Method ==== \(URLRequest.HTTPMethod)")
+        //println("URL ==== \(URLRequest.URLString)")
+        
+        return encoding.encode(URLRequest, parameters: Parameters).0
+        
     }
     
     
@@ -305,9 +302,8 @@ enum APIRouter: URLRequestConvertible
 
 class MINetworkManager: NSObject {
     
-    private static var __once: () = {
-        Static.instance = MINetworkManager()
-    }()
+    
+    private static var __once: ()
     
     class var sharedInstance:MINetworkManager{
         
@@ -316,12 +312,16 @@ class MINetworkManager: NSObject {
             static var token : Int = 0
         }
         
+        __once = {
+            Static.instance = MINetworkManager()
+        }()
+        
         _ = MINetworkManager.__once
         
         return Static.instance
     }
     
-   
+    
     
     var manager: SessionManager?
     
@@ -332,16 +332,17 @@ class MINetworkManager: NSObject {
         let cache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: "shared_cache")
         
         // Create a custom configuration
+        let defaultHeaders = MINetworkManager.sharedInstance.manager?.session.configuration.httpAdditionalHeaders
         let configuration = URLSessionConfiguration.default
-        let defaultHeaders = manager.sharedInstance.session.configuration.httpAdditionalHeaders
+        //let defaultHeaders = manager.sharedInstance.session.configuration.httpAdditionalHeaders
         
         configuration.httpAdditionalHeaders = defaultHeaders
         configuration.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
-            // this is the default
+        // this is the default
         configuration.urlCache = cache
         
         // Create your own manager instance that uses your custom configuration
-        manager = manager(configuration: configuration)
+        manager = SessionManager(configuration: configuration)
         
     }
 }

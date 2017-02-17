@@ -108,7 +108,7 @@ extension UIView{
     
     var _गोल_करा:UIView! {
         let rounfView:UIView = self
-        rounfView._गोल_करा(rounfView.frame.width / 2)
+        //rounfView._गोल_करा(rounfView.frame.width / 2)
         return rounfView
     }
     
@@ -191,7 +191,7 @@ extension UILabel {
     
     func expectedHeight() -> CGFloat! {
         
-        let constraintSize = CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: CGFloat.max)
+        let constraintSize = CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: CGFloat.greatestFiniteMagnitude)
         let labelSize = self.text!.boundingRect(with: constraintSize,
             options: NSStringDrawingOptions.usesLineFragmentOrigin,
             attributes: [NSFontAttributeName: self.font],

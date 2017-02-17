@@ -27,19 +27,19 @@ import UIKit
 /** @abstract UITextView with placeholder support   */
 class IQTextView : UITextView {
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) { //added ?
         super.init(coder: aDecoder)
-        NotificationCenter.default.addObserver(self, selector: "refreshPlaceholder", name: NSNotification.Name.UITextViewTextDidChange, object: self)
+        NotificationCenter.default.addObserver(self, selector: Selector(("refreshPlaceholder")), name: NSNotification.Name.UITextViewTextDidChange, object: self)
     }
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        NotificationCenter.default.addObserver(self, selector: "refreshPlaceholder", name: NSNotification.Name.UITextViewTextDidChange, object: self)
+        NotificationCenter.default.addObserver(self, selector: Selector(("refreshPlaceholder")), name: NSNotification.Name.UITextViewTextDidChange, object: self)
     }
     
     override func awakeFromNib() {
          super.awakeFromNib()
-        NotificationCenter.default.addObserver(self, selector: "refreshPlaceholder", name: NSNotification.Name.UITextViewTextDidChange, object: self)
+        NotificationCenter.default.addObserver(self, selector: Selector(("refreshPlaceholder")), name: NSNotification.Name.UITextViewTextDidChange, object: self)
     }
     
     deinit {
@@ -81,7 +81,7 @@ class IQTextView : UITextView {
     
     fileprivate func refreshPlaceholder() {
         
-        if count(text) != 0 {
+        if text.characters.count != 0 {
             placeholderLabel?.alpha = 0
         } else {
             placeholderLabel?.alpha = 1

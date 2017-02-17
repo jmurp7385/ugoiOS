@@ -173,7 +173,7 @@ extension UIView {
         
         //subviews are returning in opposite order. So I sorted it according the frames 'y'.
         
-        let subViews = subviews.sorted({ (obj1 : AnyObject, obj2 : AnyObject) -> Bool in
+        let subViews = subviews.sorted(by: { (obj1 : AnyObject, obj2 : AnyObject) -> Bool in
             
             let view1 = obj1 as! UIView
             let view2 = obj2 as! UIView

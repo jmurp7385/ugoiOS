@@ -131,7 +131,7 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
         let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "email,first_name,last_name"])
         graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             if let dict = result as? NSDictionary{
-                for d in dict {
+                for _ in dict {
                     //print(d)
                 }
             }
@@ -144,23 +144,24 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
             else
             {
                 //print("fetched user: \(result)")
-                if let first_name : String = result.value(forKey: "first_name") as? String{
+                if let resultDict = result as? NSDictionary {
+                if let first_name : String = (result as! NSDictionary).value(forKey: "first_name") as? String{
                     //print("first_name is: \(first_name)")
                     self.acc.firstname = first_name
                     
                 }
-                if let last_name : String = result.value(forKey: "last_name") as? String{
+                if let last_name : String = resultDict.value(forKey: "last_name") as? String{
                     //print("last_name is: \(last_name)")
                     self.acc.lastname = last_name
                     
                 }
-                if let email : String = result.value(forKey: "email") as? String{
+                if let email : String = resultDict.value(forKey: "email") as? String{
                     //print("email is: \(email)")
                     self.acc.email = email
                 }else{
                     CommonUtility.showAlertView("Information", message: "No email address is found")
                 }
-                if let id : String = result.value(forKey: "id") as? String{
+                if let id : String = resultDict.value(forKey: "id") as? String{
                     //print("id is: \(id)")
                     self.acc.fb = id
                 }
@@ -169,13 +170,14 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
                 self.acc.password = "123456"
                 
                 if self.acc.email == "" {
-                    var alert = UIAlertView(title: "Information", message: "Please enter email id.", delegate: self, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: "Information", message: "Please enter email id.", delegate: self, cancelButtonTitle: "OK")
                     alert.tag = 222
                     alert.alertViewStyle = UIAlertViewStyle.plainTextInput
                     alert.textField(at: 0)?.keyboardType = UIKeyboardType.emailAddress
                     alert.show()
                 }else{
                     self.signupFbAPI(self.acc)
+                }
                 }
                 
                 
@@ -233,14 +235,14 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
     func forgotAPI(_ email:String){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Submitting...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postForgotPwd(email: email)).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postForgotPwd(email: email)).responseString { string in
                 if string != nil {
                     //print(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        let resp = BaseJsonModel(JSON: JSON!)
+                        let resp = BaseJsonModel(JSON: JSON)
                         if resp.status {
                             
                         }else{

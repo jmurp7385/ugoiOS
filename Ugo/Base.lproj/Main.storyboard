@@ -1269,7 +1269,7 @@
                     <navigationItem key="navigationItem" id="DFH-HN-f1o"/>
                     <connections>
                         <outlet property="btnCheckout" destination="zpR-M6-CPv" id="prF-ux-q6j"/>
-                        <outlet property="tableView" destination="2vg-Ya-OcC" id="AfY-KP-TMd"/>
+                        <outlet property="table" destination="2vg-Ya-OcC" id="eyW-qF-b4h"/>
                         <segue destination="XP1-mW-hPh" kind="show" identifier="toSelectAddressViewController" id="ylg-aa-NFA"/>
                     </connections>
                 </viewController>
@@ -1540,7 +1540,7 @@
                     <connections>
                         <outlet property="btnNext" destination="ibt-WQ-CFu" id="ulc-DH-U0z"/>
                         <outlet property="pickerView" destination="gcf-H7-hMG" id="aU0-7G-XrX"/>
-                        <outlet property="tableView" destination="24D-Bc-uwz" id="1Aj-8k-gX8"/>
+                        <outlet property="table" destination="24D-Bc-uwz" id="D5Z-Ge-un5"/>
                         <outlet property="toolBar" destination="zMW-4O-CKX" id="Mrb-XF-n6a"/>
                         <segue destination="lNd-pV-2Tc" kind="show" identifier="toAddressListViewController" id="YNA-KU-6hp"/>
                     </connections>
@@ -1883,7 +1883,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="CkB-we-pDQ" id="udp-wz-njl"/>
+                        <outlet property="table" destination="CkB-we-pDQ" id="brK-Hk-cku"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kBr-qH-7Po" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2520,7 +2520,7 @@ If you have any questions or concerns, please call us.</string>
         <image name="logologin" width="104" height="86"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="YNA-KU-6hp"/>
         <segue reference="AOR-wr-CVG"/>
-        <segue reference="qQg-Vs-B2r"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -144,7 +144,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     
     func getCategoriesAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCategories).responseString { _, _, string, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getCategories).responseString { string in
                 if let str = string {
                     //println(str)
                 }
@@ -187,16 +187,16 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
             
             
             var cat_id = "\(categories[section-1].category_id!)"
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getProducts(limit: nil, page: page, cat_id: cat_id)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getProducts(limit: nil, page: page, cat_id: cat_id)).responseString { string in
+                if let str = string as? String {
                     //println(str)
                 }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     
                     if JSON != nil {
                         
                         self.categories[section-1].isLoaded = true
-                        var resp = DMCategory(JSON: JSON!)
+                        var resp = DMCategory(JSON: JSON)
                         
                         if resp.status {
                             var c = resp.category
@@ -231,19 +231,33 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     // MARK: - Table View Delegates
     
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+            return categories.count+1
+        } else {
+            return super.numberOfSections(in: searchDisp.searchResultsUpdater as! UITableView)
+        }
+        /*
         if tableView != searchDisp.searchResultsTableView {
             return  categories.count + 1
         }else{
             return super.numberOfSections(in: searchDisp.searchResultsTableView)
         }
+        */
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+            return 1
+        } else {
+            return super.tableView(tableView, numberOfRowsInSection: section)
+        }
+        /*
         if tableView != searchDisp.searchResultsTableView {
             return 1
         }else{
             return super.tableView(tableView, numberOfRowsInSection: section)
         }
+        */
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -296,7 +310,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if tableView != searchDisp.searchResultsTableView {
             
             if section == 0 {

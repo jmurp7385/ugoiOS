@@ -187,7 +187,7 @@ class CommonUtility: NSObject {
     {
         var reachability:Reachability = Reachability.forInternetConnection()
         var internetStatus:NetworkStatus = reachability.currentReachabilityStatus()
-        
+
         if(internetStatus.value !=  NotReachable.value){
             return true
         }
@@ -204,7 +204,7 @@ class CommonUtility: NSObject {
             dateFormatter.dateFormat = "yyyy-MM-dd"
             
             let actdate:Date? = dateFormatter.date(from: strDate!)
-            var currDate:Date = Date()
+            let currDate:Date = Date()
             
             var dtcomponents:DateComponents? = getDateComponentsFromDate(actdate)
             var currcomponents:DateComponents? = getDateComponentsFromDate(currDate)
@@ -238,11 +238,11 @@ class CommonUtility: NSObject {
     {
         if(strDate != nil)
         {
-            var dateFormatter:DateFormatter = DateFormatter()
+            let dateFormatter:DateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             
-            var actdate:Date? = dateFormatter.date(from: strDate!)
-            var currDate:Date = Date()
+            let actdate:Date? = dateFormatter.date(from: strDate!)
+            let currDate:Date = Date()
             
             var dtcomponents:DateComponents? = getDateComponentsFromDate(actdate)
             var currcomponents:DateComponents? = getDateComponentsFromDate(currDate)
@@ -274,12 +274,16 @@ class CommonUtility: NSObject {
     {
         if(date != nil)
         {
-            var gregorian:Calendar? = Calendar(identifier: NSGregorianCalendar)
+            let gregorian:Calendar? = Calendar(identifier: Calendar.Identifier.gregorian)
             if(gregorian != nil)
             {
-                var components:DateComponents = gregorian!.components(NSCalendar.Unit.DayCalendarUnit | NSCalendar.Unit.MonthCalendarUnit | NSCalendar.Unit.YearCalendarUnit, fromDate:date!)
                 
+                //var components:DateComponents = gregorian!.components(Calendar.Unit.DayCalendarUnit | Calendar.Unit.MonthCalendarUnit | Calendar.Unit.YearCalendarUnit, fromDate:date!)
+                //var components:DateComponents = gregorian!.components(NSCalendar.Unit.day | NSCalendar.Unit.month | NSCalendar.Unit.year, fromDate:date!)
+                //var components:DateComponents = gregorian!.components(Calendar.Component.day | Calendar.Component.month | Calendar.Component.year, fromDate:date!)
+                let components : gregorian.components = [.day,.month,.year]
                 return components
+                
             }
         }
         return nil
@@ -289,7 +293,7 @@ class CommonUtility: NSObject {
     
     class func containsSpecialCharacters(_ string: String) -> Bool {
         let regex = NSRegularExpression(pattern: "[^A-Za-z]", options: nil, error: nil)!
-        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, count(string))) != nil {
+        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, string.characters.count)) != nil {
             return true
         }
         return false
@@ -297,7 +301,7 @@ class CommonUtility: NSObject {
 
     class func containsNumbers(_ string: String) -> Bool {
         let regex = NSRegularExpression(pattern: "[0-9]", options: nil, error: nil)!
-        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, count(string))) != nil {
+        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, string.characters.count)) != nil {
             return true
         }
         return false
