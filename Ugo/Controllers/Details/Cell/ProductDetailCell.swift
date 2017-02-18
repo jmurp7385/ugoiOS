@@ -64,14 +64,14 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
         if CommonUtility.isNetworkAvailable() {
             
             CommonUtility().showLoadingWithMessage(self.window!, message: "Adding product to cart...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postAddtoCart(product)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postAddtoCart(product)).responseString { string in
+                //let str = string
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+                
+                }.responseJSON { JSON in
                 CommonUtility().hideLoadingIndicator(self.window!)
                 //                    //println(JSON!)
-                var response = DMCart(JSON: JSON!)
+                let response = DMCart(JSON: JSON as AnyObject)
                 
                 if response.status {
                     UserSessionInformation.sharedInstance.cartCount = response.cart.products.count
@@ -82,8 +82,8 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
                     if response.errors[0].code == "error" {
                     CommonUtility.showAlertView("Information", message: "This product cannot be added to cart because of additional options. Please contact support.")
                     }else{
-                        CommonUtility.showAlertView("We're sorry...", message: response.errors[0].message!)
-                        
+                        //CommonUtility.showAlertView("We're sorry...", message: response.errors[0].message!)
+                        CommonUtility.showAlertView("We're sorry...", message: response.errors[0].message! as NSString)
                     }
                 }
                 
@@ -106,9 +106,9 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     
     func receivedSelectedQty(_ sku: String) {
         //print("receivedSelectedQty \(sku)")
-        if let stock = product.stock_status?.toInt() {
-            if stock >= sku.toInt() {
-                product.quantity = sku.toInt()
+        if let stock = Int(product.stock_status!) {
+            if stock >= Int(sku) {
+                product.quantity = Int(sku)
                 btnSelectQty.setTitle("Quantity   \(sku)", for: UIControlState())
             }else{
                 CommonUtility.showAlertView("Information", message: "No stock for product or the minimum quantity requirement of a product is not met.")
@@ -119,9 +119,9 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 0 {
-            var count = alertView.textField(at: 0)?.text
+            let count = alertView.textField(at: 0)?.text
             
-            if let ct = count?.toInt() {
+            if let ct = Int(count!) {
                 product.quantity = ct
                 btnSelectQty.setTitle("Quantity   \(ct)", for: UIControlState())
 
@@ -173,8 +173,11 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     
     class func cell() -> ProductDetailCell
     {
-        let nib:NSArray = Bundle.mainBundle.loadNibNamed("ProductDetailCell", owner: self, options: nil)
-        let cell = nib.object(at: 0) as? ProductDetailCell
+        let nib = Bundle.main.loadNibNamed("ProductDeatilCell", owner: self, options: nil)
+        //let nib:NSArray = Bundle.mainBundle.loadNibNamed("ProductDetailCell", owner: self, options: nil)
+        
+        let cell = nib?.first as? ProductDetailCell
+        //let cell = nib.object(at: 0) as? ProductDetailCell
         return cell!
     }
     
@@ -187,18 +190,19 @@ class ProductDetailCell: UITableViewCell ,UIAlertViewDelegate, SelectQtyViewCont
     class func heightForCell(_ str:String?) -> CGFloat
     {
         var str = str
-        var cell = ProductDetailCell.cell()
+        let cell = ProductDetailCell.cell()
         if str == nil {
             str = " "
         }
         cell.lblDescription.setHTMLFromString(str!)
         
-        var rect = cell.lblDescription.attributedText?.boundingRectWithSize(CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: 10000), options: NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, context: nil)
+        let rect = cell.lblDescription.attributedText?.boundingRect(with: CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
         
         cell.lblDescription.sizeToFit()
-        var lblHt = cell.lblDescription.frame.height
+        _ = cell.lblDescription.frame.height
+        //let lblHt = cell.lblDescription.frame.height
         
-        return rect.height
+        return rect!.height
     }
     
     

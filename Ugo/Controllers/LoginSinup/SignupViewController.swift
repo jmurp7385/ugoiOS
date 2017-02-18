@@ -65,7 +65,7 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
     
     func signupAPI(){
         if CommonUtility.isNetworkAvailable() {
-            var acc = Account()
+            let acc = Account()
             
             acc.firstname = self.txtFirstname.text
             acc.lastname = self.txtLastname.text
@@ -77,14 +77,14 @@ class SignupViewController: BaseViewController,AddressListViewDelegate {
                 //println(response)
                 //println(error)
                 }.responseString { string in
-                let str = string 
+                //let str = string
                     //println(str)
                 
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
 
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON as AnyObject)
+                        let resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()

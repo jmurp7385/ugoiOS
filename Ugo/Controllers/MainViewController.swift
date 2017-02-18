@@ -110,9 +110,21 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
         if CommonUtility.isNetworkAvailable() {
             
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getSpecialProducts).responseString { string in
-                let str = string
+                //let str = string
                     //println(str)
                 
+                }.validate().responseJSON { response in
+                    if let JSON = response.result.value {
+                        let resp = DMProduct(JSON: JSON as AnyObject)
+                        if resp.status {
+                            self.products = resp.products
+                            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
+                            
+                        }else{
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                        }
+                    }
+                /*
                 }.responseJSON { a, res, JSON, c in
                     print(res?.statusCode) //from println
                     if res?.statusCode == 401 {
@@ -133,7 +145,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                             }
                         }
                     }
-                    
+                 */
                     
             }
         }else{
@@ -145,9 +157,20 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
     func getCategoriesAPI(){
         if CommonUtility.isNetworkAvailable() {
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getCategories).responseString { string in
-                if let str = string {
+                //let str = string
                     //println(str)
-                }
+                }.validate().responseJSON { response in
+                    if let JSON = response.result.value {
+                        let resp = DMProduct(JSON: JSON as AnyObject)
+                        if resp.status {
+                            self.products = resp.products
+                            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
+                            
+                        }else{
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                        }
+                    }
+                /*
                 }.responseJSON { _, res, JSON, _ in
                     
                     if JSON != nil {
@@ -169,6 +192,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                             
                         }
                     }
+                */
             }
         }else{
             CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
@@ -183,29 +207,26 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
         
         if CommonUtility.isNetworkAvailable() {
             //println("Section \(section) products API Call")
-            
-            
-            
-            var cat_id = "\(categories[section-1].category_id!)"
+            let cat_id = "\(categories[section-1].category_id!)"
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getProducts(limit: nil, page: page, cat_id: cat_id)).responseString { string in
-                if let str = string as? String {
+                //let str = string
                     //println(str)
-                }
+                
                 }.responseJSON { JSON in
                     
                     if JSON != nil {
                         
                         self.categories[section-1].isLoaded = true
-                        var resp = DMCategory(JSON: JSON as AnyObject)
+                        let resp = DMCategory(JSON: JSON as AnyObject)
                         
                         if resp.status {
-                            var c = resp.category
+                            let c = resp.category
                             //println("Section \(section) \(c.name) API Reaponse Products Count : \(c.products.count) ")
                             
                             if c?.products.count == 0 {
                                 self.categories[section-1].isCallAPI = false
                             }
-                            self.categories[section-1].products =   self.categories[section-1].products.count == 0 ? c.products :   self.categories[section-1].products + c.products
+                            self.categories[section-1].products =   self.categories[section-1].products.count == 0 ? (c?.products)! :   self.categories[section-1].products + (c?.products)!
                             
                             //                        self.categories[section-1].products = c.products
                             self.tableView.reloadSections(IndexSet(integer: section), with: UITableViewRowAnimation.automatic)
@@ -270,7 +291,7 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                 
             }else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ProductListCell") as! ProductListCell
-                var category = categories[indexPath.section-1]
+                let category = categories[indexPath.section-1]
                 cell.products = category.products
                 category.index = indexPath.section
                 cell.category = category
@@ -294,7 +315,8 @@ class MainViewController: BaseViewController {//,UITableViewDataSource,UITableVi
                 return cell
             }
         }else{
-            return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, cellForRowAt: indexPath)
+            //return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
         }
     }
     

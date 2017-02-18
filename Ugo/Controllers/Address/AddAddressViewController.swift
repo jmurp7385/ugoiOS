@@ -107,7 +107,7 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
             if distMiles < storeDistRadius {
                 self.Done(nil)
                 self.delegate.addressSelected(type, address: self.address)
-
+                
             }else{
                 CommonUtility.showAlertView("Information", message: "We do not deliver to your location")
             }
@@ -211,26 +211,30 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
     func geoCodeUsingAddress(_ add : String) -> CLLocationCoordinate2D {
         var latitude : Double = 0
         var longitude : Double = 0
-        var esc_addr = add.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) //String.Encoding.utf8 to .urlHostAllowed
-        var str = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=\(esc_addr!)"
-        var result = String(contentsOf: URL(string: str)!, encoding: String.Encoding.utf8, error: nil)
-        var scanner = Scanner(string: result!)
-        if scanner.scanUpToString("\"lat\" :", intoString: nil) && scanner.scanString("\"lat\" :", intoString: nil)
-        {
-            scanner.scanDouble(&latitude)
+        var center = CLLocationCoordinate2D()
+        let esc_addr = add.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) //String.Encoding.utf8 to .urlHostAllowed
+        let str = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=\(esc_addr!)"
+        do {
+            let result = try String(contentsOf: URL(string: str)!, encoding: String.Encoding.utf8)
+            let scanner = Scanner(string: result)
+            if scanner.scanUpTo("\"lat\" :", into: nil) && scanner.scanString("\"lat\" :", into: nil)
+            {
+                scanner.scanDouble(&latitude)
+            }
+            if scanner.scanUpTo("\"lng\" :", into: nil) && scanner.scanString("\"lng\" :", into: nil)
+            {
+                scanner.scanDouble(&longitude)
+            }
+            
+            
+            center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            
+            //println(center.latitude)
+            //println(center.longitude)
+        } catch {
+            print("error")
         }
-        if scanner.scanUpToString("\"lng\" :", intoString: nil) && scanner.scanString("\"lng\" :", intoString: nil)
-        {
-            scanner.scanDouble(&longitude)
-        }
-        
-        
-        var center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
-        //println(center.latitude)
-        //println(center.longitude)
         return center
-        
     }
     
     
@@ -265,9 +269,9 @@ class AddAddressViewController: BaseViewController ,CLLocationManagerDelegate,UI
             
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getCountryZones(country_id: country_id)).responseString { string in
-                if string != nil {
+                //let str = string
                     //println(str)
-                }
+            
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{

@@ -154,7 +154,6 @@ class Cart: BaseJsonModel {
     var vouchers : [Product] = []
     var totals : [Totals] = []
     
-    
     var tipOptions : [DriverTipOptions] = []
 
     var weight : String?
@@ -185,7 +184,7 @@ class Cart: BaseJsonModel {
                     
                 }
                 if let arr = dict["vouchers"] as? NSArray{
-                    
+                    print(arr)
                 }
                 if let arr = dict["totals"] as? NSArray{
                     for obj in arr{
@@ -235,28 +234,23 @@ class DMCart: BaseJsonModel {
                     if let dict3 = dict2["charge"] as? NSDictionary {
                         
                         for obj in dict3.allKeys {
-                            var tip = DriverTipOptions()
+                            let tip = DriverTipOptions()
                             
                             if let tipObj = dict3.value(forKey: obj as! String) as? NSDictionary {
                                 tip.option_type = tipObj["option_type"] as? String
                                 tip.option_text_en = tipObj["option_text_en"] as? String
                                 tip.title_admin = tipObj["title_admin"] as? String
                                 tip.title_en = tipObj["title_en"] as? String
-                                tip.group = (tipObj["group"] as? String)?.toInt()
+                                tip.group = Int(((tipObj["group"] as? String))!)//.toInt()
                                 cart.tipOptions.append(tip)
                             }
                         }
                         
                     }
-
-                    
                 }
-                
             }
-            
         }
     }
-    
 }
 
 class DriverTip : NSObject {
@@ -295,10 +289,6 @@ class DMCategory: BaseJsonModel {
     var categories : [Category] = []
     var category : Category!
     override init(JSON : AnyObject) {
-        
-        
-        
-        
         super.init(JSON: JSON)
         if status {
             if let arr = infoDict!["categories"] as? NSArray {
@@ -311,27 +301,27 @@ class DMCategory: BaseJsonModel {
                 category.thumb_image = obj["thumb_image"] as? String
                 
                 category.products = CommonParse.parseProducts(obj["products"] as! NSArray)
-                self.category = category            }
+                self.category = category
+            }
         }
-        
     }
-    
-    
 }
 
+//NSFastEnumerationIterator
 class CommonParse: NSObject {
     static func parseCategory(_ arr : NSArray) -> [Category]{
         var categories : [Category] = []
-        for cat in arr {
-            var category = Category()
+        for cat in (arr as? [[String : Any]])! {
+            let category = Category()
+            
             category.category_id = cat["category_id"] as? Int
             category.name = cat["name"] as? String
             category.descriptions = cat["description"] as? String
             category.thumb_image = cat["thumb_image"] as? String
             category.total_products = cat["total_products"] as? Int
-            var arr = cat["categories"] as? NSArray
+            let arr = cat["categories"] as? NSArray
             if arr?.count > 0 {
-                category.categories = CommonParse.parseCategory(arr!)
+                category.categories = (CommonParse.parseCategory(arr!) as NSArray) as! [Category]
             }
             categories.append(category)
         }
@@ -348,7 +338,7 @@ class CommonParse: NSObject {
     
     
     static func parseProduct(_ dict:AnyObject) -> Product{
-        var product = Product()
+        let product = Product()
         product.product_id = dict["product_id"] as? Int
         product.name = dict["name"] as? String
         product.descriptions = dict["description"] as? String
@@ -386,8 +376,8 @@ class CommonParse: NSObject {
         
         
         if let arr = dict["images"] as? NSArray{
-            for img in arr{
-                var image = Images()
+            for img in (arr as? [[String : Any]])! {
+                let image = Images()
                 image.image = img["image"] as? String
                 image.thumb_image = img["thumb_image"] as? String
                 product.images.append(image)
@@ -395,17 +385,17 @@ class CommonParse: NSObject {
         }
         
         if let arr = dict["discounts"] as? NSArray{
-            for dict in arr{
-                var discount = Discount()
+            for dict in (arr as? [[String : Any]])! {
+                let discount = Discount()
                 discount.price = dict["price"] as? String
                 discount.quantity = dict["quantity"] as? Int
                 product.discounts.append(discount)
             }
         }
         // check for option & options
-        if let arr = dict["options"] as? NSArray{
+        if let arr = dict["options"] as? [[String : Any]] {
             for dict1 in arr {
-                var option = Option()
+                let option = Option()
                 option.name = dict1["name"] as? String
                 option.option_id = dict1["option_id"] as? Int
                 option.product_option_id = dict1["product_option_id"] as? Int
@@ -413,9 +403,9 @@ class CommonParse: NSObject {
                 option.type = dict1["type"] as? String
                 option.value = dict1["value"] as? String
                 
-                if let arr = dict1["product_option_value"] as? NSArray{
-                    for dict2 in arr{
-                        var product_option_value = ProductOptionValue()
+                if let arr = dict1["product_option_value"] as? [[String : Any]] { //NSArray
+                    for dict2 in arr {
+                        let product_option_value = ProductOptionValue()
                         product_option_value.product_option_value_id = dict2["product_option_value_id"] as? Int
                         product_option_value.option_value_id = dict2["option_value_id"] as? Int
                         product_option_value.name = dict2["name"] as? String
@@ -428,16 +418,16 @@ class CommonParse: NSObject {
                 product.options.append(option)
             }
         }
-        
-        if let arr = dict["attribute_groups"] as? NSArray{
+        //NSFastEnumerationIterator
+        if let arr = dict["attribute_groups"] as? [[String : Any]]{
             for dict1 in arr {
-                var attribute_groups = AttributesGrp()
+                let attribute_groups = AttributesGrp()
                 attribute_groups.attribute_group_id = dict1["attribute_group_id"] as? Int
                 attribute_groups.name = dict1["name"] as? String
                 
-                if let arr = dict1["attribute"] as? NSArray{
-                    for dict2 in arr{
-                        var attribute = Attribute()
+                if let arr = dict1["attribute"] as? [[String : Any]] {
+                    for dict2 in arr {
+                        let attribute = Attribute()
                         attribute.attribute_id = dict2["attribute_id"] as? Int
                         attribute.name = dict2["name"] as? String
                         attribute.text = dict2["text"] as? String

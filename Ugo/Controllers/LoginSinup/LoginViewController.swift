@@ -206,14 +206,14 @@ class LoginViewController: BaseViewController ,UIAlertViewDelegate,FBSDKLoginBut
                 //                //print(response)
                 //                //print(error)
                 }.responseString { string in
-                    let str = string 
+                    _ = string 
                         //print(str)
                     
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil{
-                        var resp = DMAccount(JSON: JSON as AnyObject)
+                        let resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.userSession.account = resp.account
                             self.userSession.storeData()

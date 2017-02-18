@@ -54,7 +54,7 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
+        self.table.reloadData()
     }
   
     override func didReceiveMemoryWarning() {

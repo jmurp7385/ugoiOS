@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 
-class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITableViewDataSource {
+class ProductDetailViewController: BaseViewController {//, UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblModel: UILabel!
     @IBOutlet weak var lblPrice: UILabel!
@@ -50,27 +51,25 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     
     func productDetailAPI(){
         if CommonUtility.isNetworkAvailable() {
-            var product_id = "\(product.product_id!)"
+            let product_id = "\(product.product_id!)"
             self.showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getProductDetail(product_id)).responseString { string in
-                if let str = string {
+                //let str = string
                     //println(str)
-                }
-                }
-                .responseJSON { JSON in
+                
+                }.responseJSON { JSON in
                     self.hideLoadingIndicator(self.navigationController!.view)
                     
                     
                     if JSON != nil {
-                        var resp = DMProduct(JSON: JSON!)
-                        
+                        let resp = DMProduct(JSON: JSON as AnyObject)
                         if resp.status {
                             self.product = resp.product
                             self.product.quantity = 1
                             self.tableView.reloadData()
                             
                         }else{
-                            CommonUtility.showAlertView("Information", message: resp.errorMsg)
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }
                     }
                     
@@ -94,7 +93,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     // MARK: - Table View Delegates
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+        //if tableView != searchDisp.searchResultsTableView {
             if self.product.related_products.count > 0 {
                 return 2
             }else{
@@ -106,7 +106,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+        //if tableView != searchDisp.searchResultsTableView {
             
             if section == 0 {
                 return 0
@@ -132,7 +133,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+        //if tableView != searchDisp.searchResultsTableView {
             return 1
         }else{
             return super.tableView(tableView, numberOfRowsInSection: section)
@@ -165,7 +167,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     //    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+        //if tableView != searchDisp.searchResultsTableView {
             
             switch indexPath.section {
             case 0 :
@@ -173,7 +176,7 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 if NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1 {
                     return UITableViewAutomaticDimension
                 }else{
-                    var cell =  ProductDetailCell.cell()
+                    _ =  ProductDetailCell.cell()
                     //println(product.descriptions)
                     
                     
@@ -194,7 +197,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView != searchDisp.searchResultsTableView {
+        if searchDisp.isActive && searchDisp.searchBar.text != "" {
+        //if tableView != searchDisp.searchResultsTableView {
             
             if indexPath.section == 0 && indexPath.row == 0 {
                 var cell = tableView.dequeueReusableCell(withIdentifier: "ProductDetailCell") as? ProductDetailCell
@@ -203,14 +207,14 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 }
                 cell!.product = product
                 
-                var str = product.descriptions != nil ? product.descriptions! : ""
+                let str = product.descriptions != nil ? product.descriptions! : ""
                 
                 cell!.lblTitle.text = product.title != nil ? product.title! : ""
                 cell!.lblModel.text = product.model != nil ? product.model! : ""
                 cell!.lblPrice.text = product.price != nil ? product.price! : ""
                 
                 
-                if let stock = product.stock_status?.toInt() {
+                if let stock = Int(product.stock_status!) {
                     cell!.btnAddtoCart.isEnabled = true
                     cell!.btnAddtoCart.alpha = 1
                     cell!.lblStockStatus.text = "Total \(stock) in Stock"
@@ -219,8 +223,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                     cell!.btnAddtoCart.alpha = 0.6
                     cell!.lblStockStatus.text = product.stock_status != nil ? product.stock_status! : ""
                 }
-                
-                cell!.imgProduct.setImageWithUrl(URL(string: product.image != nil ? product.image!.addingPercentEscapes(using: String.Encoding.utf8)! : "")!, placeHolderImage: UIImage(named: "loading"))
+                cell!.imgProduct.af_setImage(withURL: URL(string: product.image!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, placeholderImage: UIImage(named: "loading"), filter: nil, progress: nil, progressQueue: .main, imageTransition: .noTransition, runImageTransitionIfCached: false, completion: nil)
+                //cell!.imgProduct.setImageWithUrl(URL(string: product.image != nil ? product.image!.addingPercentEscapes(using: String.Encoding.utf8)! : "")!, placeHolderImage: UIImage(named: "loading"))
                 
                 cell!.lblDescription.setHTMLFromString(str)
                 
@@ -235,7 +239,8 @@ class ProductDetailViewController: BaseViewController , UITableViewDelegate,UITa
                 return cell
             }
         }else{
-            return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, cellForRowAt: indexPath)
+            //return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
         }
     }
     

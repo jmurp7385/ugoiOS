@@ -10,7 +10,9 @@ import UIKit
 import Alamofire
 
 class OrderHistoryViewController: BaseViewController {
-    @IBOutlet weak var tableView: UITableView!
+ 
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     var dataArray : [Order] = []
  
     
@@ -81,14 +83,14 @@ class OrderHistoryViewController: BaseViewController {
         //print("page \(page)")
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getOrder(page: page)).responseString { _, _, string, _ in
-                if let str = string {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getOrder(page: page)).responseString { string in
+                //let str = string
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+                
+                }.responseJSON { JSON in
                 CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                 if JSON != nil{
-                    var resp = DMOrder(JSON: JSON!)
+                    let resp = DMOrder(JSON: JSON as AnyObject)
                     
                     if resp.status {
                         if resp.orderes.count == 0 {
@@ -104,7 +106,7 @@ class OrderHistoryViewController: BaseViewController {
             }
             
         }else{
-            CommonUtility.showAlertView(ß,"Network Unavailable", message: "Please check your internet connectivity and try again.")
+            CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
         }
     }
     /*

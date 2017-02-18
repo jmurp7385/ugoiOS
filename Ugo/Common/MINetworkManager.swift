@@ -18,6 +18,7 @@ enum APIRouter: URLRequestConvertible
     /// - returns: A URL request.
     public func asURLRequest() throws -> URLRequest {
         print("nil")
+        return URLRequest //added
     }
     
     static let BASE_URL = "https://www.ugollc.com/api/v1"
@@ -78,9 +79,10 @@ enum APIRouter: URLRequestConvertible
     
     
     var URLRequest: Foundation.URLRequest {
-        let (path, parameters) = 
         //let (path: String, parameters: [String: AnyObject]) =
+        let (path, parameters) =
             { () -> (String, [String : AnyObject]) in
+            //{ () -> (String, Dictionary<String, Any>) in
                 switch self {
                 case .postToken:
                     let params :[String: AnyObject] = ["":"" as AnyObject]
@@ -271,12 +273,13 @@ enum APIRouter: URLRequestConvertible
                     return ("", params)
                     
                 }
+        //}
         }()
         
         
         let URL = Foundation.URL(string: APIRouter.BASE_URL)
-        let URLRequest = NSMutableURLRequest(URL:URL!.URLByAppendingPathComponent(path))
-        URLRequest.HTTPMethod = method.rawValue
+        let URLRequest = NSMutableURLRequest(url:URL!.appendingPathComponent(path))
+        URLRequest.httpMethod = method.rawValue
         if let access_token = UserSessionInformation.sharedInstance.access_token{
             URLRequest.setValue("Bearer \(access_token)", forHTTPHeaderField: "Authorization")
         }else{
@@ -285,19 +288,17 @@ enum APIRouter: URLRequestConvertible
             
         }
         
-        let encoding = ParameterEncoding.self    //.url
+        //let encoding = ParameterEncoding.URL
         //println("Headers ==== \(URLRequest.allHTTPHeaderFields!)")
         //println("parameters ==== \(parameters)")
         
         //println("Method ==== \(URLRequest.HTTPMethod)")
         //println("URL ==== \(URLRequest.URLString)")
         
-        return encoding.encode(URLRequest, parameters: Parameters).0
+        return try! URLEncoding.queryString.encode(URLRequest as! URLRequestConvertible, with: parameters)
         
+        //return encoding.encode(URLRequest, parameters: Parameters).0
     }
-    
-    
-    
 }
 
 class MINetworkManager: NSObject {

@@ -26,7 +26,7 @@ class CartTableViewCell: SWTableViewCell {
     override func layoutSubviews() {
 
         super.layoutSubviews()
-        self.contentView.autoresizingMask = UIViewAutoresizing.FlexibleHeight|UIViewAutoresizing.FlexibleWidth
+        self.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.contentView.frame = self.bounds
         bgView.layer.shadowColor = UIColor(r: 0, g: 0, b: 0, a: 0.5).cgColor
         bgView.layer.shadowOffset = CGSize(width: 0, height: 2)

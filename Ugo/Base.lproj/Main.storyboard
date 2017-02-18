@@ -498,7 +498,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="272-aa-bfd" id="XEW-S6-NlW"/>
+                        <outlet property="table" destination="272-aa-bfd" id="q9Z-z0-ZHb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CHT-Yg-Kkd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1708,7 +1708,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="Pzx-x6-0yQ" id="teZ-eK-Vfm"/>
+                        <outlet property="table" destination="Pzx-x6-0yQ" id="69Z-Gf-PRj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ykr-6p-cAY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2152,8 +2152,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FxD-bb-Ly4">
-                                <rect key="frame" x="0.0" y="-1" width="320" height="568"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FxD-bb-Ly4">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductListCell" rowHeight="150" id="TbE-wF-6Es" customClass="ProductListCell" customModule="Ugo" customModuleProvider="target">

@@ -89,13 +89,13 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.getCart).responseString { string in
-                let str = string  //if let str = string {
+                //let str = string  //if let str = string {
                     //println(str)
                 
-                }.responseJSON { JSON in
+                }.responseJSON { response in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
-                    
-                    if JSON != nil {
+                    if let JSON =  response.result.value {
+                    //if JSON != nil {
                         self.cart = DMCart(JSON: JSON as AnyObject)
                         let resp = self.cart
                         if (resp?.status)! {
@@ -124,15 +124,32 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.putCart(key: productKey, quantity: quantity)).responseString { string in
-                let str = string
+                //let str = string
                     //println(str)
-                
+                /*
+                }.validate().responseJSON { response in
+                    CommonUtility().hideLoadingIndicator(self.navigationController!.view)
+                    self.setBadge()
+                    switch response.result {
+                    case .success:
+                        self.cart = DMCart(JSON: response.result.value as AnyObject)
+                        self.products = self.cart.cart.products
+                        self.userSession.cartCount = self.cart.cart.products.count
+                        self.setCheckoutBtnStatus()
+                        self.table.reloadData()
+                        if let warning = self.cart.cart.error_warning {
+                            CommonUtility.showAlertView("Information", message: warning as NSString)
+                        }
+                    case .failure:
+                        CommonUtility.showAlertView("Information", message: resp!.errorMsg as NSString)
+                    }
+                */
                 }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     self.setBadge()
                     self.cart = DMCart(JSON: JSON as AnyObject)
-                    var resp = self.cart
+                    let resp = self.cart
                     if JSON != nil {
                         if (resp?.status)! {
                             self.products  = self.cart.cart.products
@@ -148,7 +165,7 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
                             CommonUtility.showAlertView("Information", message: resp!.errorMsg as NSString)
                         }
                     }
-                    
+                 //   */
                     
             }
             
@@ -161,7 +178,7 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
             MINetworkManager.sharedInstance.manager?.request(APIRouter.deleteCart(productKey)).responseString { string in
-                let str = string
+                //let str = string
                     //println(str)
             
                 }.responseJSON { JSON in
@@ -205,9 +222,9 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CartTableViewCell") as! CartTableViewCell
-        var product = products[indexPath.row]
+        let product = products[indexPath.row]
         
-        var attributed = NSMutableAttributedString(string: product.name != nil ? product.name! : "")
+        let attributed = NSMutableAttributedString(string: product.name != nil ? product.name! : "")
         
         if !product.in_stock! {
             attributed.append(NSAttributedString(string: " ***", attributes: [NSForegroundColorAttributeName:UIColor.red,NSBaselineOffsetAttributeName:2,NSFontAttributeName: UIFont.systemFont(ofSize: 15)]))
@@ -218,8 +235,7 @@ class CartViewController: BaseViewController ,SWTableViewCellDelegate , SelectQt
         cell.lblDescription.text = product.model != nil ? product.model! : ""
         cell.lblPrice.text = product.price != nil ? "\(product.price!)    x" : ""
         cell.btnSelectQty.setTitle("\(product.quantity!)", for: UIControlState())
-        
-        cell.imgProduct.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: UIImage(named: "loading"))
+        cell.imgProduct.af_setImage(withURL: URL(string: product.thumb_image!.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!)!, placeholderImage: UIImage(named: "loading"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: UIImageView.ImageTransition.noTransition, runImageTransitionIfCached: true, completion: nil)
         cell.btnSelectQty.tag = indexPath.row
         cell.btnSelectQty.addTarget(self, action: #selector(CartViewController.btnSelectQtyTapped(_:)), for: UIControlEvents.touchUpInside)
         

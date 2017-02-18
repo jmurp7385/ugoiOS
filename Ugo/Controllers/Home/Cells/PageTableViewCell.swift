@@ -38,15 +38,15 @@ class PageTableViewCell: UITableViewCell , UIScrollViewDelegate {
         super.layoutSubviews()
         
         var xposition:CGFloat = 0
-        
-        for (index,product) in  enumerate(products) {
-            var imgView = UIImageView(frame: CGRect(x: xposition, y: 0, width: ScreenSize.SCREEN_WIDTH, height: scrollView.frame.height))
-            imgView.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: nil)
+        for (index,product) in products.enumerated() {
+        //for (index,product) in  enumerate(products) {
+            let imgView = UIImageView(frame: CGRect(x: xposition, y: 0, width: ScreenSize.SCREEN_WIDTH, height: scrollView.frame.height))
+            imgView.af_setImage(withURL: URL(string: product.thumb_image!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!)
+            //imgView.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: nil)
             imgView.contentMode = UIViewContentMode.scaleAspectFit
             xposition = xposition + ScreenSize.SCREEN_WIDTH
             
-            
-            var tapGesture = UITapGestureRecognizer(target: self, action: Selector("imgTapped:"))
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(PageTableViewCell.imgTapped(_:)))
             imgView.tag = index
             imgView.gestureRecognizers = [tapGesture]
             imgView.isUserInteractionEnabled = true
@@ -58,7 +58,7 @@ class PageTableViewCell: UITableViewCell , UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: xposition, height: scrollView.frame.height)
         scrollView.delegate = self
 
-        var pages =  Int(scrollView.contentSize.width / ScreenSize.SCREEN_WIDTH)
+        let pages =  Int(scrollView.contentSize.width / ScreenSize.SCREEN_WIDTH)
 //        //print("pages \(pages)")
         pageControl.numberOfPages = pages
         pageControl.addTarget(self, action: #selector(PageTableViewCell.changePage(_:)), for: UIControlEvents.valueChanged)

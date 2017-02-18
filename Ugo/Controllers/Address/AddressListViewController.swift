@@ -15,7 +15,8 @@ protocol AddressListViewDelegate{
 
 class AddressListViewController: BaseViewController,SWTableViewCellDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var table: UITableView!
     var addresses : [Address] = []
     var addressType : AddressType!
     var delegate : AddressListViewDelegate!
@@ -149,15 +150,15 @@ class AddressListViewController: BaseViewController,SWTableViewCellDelegate {
         let address_id = addresses[index].address_id!
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.deleteAddress(address_id: address_id)).responseString { _, _, string, _ in
-                if string != nil {
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.deleteAddress(address_id: address_id)).responseString { string in
+                let str = string
                     //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+                
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     
                     if JSON != nil {
-                        let obj = BaseJsonModel(JSON: JSON!)
+                        let obj = BaseJsonModel(JSON: JSON as AnyObject)
                         
                         if obj.status {
                         }else{
@@ -179,14 +180,15 @@ class AddressListViewController: BaseViewController,SWTableViewCellDelegate {
     func getAddressAPI(){
         if CommonUtility.isNetworkAvailable() {
             CommonUtility().showLoadingWithMessage(self.navigationController!.view, message: "Loading...")
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.getAddress).responseString { _, _, string, _ in
-                if string != nil {
-                    //println(str)
-                }
-                }.responseJSON { _, _, JSON, _ in
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.getAddress).responseString { string in
+                let str = string
+                //println(str)
+                
+
+                }.responseJSON { JSON in
                     CommonUtility().hideLoadingIndicator(self.navigationController!.view)
                     if JSON != nil{
-                        let resp = DMAccount(JSON: JSON!)
+                        let resp = DMAccount(JSON: JSON as AnyObject)
                         if resp.status {
                             self.addresses = resp.addresses
                             self.tableView.reloadData()

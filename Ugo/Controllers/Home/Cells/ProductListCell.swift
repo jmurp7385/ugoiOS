@@ -64,8 +64,9 @@ class ProductListCell: UITableViewCell ,UICollectionViewDataSource,UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCollectionViewCell", for: indexPath) as! ProductCollectionViewCell
-        var product = products[indexPath.row]
-        cell.imgProduct.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: UIImage(named: "loading"))
+        let product = products[indexPath.row]
+        cell.imgProduct.af_setImage(withURL: URL(string: product.thumb_image!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, placeholderImage: UIImage(named: "loading"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: UIImageView.ImageTransition.noTransition, runImageTransitionIfCached: false, completion: nil)
+        //cell.imgProduct.setImageWithUrl(URL(string: product.thumb_image!.addingPercentEscapes(using: String.Encoding.utf8)!)!, placeHolderImage: UIImage(named: "loading"))
         cell.lblName.text = product.name!
         cell.lblPrice.text = product.price!
         if let separator = cell.vwSeparator {

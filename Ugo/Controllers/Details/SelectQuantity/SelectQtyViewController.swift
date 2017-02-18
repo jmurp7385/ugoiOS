@@ -113,15 +113,15 @@ class SelectQtyViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? UITableViewCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as UITableViewCell!
         
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
         }
         
 //        var quantity = "\(quantityArr[indexPath.row].pack_size!) \(quantityArr[indexPath.row].unit_name!)"
 
-        cell!.textLabel?.textAlignment = .Center
+        cell!.textLabel?.textAlignment = .center
         cell!.textLabel?.text = quantityArr[indexPath.row]
         
         // Configure the cell...

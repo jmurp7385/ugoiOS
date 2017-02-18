@@ -26,9 +26,9 @@ extension Array {
     func contains<T>(_ obj: T) -> Bool where T : Equatable {
         return self.filter({$0 as? T == obj}).count > 0
     }
-    func get(_ index: Int) -> T? {
+    func get<T>(_ index: Int) -> T? {
         if 0 <= index && index < count {
-            return self[index]
+            return self[index] as? T //added as? T
         } else {
             return nil
         }
@@ -59,12 +59,18 @@ extension String {
     
     func getHtmlToAttributed(_ font:UIFont = font15) -> NSAttributedString {
         let encodedData = self.data(using: String.Encoding.utf8)!
+        var attributedString = NSAttributedString()
         let attributedOptions : [String: AnyObject] = [
             NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType as AnyObject,
             NSCharacterEncodingDocumentAttribute: String.Encoding.utf8 as AnyObject,
             NSFontAttributeName : font
         ]
-        let attributedString = NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil, error: nil)!
+        //let attributedString = NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil, error: nil)!
+        do {
+            attributedString = try NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil)
+        } catch {
+            print("error")
+        }
         
         
         return attributedString
@@ -81,11 +87,11 @@ extension UIColor {
     }
     
     convenience init(hex:String , alpha: Double = 1.0){
-        var cString:NSString = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercased()
-        
-        var rString = cString.substring(to: 2)
-        var gString = (cString.substring(from: 2) as NSString).substring(to: 2)
-        var bString = (cString.substring(from: 4)as NSString).substring(to: 2)
+        //var cString:NSString = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).uppercased()
+        let cString:NSString = hex.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines).uppercased() as NSString
+        let rString = cString.substring(to: 2)
+        let gString = (cString.substring(from: 2) as NSString).substring(to: 2)
+        let bString = (cString.substring(from: 4)as NSString).substring(to: 2)
         
         var r:CUnsignedInt = 0, g:CUnsignedInt = 0, b:CUnsignedInt = 0;
         Scanner(string: rString).scanHexInt32(&r)
@@ -118,7 +124,7 @@ extension UIView{
         self.layer.shadowRadius = 5.0;
         self.layer.shadowOffset = CGSize(width: 0, height: 0);
         self.clipsToBounds = false;
-
+        
         return self
     }
 }
@@ -127,7 +133,7 @@ extension UITextField {
     var setRightView : UITextField {
         let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         imgView.image = UIImage(named: "arrowdown")
-    
+        
         self.rightView = imgView
         self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
         
@@ -142,7 +148,7 @@ extension UITextField {
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
         self.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
-
+        
         self.leftViewMode = .always
         return self
     }
@@ -170,17 +176,18 @@ extension UILabel {
     
     
     func setHTMLFromString(_ text: String) {
-        var modifiedFont = NSString(format:"<span style=\"font-family: \(self.font.fontName); font-size: \(self.font.pointSize)\">%@</span>" as NSString, text) as String
-        
-        var attrStr = NSAttributedString(
-            data: modifiedFont.data(using: String.Encoding.unicode, allowLossyConversion: true)!,
-            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8],
-            documentAttributes: nil,
-            error: nil)
-        
-        self.attributedText = attrStr
+        let modifiedFont = NSString(format:"<span style=\"font-family: \(self.font.fontName); font-size: \(self.font.pointSize)\">%@</span>" as NSString, text) as String
+        do {
+            let attrStr = try NSAttributedString(
+                data: modifiedFont.data(using: String.Encoding.unicode, allowLossyConversion: true)!,
+                options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8],
+                documentAttributes: nil)
+            self.attributedText = attrStr
+        } catch {
+            print("error")
+        }
     }
-
+    
     
     func heightAsPerTheText(setTest txt:String) -> UILabel! {
         self.numberOfLines = 0
@@ -193,21 +200,21 @@ extension UILabel {
         
         let constraintSize = CGSize(width: ScreenSize.SCREEN_WIDTH - 32, height: CGFloat.greatestFiniteMagnitude)
         let labelSize = self.text!.boundingRect(with: constraintSize,
-            options: NSStringDrawingOptions.usesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: self.font],
-            context: nil)
+                                                options: NSStringDrawingOptions.usesLineFragmentOrigin,
+                                                attributes: [NSFontAttributeName: self.font],
+                                                context: nil)
         return labelSize.height + 15
     }
     
     func expectedWidth() -> CGFloat! {
         let constraintSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: self.frame.height)
         let labelSize = self.text!.boundingRect(with: constraintSize,
-            options: NSStringDrawingOptions.usesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: self.font],
-            context: nil)
+                                                options: NSStringDrawingOptions.usesLineFragmentOrigin,
+                                                attributes: [NSFontAttributeName: self.font],
+                                                context: nil)
         return labelSize.width
     }
     
-   
+    
 }
 

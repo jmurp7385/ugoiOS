@@ -27,9 +27,9 @@ class BaseJsonModel: NSObject {
     
     init(JSON : AnyObject){
         if let dict = JSON as? NSDictionary {
-            if let arr = dict["errors"] as? NSArray {
+            if let arr = dict["errors"] as? [[String : AnyObject]] { //NSArray {
                 for obj in arr {
-                    var err = Errors()
+                    let err = Errors()
                     err.message = obj["message"] as? String
                     err.code = obj["code"] as? String
                     errors.append(err)
@@ -37,7 +37,7 @@ class BaseJsonModel: NSObject {
                 }
             }else{
                 if dict["heading_title"] as? String == "Maintenance" {
-                    var err = Errors()
+                    let err = Errors()
                     err.message = "Sorry for inconvenience. Our backend is currently undergoing scheduled maintenance"
                     err.code = "Maintenance"
                     errors.append(err)

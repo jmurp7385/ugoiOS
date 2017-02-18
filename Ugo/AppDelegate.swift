@@ -63,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func geoCodeUsingAddress(_ add : String) -> CLLocationCoordinate2D {
         var latitude : Double = 0
         var longitude : Double = 0
+        var center = CLLocationCoordinate2D()
         let esc_addr = add.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) //(using: String.Encoding.utf8)
         let str = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=\(esc_addr!)"
         //added do try catch 
@@ -81,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             
-            let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             
             //println(center.latitude)
             //println(center.longitude)
@@ -89,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("error")
         }
+        return center
     }
     
     
@@ -131,29 +133,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getTokenAPI(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).response { (request, response, data, error) in
-                //println(request)
-                //println(response)
-                //println(error)
-                }.responseString { _, _, string, _ in
-                    if string != nil {
-                        //println(str)
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).responseJSON { response in
+                if let JSON = response.result.value as? [String : Any] {
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
+                    if !resp.status{
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                    }else{
+                        let userSession = UserSessionInformation.sharedInstance
+                        userSession.access_token = JSON["access_token"] as? String
+                        //userSession.access_token = JSON["access_token"] as? String
+                        userSession.storeData()
                     }
-                }.responseJSON { _, _,JSON, _ in
+                    self.initVC()
+                }
+                
+            }
+            /*
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).responseJSON { JSON in
                     
                     if JSON != nil {
-                        let resp = BaseJsonModel(JSON: JSON!)
+                        let resp = BaseJsonModel(JSON: JSON as AnyObject)
                         if !resp.status{
                             CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }else{
                             let userSession = UserSessionInformation.sharedInstance
-                            userSession.access_token = JSON!["access_token"] as? String
+                            userSession.access_token = JSON["access_token"] as? String
                             userSession.storeData()
                         }
                         self.initVC()
                     }
                     
             }
+            */
         }else{
             CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
         }
@@ -163,24 +174,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getTokenAPIGeneral(){
         if CommonUtility.isNetworkAvailable() {
-            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).response { (request, response, data, error) in
-                //println(request)
-                //println(response)
-                //println(error)
-                }.responseString { _, _, string, _ in
-                    if string != nil {
-                        //println(str)
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).responseJSON { response in
+                if let JSON = response.result.value as? [String : Any] {
+                    let resp = BaseJsonModel(JSON: JSON as AnyObject)
+                    if !resp.status{
+                        CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                    }else{
+                        let userSession = UserSessionInformation.sharedInstance
+                        userSession.access_token = JSON["access_token"] as? String
+                        
+                        userSession.storeData()
                     }
-                }.responseJSON { _, _,JSON, _ in
+                }
+                
+            }
+            /*
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postToken).responseJSON { JSON in
                     
                     if JSON != nil {
                         
-                        let resp = BaseJsonModel(JSON: JSON!)
+                        let resp = BaseJsonModel(JSON: JSON as AnyObject)
                         if !resp.status{
                             CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
                         }else{
                             let userSession = UserSessionInformation.sharedInstance
-                            userSession.access_token = JSON!["access_token"] as? String
+                            userSession.access_token = JSON["access_token"] as? String
                             userSession.storeData()
                         }
                         
@@ -188,6 +206,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     
             }
+ */
         }else{
             CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
         }
@@ -197,9 +216,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func getInitAPI(){
         if CommonUtility.isNetworkAvailable() {
             MINetworkManager.sharedInstance.manager?.request(APIRouter.initApp("languages,currencies,countries,settings,customer_groups,cart,wishlist")).responseString { string in
-                if string != nil {
+                //let str = string
                     //println(str)
-                }
+
                 }.responseJSON { JSON in
                     
                     if JSON != nil {
@@ -223,15 +242,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func testAPI(){
         if CommonUtility.isNetworkAvailable() {
             let acc = Account()
+            MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegister(account: acc)).responseJSON { JSON in
+                    if JSON != nil {
+                        
+                        let resp = BaseJsonModel(JSON: JSON as AnyObject)
+                        if !resp.status{
+                            CommonUtility.showAlertView("Information", message: resp.errorMsg as NSString)
+                        }
+                    }
+            }
+
+            /*
             MINetworkManager.sharedInstance.manager?.request(APIRouter.postRegister(account: acc)).response { (request, response, data, error) in
                 //println(request)
                 //println(response)
                 //println(error)
-                }.responseString { _, _, string, _ in
+                }.responseString { string in
                     if string != nil {
                         //println(str)
                     }
-                }.responseJSON { _, _, JSON, _ in
+                }.responseJSON { JSON in
                     
                     if JSON != nil {
                         
@@ -242,6 +272,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     
             }
+            */
         }else{
             CommonUtility.showAlertView("Network Unavailable", message: "Please check your internet connectivity and try again.")
         }

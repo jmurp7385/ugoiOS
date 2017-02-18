@@ -274,17 +274,19 @@ class CommonUtility: NSObject {
     {
         if(date != nil)
         {
+            let gregCal = Calendar(identifier: .gregorian)
+            let components = gregCal.dateComponents([.day,.month,.year], from: Date())
+            return components
+            /*
             let gregorian:Calendar? = Calendar(identifier: Calendar.Identifier.gregorian)
             if(gregorian != nil)
             {
                 
-                //var components:DateComponents = gregorian!.components(Calendar.Unit.DayCalendarUnit | Calendar.Unit.MonthCalendarUnit | Calendar.Unit.YearCalendarUnit, fromDate:date!)
-                //var components:DateComponents = gregorian!.components(NSCalendar.Unit.day | NSCalendar.Unit.month | NSCalendar.Unit.year, fromDate:date!)
-                //var components:DateComponents = gregorian!.components(Calendar.Component.day | Calendar.Component.month | Calendar.Component.year, fromDate:date!)
-                let components : gregorian.components = [.day,.month,.year]
+                var components:DateComponents = gregorian!.components(Calendar.Unit.DayCalendarUnit | Calendar.Unit.MonthCalendarUnit | Calendar.Unit.YearCalendarUnit, fromDate:date!)
                 return components
                 
             }
+            */
         }
         return nil
     }
@@ -292,16 +294,18 @@ class CommonUtility: NSObject {
     //MARK: - Validations
     
     class func containsSpecialCharacters(_ string: String) -> Bool {
-        let regex = NSRegularExpression(pattern: "[^A-Za-z]", options: nil, error: nil)!
-        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, string.characters.count)) != nil {
+        //let regex = NSRegularExpression(pattern: "[^A-Za-z]", options: nil, error: nil)!
+        let regex = try! NSRegularExpression(pattern: "[^A-Za-z]", options: .caseInsensitive)
+        if regex.firstMatch(in: string, options: .anchored, range: NSMakeRange(0, string.characters.count)) != nil {
             return true
         }
+       
         return false
     }
 
     class func containsNumbers(_ string: String) -> Bool {
-        let regex = NSRegularExpression(pattern: "[0-9]", options: nil, error: nil)!
-        if regex.firstMatchInString(string, options: nil, range: NSMakeRange(0, string.characters.count)) != nil {
+        let regex = try! NSRegularExpression(pattern: "[0-9]", options: .caseInsensitive)
+        if regex.firstMatch(in: string, options: .anchored, range: NSMakeRange(0, string.characters.count)) != nil {
             return true
         }
         return false
